@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-Digit Addition Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .problem {
+            display: inline-block;
+            text-align: right;
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #ffffff;
+            border-radius: 5px;
+        }
+        .numbers {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .line {
+            border-top: 2px solid black;
+            margin: 10px 0;
+        }
+        .answer-box {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px; /* Add spacing between the boxes */
+        }
+        .digit-input {
+            width: 50px; /* Allow space for a 5-digit number */
+            height: 40px;
+            font-size: 24px;
+            text-align: center;
+            margin: 2px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            font-size: 20px;
+            color: blue;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>4-Digit Addition Quiz</h1>
+    <form id="quizForm">
+        <div id="questions"></div>
+        <button type="button" onclick="checkAnswers()">Submit Answers</button>
+    </form>
+    <div id="results" class="result"></div>
+
+    <script>
+        const numQuestions = 10; // Number of questions
+        const questionsDiv = document.getElementById("questions");
+
+        function generateQuestions() {
+            for (let i = 1; i <= numQuestions; i++) {
+                const num1 = Math.floor(Math.random() * 9000) + 1000; // Random 4-digit number
+                const num2 = Math.floor(Math.random() * 9000) + 1000;
+
+                const problemDiv = document.createElement("div");
+                problemDiv.className = "problem";
+                problemDiv.innerHTML = `
+                    <div class="numbers">${num1}</div>
+                    <div class="numbers">${num2}</div>
+                    <div class="line"></div>
+                    <div class="answer-box" id="answerBox${i}">
+                        <input type="text" maxlength="1" class="digit-input" id="digit${i}-5">
+                        <input type="text" maxlength="1" class="digit-input" id="digit${i}-4">
+                        <input type="text" maxlength="1" class="digit-input" id="digit${i}-3">
+                        <input type="text" maxlength="1" class="digit-input" id="digit${i}-2">
+                        <input type="text" maxlength="1" class="digit-input" id="digit${i}-1">
+                    </div>
+                    <input type="hidden" id="correctAnswer${i}" value="${num1 + num2}">
+                `;
+                questionsDiv.appendChild(problemDiv);
+            }
+        }
+
+        function checkAnswers() {
+            let correctCount = 0;
+
+            for (let i = 1; i <= numQuestions; i++) {
+                const correctAnswer = document.getElementById(`correctAnswer${i}`).value;
+                let userAnswer = '';
+
+                // Combine the digits into the user's full answer
+                for (let j = 5; j >= 1; j--) {
+                    const digit = document.getElementById(`digit${i}-${j}`).value;
+                    userAnswer += digit ? digit : '0'; // Default to 0 if empty
+                }
+
+                if (parseInt(userAnswer) === parseInt(correctAnswer)) {
+                    correctCount++;
+                }
+            }
+            document.getElementById("results").textContent = `You got ${correctCount} out of ${numQuestions} correct!`;
+        }
+
+        // Generate questions on page load
+        generateQuestions();
+    </script>
+</body>
+</html>
