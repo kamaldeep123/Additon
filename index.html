@@ -22,6 +22,7 @@
             border: 1px solid #ddd;
             background-color: #ffffff;
             border-radius: 5px;
+            position: relative;
         }
         .carry-row, .answer-row, .number-row {
             display: flex;
@@ -34,8 +35,8 @@
             width: 100%;
         }
         .digit-input, .carry-input {
-            width: 40px;  /* Same width for carry, number, and answer boxes */
-            height: 40px; /* Same height for all boxes */
+            width: 40px;
+            height: 40px;
             font-size: 24px;
             text-align: center;
             border: 1px solid #ddd;
@@ -46,14 +47,32 @@
         }
         .number-box {
             display: inline-block;
-            width: 40px;  /* Same width as input boxes */
-            height: 40px; /* Same height as input boxes */
+            width: 40px;
+            height: 40px;
             font-size: 24px;
             line-height: 40px;
             text-align: center;
             border: 1px solid #ddd;
             border-radius: 4px;
             background-color: #f9f9f9;
+        }
+        .correct {
+            background-color: #c8e6c9; /* Light green for correct answers */
+        }
+        .incorrect {
+            background-color: #ffcccb; /* Light red for incorrect answers */
+        }
+        .result-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: black;
+        }
+        .correct-text {
+            color: green;
+        }
+        .incorrect-text {
+            color: red;
         }
         button {
             margin-top: 20px;
@@ -94,23 +113,27 @@
 
                 const digits1 = num1.toString().split("");
                 const digits2 = num2.toString().split("");
+                const totalDigits = 5; // Because sum can be 5-digit long
 
                 const problemDiv = document.createElement("div");
                 problemDiv.className = "problem";
                 problemDiv.innerHTML = `
                     <div class="carry-row">
-                        ${digits1.map((_, index) => `<input type="text" maxlength="1" class="carry-input" id="carry${i}-${index + 1}">`).join("")}
+                        ${Array(totalDigits).fill(0).map((_, index) => `<input type="text" maxlength="1" class="carry-input" id="carry${i}-${index + 1}">`).join("")}
                     </div>
                     <div class="number-row">
+                        <span class="number-box">&nbsp;</span> <!-- Extra box for spacing -->
                         ${digits1.map((digit) => `<span class="number-box">${digit}</span>`).join("")}
                     </div>
                     <div class="number-row">
+                        <span class="number-box">+</span> <!-- Plus sign for addition -->
                         ${digits2.map((digit) => `<span class="number-box">${digit}</span>`).join("")}
                     </div>
                     <div class="line"></div>
                     <div class="answer-row">
-                        ${digits1.map((_, index) => `<input type="text" maxlength="1" class="digit-input" id="answer${i}-${index + 1}">`).join("")}
+                        ${Array(totalDigits).fill(0).map((_, index) => `<input type="text" maxlength="1" class="digit-input" id="answer${i}-${index + 1}">`).join("")}
                     </div>
+                    <div id="result-text-${i}" class="result-text"></div>
                     <input type="hidden" id="correctAnswer${i}" value="${num1 + num2}">
                 `;
                 questionsDiv.appendChild(problemDiv);
@@ -124,17 +147,36 @@
                 const correctAnswer = document.getElementById(`correctAnswer${i}`).value;
                 let userAnswer = '';
 
-                // Combine the digits into the user's full answer
-                for (let j = 1; j <= 4; j++) {
-                    const digit = document.getElementById(`answer${i}-${j}`).value;
+                // Combine digits into full number
+                for (let j = 1; j <= 5; j++) {
+                    const digitBox = document.getElementById(`answer${i}-${j}`);
+                    const digit = digitBox.value.trim();
                     userAnswer += digit ? digit : '0'; // Default to 0 if empty
+
+                    // Get correct digit from answer
+                    const correctDigit = correctAnswer.toString().padStart(5, "0")[j - 1];
+
+                    // Highlight correct or incorrect inputs
+                    if (digit === correctDigit) {
+                        digitBox.classList.add("correct");
+                        digitBox.classList.remove("incorrect");
+                    } else {
+                        digitBox.classList.add("incorrect");
+                        digitBox.classList.remove("correct");
+                    }
                 }
 
                 if (parseInt(userAnswer) === parseInt(correctAnswer)) {
                     correctCount++;
+                    document.getElementById(`result-text-${i}`).textContent = "✅ Correct!";
+                    document.getElementById(`result-text-${i}`).classList.add("correct-text");
+                } else {
+                    document.getElementById(`result-text-${i}`).textContent = `❌ Wrong! Correct Answer: ${correctAnswer}`;
+                    document.getElementById(`result-text-${i}`).classList.add("incorrect-text");
                 }
             }
-            document.getElementById("results").textContent = `You got ${correctCount} out of ${numQuestions} correct!`;
+
+            document.getElementById("results").textContent = `You got ${correctCount} out of ${numQuestions} correct! ✅`;
         }
 
         // Generate questions on page load
