@@ -16,34 +16,44 @@
         }
         .problem {
             display: inline-block;
-            text-align: right;
+            text-align: center;
             margin: 20px;
             padding: 15px;
             border: 1px solid #ddd;
             background-color: #ffffff;
             border-radius: 5px;
         }
-        .numbers {
-            font-size: 24px;
-            font-weight: bold;
+        .carry-row, .answer-row, .number-row {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
         }
         .line {
             border-top: 2px solid black;
             margin: 10px 0;
+            width: 100%;
         }
-        .answer-box {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px; /* Add spacing between the boxes */
-        }
-        .digit-input {
-            width: 50px; /* Allow space for a 5-digit number */
-            height: 40px;
+        .digit-input, .carry-input {
+            width: 40px;  /* Same width for carry, number, and answer boxes */
+            height: 40px; /* Same height for all boxes */
             font-size: 24px;
             text-align: center;
-            margin: 2px;
             border: 1px solid #ddd;
             border-radius: 4px;
+        }
+        .carry-input {
+            background-color: #f0f0f0;
+        }
+        .number-box {
+            display: inline-block;
+            width: 40px;  /* Same width as input boxes */
+            height: 40px; /* Same height as input boxes */
+            font-size: 24px;
+            line-height: 40px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
         }
         button {
             margin-top: 20px;
@@ -82,18 +92,24 @@
                 const num1 = Math.floor(Math.random() * 9000) + 1000; // Random 4-digit number
                 const num2 = Math.floor(Math.random() * 9000) + 1000;
 
+                const digits1 = num1.toString().split("");
+                const digits2 = num2.toString().split("");
+
                 const problemDiv = document.createElement("div");
                 problemDiv.className = "problem";
                 problemDiv.innerHTML = `
-                    <div class="numbers">${num1}</div>
-                    <div class="numbers">${num2}</div>
+                    <div class="carry-row">
+                        ${digits1.map((_, index) => `<input type="text" maxlength="1" class="carry-input" id="carry${i}-${index + 1}">`).join("")}
+                    </div>
+                    <div class="number-row">
+                        ${digits1.map((digit) => `<span class="number-box">${digit}</span>`).join("")}
+                    </div>
+                    <div class="number-row">
+                        ${digits2.map((digit) => `<span class="number-box">${digit}</span>`).join("")}
+                    </div>
                     <div class="line"></div>
-                    <div class="answer-box" id="answerBox${i}">
-                        <input type="text" maxlength="1" class="digit-input" id="digit${i}-5">
-                        <input type="text" maxlength="1" class="digit-input" id="digit${i}-4">
-                        <input type="text" maxlength="1" class="digit-input" id="digit${i}-3">
-                        <input type="text" maxlength="1" class="digit-input" id="digit${i}-2">
-                        <input type="text" maxlength="1" class="digit-input" id="digit${i}-1">
+                    <div class="answer-row">
+                        ${digits1.map((_, index) => `<input type="text" maxlength="1" class="digit-input" id="answer${i}-${index + 1}">`).join("")}
                     </div>
                     <input type="hidden" id="correctAnswer${i}" value="${num1 + num2}">
                 `;
@@ -109,8 +125,8 @@
                 let userAnswer = '';
 
                 // Combine the digits into the user's full answer
-                for (let j = 5; j >= 1; j--) {
-                    const digit = document.getElementById(`digit${i}-${j}`).value;
+                for (let j = 1; j <= 4; j++) {
+                    const digit = document.getElementById(`answer${i}-${j}`).value;
                     userAnswer += digit ? digit : '0'; // Default to 0 if empty
                 }
 
