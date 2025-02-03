@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Multiplication Worksheet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .problem {
+            display: inline-block;
+            text-align: center;
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #ffffff;
+            border-radius: 5px;
+        }
+        .number-row, .carry-row, .step-row, .answer-row {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        .line {
+            border-top: 2px solid black;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .digit-input, .carry-input, .step-input {
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .carry-input, .step-input {
+            background-color: #f0f0f0;
+            margin-bottom: 5px;
+        }
+        .number-box {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            line-height: 30px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .wrong {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dynamic Multiplication Worksheet</h1>
+    <form id="quizForm">
+        <div id="questions"></div>
+        <button type="button" onclick="checkAnswers()">Submit Answers</button>
+    </form>
+    <div id="results"></div>
+
+    <script>
+        const numQuestions = 5; // Number of problems
+        const questionsDiv = document.getElementById("questions");
+
+        // Stores correct answers for validation
+        const correctAnswers = [];
+
+        function generateQuestions() {
+            for (let i = 1; i <= numQuestions; i++) {
+                const num1 = Math.floor(Math.random() * 9000) + 1000; // 4-digit number
+                const num2 = Math.random() > 0.5 ? Math.floor(Math.random() * 900) + 100 : Math.floor(Math.random() * 9000) + 1000; // Random 3-digit or 4-digit number
+
+                const digits1 = num1.toString().split("");
+                const digits2 = num2.toString().split("");
+
+                // Calculate the correct answer
+                const correctAnswer = num1 * num2;
+                correctAnswers.push(correctAnswer);
+
+                // Determine the maximum possible number of digits in the result
+                const maxDigits = correctAnswer.toString().length;
+
+                const problemDiv = document.createElement("div");
+                problemDiv.className = "problem";
+
+                problemDiv.innerHTML = `
+                    <!-- Carry Row -->
+                    <div class="carry-row">
+                        ${Array(maxDigits).fill(0).map(() => `<input type="text" maxlength="1" class="carry-input">`).join("")}
+                    </div>
+                    <!-- Top Number -->
+                    <div class="number-row">
+                        ${digits1.map((digit) => `<span class="number-box">${digit}</span>`).join("")}
+                    </div>
+                    <!-- Multiplication Symbol and Bottom Number -->
+                    <div class="number-row">
+                        <span class="number-box">×</span>
+                        ${digits2.map((digit) => `<span class="number-box">${digit}</span>`).join("")}
+                    </div>
+                    <!-- Horizontal Line -->
+                    <div class="line"></div>
+                    <!-- Step Rows for Intermediate Calculations -->
+                    ${Array(digits2.length).fill(0).map(() => `
+                        <div class="step-row">
+                            ${Array(maxDigits).fill(0).map(() => `<input type="text" maxlength="1" class="step-input">`).join("")}
+                        </div>
+                    `).join("")}
+                    <!-- Final Horizontal Line -->
+                    <div class="line"></div>
+                    <!-- Final Answer Row -->
+                    <div class="answer-row">
+                        ${Array(maxDigits).fill(0).map(() => `<input type="text" maxlength="1" class="digit-input">`).join("")}
+                    </div>
+                `;
+                questionsDiv.appendChild(problemDiv);
+            }
+        }
+
+        function checkAnswers() {
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = ""; // Clear previous results
+            const answerRows = document.querySelectorAll(".answer-row");
+
+            answerRows.forEach((row, index) => {
+                const inputs = row.querySelectorAll(".digit-input");
+                const userAnswer = Array.from(inputs).map(input => input.value).join("");
+
+                const resultText = document.createElement("p");
+                if (parseInt(userAnswer) === correctAnswers[index]) {
+                    resultText.innerHTML = `Question ${index + 1}: <span class="correct">Correct!</span>`;
+                } else {
+                    resultText.innerHTML = `Question ${index + 1}: <span class="wrong">Wrong. Correct Answer: ${correctAnswers[index]}</span>`;
+                }
+                resultsDiv.appendChild(resultText);
+            });
+        }
+
+        // Generate questions on page load
+        generateQuestions();
+    </script>
+</body>
+</html>
