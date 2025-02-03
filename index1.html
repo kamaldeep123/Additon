@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4-Digit Addition Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .problem {
+            display: inline-block;
+            text-align: center;
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #ffffff;
+            border-radius: 5px;
+            position: relative;
+        }
+        .carry-row, .answer-row, .number-row {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        .line {
+            border-top: 2px solid black;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .digit-input, .carry-input {
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .carry-input {
+            background-color: #f0f0f0;
+        }
+        .number-box {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            line-height: 40px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .correct {
+            background-color: #c8e6c9; /* Light green for correct answers */
+        }
+        .incorrect {
+            background-color: #ffcccb; /* Light red for incorrect answers */
+        }
+        .result-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: black;
+        }
+        .correct-text {
+            color: green;
+        }
+        .incorrect-text {
+            color: red;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            font-size: 20px;
+            color: blue;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>4-Digit Addition Quiz</h1>
+    <form id="quizForm">
+        <div id="questions"></div>
+        <button type="button" onclick="checkAnswers()">Submit Answers</button>
+    </form>
+    <div id="results" class="result"></div>
+
+    <script>
+        const numQuestions = 10; // Number of questions
+        const questionsDiv = document.getElementById("questions");
+
+        function generateQuestions() {
+            for (let i = 1; i <= numQuestions; i++) {
+                const num1 = Math.floor(Math.random() * 9000) + 1000; // Random 4-digit number
+                const num2 = Math.floor(Math.random() * 9000) + 1000;
+
+                const digits1 = num1.toString().split("");
+                const digits2 = num2.toString().split("");
+                const totalDigits = 5; // Because sum can be 5-digit long
+
+                const problemDiv = document.createElement("div");
+                problemDiv.className = "problem";
+                problemDiv.innerHTML = `
+                    <div class="carry-row">
+                        ${Array(totalDigits).fill(0).map((_, index) => `<input type="text" maxlength="1" class="carry-input" id="carry${i}-${index + 1}">`).join("")}
+                    </div>
+                    <div class="number-row">
+                        <span class="number-box">&nbsp;</span> <!-- Extra box for spacing -->
+                        ${digits1.map((digit) => `<span class="number-box">${digit}</span>`).join("")}
+                    </div>
+                    <div class="number-row">
+                        <span class="number-box">+</span> <!-- Plus sign for addition -->
+                        ${digits2.map((digit) => `<span class="number-box">${digit}</span>`).join("")}
+                    </div>
+                    <div class="line"></div>
+                    <div class="answer-row">
+                        ${Array(totalDigits).fill(0).map((_, index) => `<input type="text" maxlength="1" class="digit-input" id="answer${i}-${index + 1}">`).join("")}
+                    </div>
+                    <div id="result-text-${i}" class="result-text"></div>
+                    <input type="hidden" id="correctAnswer${i}" value="${num1 + num2}">
+                `;
+                questionsDiv.appendChild(problemDiv);
+            }
+        }
+
+        function checkAnswers() {
+            let correctCount = 0;
+
+            for (let i = 1; i <= numQuestions; i++) {
+                const correctAnswer = document.getElementById(`correctAnswer${i}`).value;
+                let userAnswer = '';
+
+                // Combine digits into full number
+                for (let j = 1; j <= 5; j++) {
+                    const digitBox = document.getElementById(`answer${i}-${j}`);
+                    const digit = digitBox.value.trim();
+                    userAnswer += digit ? digit : '0'; // Default to 0 if empty
+
+                    // Get correct digit from answer
+                    const correctDigit = correctAnswer.toString().padStart(5, "0")[j - 1];
+
+                    // Highlight correct or incorrect inputs
+                    if (digit === correctDigit) {
+                        digitBox.classList.add("correct");
+                        digitBox.classList.remove("incorrect");
+                    } else {
+                        digitBox.classList.add("incorrect");
+                        digitBox.classList.remove("correct");
+                    }
+                }
+
+                if (parseInt(userAnswer) === parseInt(correctAnswer)) {
+                    correctCount++;
+                    document.getElementById(`result-text-${i}`).textContent = "✅ Correct!";
+                    document.getElementById(`result-text-${i}`).classList.add("correct-text");
+                } else {
+                    document.getElementById(`result-text-${i}`).textContent = `❌ Wrong! Correct Answer: ${correctAnswer}`;
+                    document.getElementById(`result-text-${i}`).classList.add("incorrect-text");
+                }
+            }
+
+            document.getElementById("results").textContent = `You got ${correctCount} out of ${numQuestions} correct! ✅`;
+        }
+
+        // Generate questions on page load
+        generateQuestions();
+    </script>
+</body>
+</html>
