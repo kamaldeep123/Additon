@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Multiplication Table Quiz</title>
+  <script>
+    // Will hold the 5 random digits selected for the current quiz
+    let selectedDigits = [];
+
+    // Function to generate 5 random digits from 2..19 and build the tables
+    function generateTables() {
+      // Create an array of all digits from 2..19
+      const range = [];
+      for (let i = 2; i <= 19; i++) {
+        range.push(i);
+      }
+
+      // Shuffle the array using Fisher–Yates shuffle
+      for (let i = range.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [range[i], range[j]] = [range[j], range[i]];
+      }
+
+      // Pick the first 5 digits from the shuffled array
+      selectedDigits = range.slice(0, 5);
+
+      // Get the container where we'll insert the tables
+      const container = document.getElementById("tablesContainer");
+      container.innerHTML = ""; // Clear any old tables
+
+      // Build a table for each selected digit
+      selectedDigits.forEach((digit) => {
+        const table = document.createElement("table");
+        table.border = "1";
+        table.style.margin = "20px";
+        table.cellPadding = "5";
+
+        // Create a caption for the table (e.g., "Table for 7")
+        const caption = document.createElement("caption");
+        caption.textContent = `Table for ${digit}`;
+        caption.style.fontWeight = "bold";
+        table.appendChild(caption);
+
+        // Build rows for multiples 1 to 10
+        for (let i = 1; i <= 10; i++) {
+          const row = document.createElement("tr");
+
+          // First cell: e.g., "7 x 1 = "
+          const questionCell = document.createElement("td");
+          questionCell.textContent = `${digit} x ${i} =`;
+          row.appendChild(questionCell);
+
+          // Second cell: an input field for the user to type the answer
+          const inputCell = document.createElement("td");
+          const input = document.createElement("input");
+          input.type = "number";
+          input.name = `answer-${digit}-${i}`;
+          input.placeholder = "?";
+          inputCell.appendChild(input);
+
+          row.appendChild(inputCell);
+          table.appendChild(row);
+        }
+
+        container.appendChild(table);
+      });
+    }
+
+    // Function to check the user's answers
+    function validateAnswers() {
+      let correctCount = 0;
+      const totalCount = 5 * 10; // 5 digits, 10 multiples each
+
+      // For each digit and each multiple, check if the user's input matches the actual product
+      selectedDigits.forEach((digit) => {
+        for (let i = 1; i <= 10; i++) {
+          const inputName = `answer-${digit}-${i}`;
+          const userInput = document.getElementsByName(inputName)[0].value;
+          const correctAnswer = digit * i;
+          
+          if (parseInt(userInput) === correctAnswer) {
+            correctCount++;
+          }
+        }
+      });
+
+      // Show the result
+      alert(`You got ${correctCount} out of ${totalCount} correct!`);
+    }
+
+    // Generate the tables on page load
+    window.onload = generateTables;
+  </script>
+</head>
+<body>
+  <h1>Multiplication Table Quiz</h1>
+  <p>Every time you load this page or click "Refresh Quiz," you’ll get 5 new random tables to practice!</p>
+  
+  <!-- Container for the tables -->
+  <div id="tablesContainer"></div>
+  
+  <!-- Buttons to validate answers and to refresh new tables -->
+  <button type="button" onclick="validateAnswers()">Submit</button>
+  <button type="button" onclick="generateTables()">Refresh Quiz</button>
+</body>
+</html>
