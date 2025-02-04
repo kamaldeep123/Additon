@@ -3,11 +3,166 @@
 <head>
   <meta charset="UTF-8" />
   <title>Multiplication Table Quiz</title>
+  <!-- Import a nice Google Font (Poppins) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" 
+    rel="stylesheet"
+  >
+
+  <style>
+    /* General reset/utility styles */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      /* A soft pastel gradient background */
+      background: linear-gradient(to right, #fad0c4, #ffd1ff);
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+
+    /* Header bar with the page title */
+    header {
+      background: #ff88cc;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      margin: 0;
+      color: #fff;
+      font-weight: 600;
+      font-size: 2rem;
+    }
+
+    /* Main container to nicely center content and add spacing */
+    main {
+      width: 90%;
+      max-width: 1200px;
+      margin: 30px auto;
+      background-color: rgba(255, 255, 255, 0.7); /* White with slight opacity */
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Description text just under the heading */
+    #description {
+      margin: 0 0 20px;
+      text-align: center;
+      font-size: 1.1rem;
+      color: #444;
+    }
+
+    /* Container that holds all the tables horizontally on a single row */
+    #tablesContainer {
+      display: flex;
+      flex-wrap: nowrap;       /* Force single row (no wrap) */
+      gap: 20px;               /* Space between tables */
+      overflow-x: auto;        /* Scroll horizontally if needed */
+      padding-bottom: 10px;    /* A little space at the bottom so scrollbar isn't too tight */
+    }
+
+    table {
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      min-width: 140px;
+      flex-shrink: 0; /* Prevent the table from shrinking so it stays the same width */
+    }
+
+    /* Table captions for each digit */
+    caption {
+      font-weight: 600;
+      font-size: 1.1em;
+      background-color: #ffc0cb;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+
+    td {
+      padding: 8px;
+      border: 1px solid #f0f0f0;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    /* Input fields for answers */
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      text-align: center;
+      color: darkblue;
+      transition: box-shadow 0.2s ease-in-out;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
+    }
+
+    /* Span next to each input for result (correct/incorrect) */
+    .result-span {
+      margin-left: 6px;
+      font-weight: bold;
+    }
+
+    /* Correct answer highlight */
+    .correct {
+      background-color: #ddffd9; /* light green */
+    }
+
+    /* Incorrect answer highlight */
+    .incorrect {
+      background-color: #ffe5e5; /* light red/pink */
+    }
+
+    /* Buttons for Submit and Refresh */
+    .button-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    button {
+      cursor: pointer;
+      background-color: #4caf50;
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 1rem;
+      border-radius: 4px;
+      transition: background-color 0.2s ease-in-out;
+    }
+    button:hover {
+      background-color: #43a047;
+    }
+    /* Secondary button (Refresh) in a different color */
+    .refresh-btn {
+      background-color: #2196f3;
+    }
+    .refresh-btn:hover {
+      background-color: #1e88e5;
+    }
+
+    /* Remove or adjust if you prefer differently on mobile — 
+       currently, the single row is forced. A horizontal scrollbar 
+       will appear if the viewport is small. */
+  </style>
+
   <script>
     // Will hold the 5 random digits selected for the current quiz
     let selectedDigits = [];
 
-    // Function to generate 5 random digits from 2..19 and build the tables
+    // Generate 5 random digits from 2..19 and build the tables
     function generateTables() {
       // Create an array of all digits from 2..19
       const range = [];
@@ -31,14 +186,10 @@
       // Build a table for each selected digit
       selectedDigits.forEach((digit) => {
         const table = document.createElement("table");
-        table.border = "1";
-        table.style.margin = "20px";
-        table.cellPadding = "5";
 
         // Create a caption for the table (e.g., "Table for 7")
         const caption = document.createElement("caption");
         caption.textContent = `Table for ${digit}`;
-        caption.style.fontWeight = "bold";
         table.appendChild(caption);
 
         // Build rows for multiples 1 to 10
@@ -56,7 +207,17 @@
           input.type = "number";
           input.name = `answer-${digit}-${i}`;
           input.placeholder = "?";
+          // for referencing the result span later
+          input.dataset.digit = digit;
+          input.dataset.multiple = i;
           inputCell.appendChild(input);
+
+          // create result span (to show correct/incorrect)
+          const resultSpan = document.createElement("span");
+          resultSpan.className = "result-span";
+          // Use data-attribute to easily find later
+          resultSpan.dataset.result = `answer-${digit}-${i}`;
+          inputCell.appendChild(resultSpan);
 
           row.appendChild(inputCell);
           table.appendChild(row);
@@ -66,7 +227,7 @@
       });
     }
 
-    // Function to check the user's answers
+    // Check the user's answers
     function validateAnswers() {
       let correctCount = 0;
       const totalCount = 5 * 10; // 5 digits, 10 multiples each
@@ -75,32 +236,63 @@
       selectedDigits.forEach((digit) => {
         for (let i = 1; i <= 10; i++) {
           const inputName = `answer-${digit}-${i}`;
-          const userInput = document.getElementsByName(inputName)[0].value;
+          const input = document.getElementsByName(inputName)[0];
+          const userInput = parseInt(input.value);
           const correctAnswer = digit * i;
-          
-          if (parseInt(userInput) === correctAnswer) {
+
+          // Find the associated result span
+          const resultSpan = document.querySelector(`[data-result='${inputName}']`);
+
+          // Reset styles from any previous submission
+          input.classList.remove("correct", "incorrect");
+          resultSpan.textContent = "";
+
+          if (userInput === correctAnswer) {
             correctCount++;
+            // highlight correct
+            input.classList.add("correct");
+            resultSpan.textContent = " ✓";
+            resultSpan.style.color = "green";
+          } else {
+            // highlight incorrect
+            input.classList.add("incorrect");
+            resultSpan.textContent = " X";
+            resultSpan.style.color = "red";
           }
         }
       });
 
-      // Show the result
-      alert(`You got ${correctCount} out of ${totalCount} correct!`);
+      // Show the final score in an alert
+      setTimeout(() => {
+        alert(`You got ${correctCount} out of ${totalCount} correct!`);
+      }, 100); 
+      // Slight delay so the highlights appear before the alert
     }
 
-    // Generate the tables on page load
+    // Generate new tables on page load
     window.onload = generateTables;
   </script>
 </head>
 <body>
-  <h1>Multiplication Table Quiz</h1>
-  <p>Every time you load this page or click "Refresh Quiz," you’ll get 5 new random tables to practice!</p>
+
+  <header>
+    <h1>Multiplication Table Quiz</h1>
+  </header>
+
+  <main>
+    <p id="description">
+      Practice your multiplication! Each time you load or refresh, you get 5 random tables (from 2 to 19).
+    </p>
+
+    <!-- Container for the tables (forced into one horizontal row) -->
+    <div id="tablesContainer"></div>
   
-  <!-- Container for the tables -->
-  <div id="tablesContainer"></div>
-  
-  <!-- Buttons to validate answers and to refresh new tables -->
-  <button type="button" onclick="validateAnswers()">Submit</button>
-  <button type="button" onclick="generateTables()">Refresh Quiz</button>
+    <!-- Buttons to validate answers and to refresh new tables -->
+    <div class="button-container">
+      <button type="button" onclick="validateAnswers()">Submit</button>
+      <button type="button" class="refresh-btn" onclick="generateTables()">Refresh Quiz</button>
+    </div>
+  </main>
+
 </body>
 </html>
