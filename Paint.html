@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paintable Picture for Kids</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-top: 10px;
+      touch-action: none;
+    }
+    video {
+      max-width: 100%;
+      margin-top: 10px;
+    }
+    button, input[type="color"] {
+      margin: 5px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Paintable Picture for Kids</h1>
+  <!-- Button to start the camera -->
+  <button id="takePicBtn">Take Picture</button>
+  <!-- Capture button appears once the video stream starts -->
+  <button id="captureBtn" style="display:none;">Capture</button>
+  <br>
+  <!-- Color picker for drawing -->
+  <input type="color" id="colorPicker" value="#000000">
+  <br>
+  <!-- Video element for showing camera stream -->
+  <video id="video" autoplay style="display:none;"></video>
+  <!-- Canvas for displaying the image and painting -->
+  <canvas id="canvas" width="640" height="480"></canvas>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const takePicBtn = document.getElementById('takePicBtn');
+    const captureBtn = document.getElementById('captureBtn');
+    const colorPicker = document.getElementById('colorPicker');
+
+    let drawing = false;
+    let currentColor = colorPicker.value;
+    let stream;
+
+    // Start the camera and show the video feed.
+    takePicBtn.addEventListener('click', async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = stream;
+        video.style.display = "block";
+        captureBtn.style.display = "inline-block";
+      } catch (err) {
+        alert("Error accessing camera: " + err);
+      }
+    });
+
+    // Capture the current frame from the video to the canvas and convert it to an outline.
+    captureBtn.addEventListener('click', () => {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      stopVideo();
+      video.style.display = "none";
+      captureBtn.style.display = "none";
+      convertToOutline();
+    });
+
+    // Stop all tracks of the video stream.
+    function stopVideo() {
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+    }
+
+    // Convert the current canvas image into an outline structure.
+    function convertToOutline() {
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+      const width = imageData.width;
+      const height = imageData.height;
+      
+      // Convert to grayscale.
+      for (let i = 0; i < data.length; i += 4) {
+        const avg = (data[i] + data[i+1] + data[i+2]) / 3;
+        data[i] = data[i+1] = data[i+2] = avg;
+      }
+      
+      // Create an output array.
+      const output = new Uint8ClampedArray(data);
+      const threshold = 20;
+      
+      // Simple edge detection: compare each pixel with its right and bottom neighbors.
+      for (let y = 1; y < height - 1; y++){
+        for (let x = 1; x < width - 1; x++){
+          const i = (y * width + x) * 4;
+          const right = (y * width + (x+1)) * 4;
+          const bottom = ((y+1) * width + x) * 4;
+          const diffX = Math.abs(data[i] - data[right]);
+          const diffY = Math.abs(data[i] - data[bottom]);
+          const edgeValue = (diffX + diffY) > threshold ? 0 : 255;
+          output[i] = output[i+1] = output[i+2] = edgeValue;
+          output[i+3] = 255;
+        }
+      }
+      
+      // Set border pixels to white.
+      for (let x = 0; x < width; x++){
+        let i = x * 4;
+        output[i] = output[i+1] = output[i+2] = 255;
+        output[i+3] = 255;
+        let i2 = ((height-1) * width + x) * 4;
+        output[i2] = output[i2+1] = output[i2+2] = 255;
+        output[i2+3] = 255;
+      }
+      for (let y = 0; y < height; y++){
+        let i = (y * width) * 4;
+        output[i] = output[i+1] = output[i+2] = 255;
+        output[i+3] = 255;
+        let i2 = (y * width + (width-1)) * 4;
+        output[i2] = output[i2+1] = output[i2+2] = 255;
+        output[i2+3] = 255;
+      }
+      
+      const newImageData = new ImageData(output, width, height);
+      ctx.putImageData(newImageData, 0, 0);
+    }
+
+    // Load a default paintable image (converted to outline) when the page loads.
+    window.addEventListener('load', () => {
+      let img = new Image();
+      // A sample default image; replace with any desired paintable image URL.
+      img.src = 'https://via.placeholder.com/640x480.png?text=Paintable+Page';
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        convertToOutline();
+      }
+    });
+
+    // Set up drawing on the canvas.
+    canvas.addEventListener('pointerdown', startDrawing);
+    canvas.addEventListener('pointermove', draw);
+    canvas.addEventListener('pointerup', stopDrawing);
+    canvas.addEventListener('pointerleave', stopDrawing);
+
+    function startDrawing(e) {
+      drawing = true;
+      ctx.beginPath();
+      ctx.moveTo(e.offsetX, e.offsetY);
+    }
+
+    function draw(e) {
+      if (!drawing) return;
+      ctx.lineWidth = 4;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = currentColor;
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.stroke();
+    }
+
+    function stopDrawing() {
+      if (!drawing) return;
+      drawing = false;
+      ctx.closePath();
+    }
+
+    // Update the drawing color based on the color picker.
+    colorPicker.addEventListener('change', (e) => {
+      currentColor = e.target.value;
+    });
+  </script>
+</body>
+</html>
