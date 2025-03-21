@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phonics Reading App</title>
+  <style>
+    body { font-family: Arial; margin: 0; padding: 20px; background: #f0f8ff; }
+    .app { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { color: #0066cc; text-align: center; }
+    .story { margin: 20px 0; }
+    .controls { display: flex; justify-content: space-between; margin: 10px 0; }
+    .word { display: inline-block; margin: 5px; padding: 5px; cursor: pointer; border-radius: 5px; }
+    .word:hover { background: #e6f2ff; }
+    .word.active { background: #ffff99; }
+    .phoneme { transition: all 0.3s; }
+    .phoneme.highlight { background: #99ff99; padding: 2px; border-radius: 3px; }
+    .phoneme-btns { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+    .phoneme-btn { background: #9966ff; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+    button { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+    .btn-prev, .btn-next { background: #cccccc; }
+    .btn-mode { background: #ff9933; color: white; }
+    .btn-read { background: #33cc33; color: white; }
+    select { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 10px; }
+    .progress { width: 100%; height: 10px; background: #e6e6e6; border-radius: 5px; margin-bottom: 10px; }
+    .progress-bar { height: 100%; background: #0066cc; border-radius: 5px; width: 0%; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Phonics Reading App</h1>
+    
+    <select id="story-select"></select>
+    
+    <div class="progress">
+      <div id="progress-bar" class="progress-bar"></div>
+    </div>
+    
+    <div class="controls">
+      <button id="prev-btn" class="btn-prev">Previous</button>
+      <span id="page-info">Page 1 of 1</span>
+      <button id="next-btn" class="btn-next">Next</button>
+    </div>
+    
+    <div class="story" id="story-content"></div>
+    
+    <div class="phoneme-btns" id="phoneme-btns"></div>
+    
+    <div class="controls">
+      <button id="mode-btn" class="btn-mode">Switch to Reading Mode</button>
+      <button id="read-btn" class="btn-read">Read Page</button>
+    </div>
+  </div>
+  
+  <script>
+    // App state
+    const state = {
+      currentStory: 0,
+      currentPage: 0,
+      teachingMode: true,
+      speechEnabled: true
+    };
+    
+    // Keep track of speech synthesis state
+    let speechSynthesisActive = false;
+    
+    // Function to check and restart speech synthesis if needed
+    function checkSpeechSynthesis() {
+      if ('speechSynthesis' in window) {
+        // Chrome and some browsers have a bug where speech synthesis stops after ~15 seconds
+        // This keeps it active
+        if (speechSynthesisActive) {
+          window.speechSynthesis.pause();
+          window.speechSynthesis.resume();
+        }
+      }
+    }
+    
+    // Set up timer to keep speech synthesis active
+    setInterval(checkSpeechSynthesis, 10000);
+    
+    // Stories array
+    const stories = [];
+    
+    // Story templates to generate variety
+    const templates = [
+      {
+        title: "The Cat",
+        text: "The cat sat on the mat. It was a big cat with soft fur. The cat liked to sleep on the mat by the door. When the sun was warm, the cat would stretch out and purr."
+      },
+      {
+        title: "My Hat",
+        text: "I have a red hat. My hat is big and soft. I wear my hat when it is cold. The hat keeps my head warm in the snow. My mom gave me the hat for my birthday."
+      },
+      {
+        title: "The Dog",
+        text: "The dog likes to run and play. He can jump very high. His name is Max and he is my best friend. We play in the park every day. Max can catch the ball when I throw it."
+      },
+      {
+        title: "School Day",
+        text: "I go to school on the bus. My teacher is very nice. We learn to read and count numbers. At lunch I eat with my friends. Then we play games outside on the playground."
+      },
+      {
+        title: "The Farm",
+        text: "We went to the farm today. I saw cows, pigs, and sheep. The farmer showed us how to feed the animals. The big tractor was my favorite thing. I want to visit the farm again."
+      }
+    ];
+    
+    // Create 30 stories by repeating templates with variations
+    for (let i = 0; i < 30; i++) {
+      const template = templates[i % templates.length];
+      const storyNumber = Math.floor(i / templates.length) + 1;
+      const title = template.title + " " + (storyNumber > 1 ? storyNumber : "");
+      
+      // Convert text to words with phonemes
+      const words = template.text.split(/\s+/).map(word => {
+        // Simple phonetic breakdown (in a real app, this would be more sophisticated)
+        const cleanWord = word.replace(/[.,!?]/g, "");
+        return {
+          word: cleanWord,
+          phonemes: breakIntoPhonemes(cleanWord)
+        };
+      });
+      
+      // Create story with 1-2 pages
+      const pages = [{ text: template.text, words }];
+      
+      // Add second page for some stories
+      if (i % 3 === 0) {
+        const secondPageWords = words.slice(0, words.length / 2).reverse();
+        pages.push({
+          text: secondPageWords.map(w => w.word).join(" ") + ".",
+          words: secondPageWords
+        });
+      }
+      
+      stories.push({ title, pages });
+    }
+    
+    // More advanced function to break words into phonemes
+    function breakIntoPhonemes(word) {
+      const phonemes = [];
+      const lowercaseWord = word.toLowerCase();
+      
+      // Common phoneme patterns to check first (order matters)
+      const phonemePatterns = [
+        // Vowel teams
+        { pattern: 'ee', phoneme: 'ee' },
+        { pattern: 'ea', phoneme: 'ea' },
+        { pattern: 'ai', phoneme: 'ai' },
+        { pattern: 'ay', phoneme: 'ay' },
+        { pattern: 'oa', phoneme: 'oa' },
+        { pattern: 'ow', phoneme: 'ow' },
+        { pattern: 'oo', phoneme: 'oo' },
+        { pattern: 'ou', phoneme: 'ou' },
+        { pattern: 'oi', phoneme: 'oi' },
+        { pattern: 'oy', phoneme: 'oy' },
+        
+        // R-controlled vowels
+        { pattern: 'ar', phoneme: 'ar' },
+        { pattern: 'er', phoneme: 'er' },
+        { pattern: 'ir', phoneme: 'ir' },
+        { pattern: 'or', phoneme: 'or' },
+        { pattern: 'ur', phoneme: 'ur' },
+        
+        // Consonant digraphs
+        { pattern: 'sh', phoneme: 'sh' },
+        { pattern: 'ch', phoneme: 'ch' },
+        { pattern: 'th', phoneme: 'th' },
+        { pattern: 'ph', phoneme: 'ph' },
+        { pattern: 'wh', phoneme: 'wh' },
+        { pattern: 'ck', phoneme: 'ck' },
+        
+        // Common endings
+        { pattern: 'ing', phoneme: 'ing' },
+        { pattern: 'ed', phoneme: 'ed' }
+      ];
+      
+      // Process the word
+      let i = 0;
+      while (i < lowercaseWord.length) {
+        let foundPattern = false;
+        
+        // Check for multi-character phoneme patterns
+        for (const {pattern, phoneme} of phonemePatterns) {
+          if (i <= lowercaseWord.length - pattern.length && 
+              lowercaseWord.substring(i, i + pattern.length) === pattern) {
+            phonemes.push(phoneme);
+            i += pattern.length;
+            foundPattern = true;
+            break;
+          }
+        }
+        
+        // If no pattern matched, treat as individual character
+        if (!foundPattern) {
+          phonemes.push(lowercaseWord[i]);
+          i++;
+        }
+      }
+      
+      return phonemes.length ? phonemes : [lowercaseWord];
+    }
+    
+    // DOM Elements
+    const elements = {
+      storySelect: document.getElementById('story-select'),
+      prevBtn: document.getElementById('prev-btn'),
+      nextBtn: document.getElementById('next-btn'),
+      pageInfo: document.getElementById('page-info'),
+      storyContent: document.getElementById('story-content'),
+      phonemeBtns: document.getElementById('phoneme-btns'),
+      modeBtn: document.getElementById('mode-btn'),
+      readBtn: document.getElementById('read-btn'),
+      progressBar: document.getElementById('progress-bar')
+    };
+    
+    // Initialize the app
+    function init() {
+      // Generate stories first - IMPORTANT
+      createStories();
+      
+      // Populate story selector
+      stories.forEach((story, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = story.title;
+        elements.storySelect.appendChild(option);
+      });
+      
+      // Add event listeners
+      elements.storySelect.addEventListener('change', () => {
+        state.currentStory = parseInt(elements.storySelect.value);
+        state.currentPage = 0;
+        renderCurrentPage();
+      });
+      
+      elements.prevBtn.addEventListener('click', navigatePrev);
+      elements.nextBtn.addEventListener('click', navigateNext);
+      elements.modeBtn.addEventListener('click', toggleMode);
+      elements.readBtn.addEventListener('click', readPage);
+      
+      // Initial render
+      renderCurrentPage();
+    }
+    
+    // Create the stories
+    function createStories() {
+      // Add predefined stories
+      stories.push({
+        title: "The Cat",
+        pages: [{
+          text: "The cat sat on the mat. It was a big cat with soft fur. The cat liked to sleep on the mat by the door. When the sun was warm, the cat would stretch out and purr.",
+          words: [
+            { word: "The", phonemes: ["th", "e"] },
+            { word: "cat", phonemes: ["c", "a", "t"] },
+            { word: "sat", phonemes: ["s", "a", "t"] },
+            { word: "on", phonemes: ["o", "n"] },
+            { word: "the", phonemes: ["th", "e"] },
+            { word: "mat", phonemes: ["m", "a", "t"] },
+            { word: "It", phonemes: ["i", "t"] },
+            { word: "was", phonemes: ["w", "a", "s"] },
+            { word: "a", phonemes: ["a"] },
+            { word: "big", phonemes: ["b", "i", "g"] },
+            { word: "with", phonemes: ["w", "i", "th"] },
+            { word: "soft", phonemes: ["s", "o", "f", "t"] },
+            { word: "fur", phonemes: ["f", "ur"] },
+            { word: "liked", phonemes: ["l", "i", "k", "ed"] },
+            { word: "to", phonemes: ["t", "o"] },
+            { word: "sleep", phonemes: ["s", "l", "ee", "p"] },
+            { word: "by", phonemes: ["b", "y"] },
+            { word: "door", phonemes: ["d", "oo", "r"] },
+            { word: "When", phonemes: ["wh", "e", "n"] },
+            { word: "sun", phonemes: ["s", "u", "n"] },
+            { word: "warm", phonemes: ["w", "ar", "m"] },
+            { word: "would", phonemes: ["w", "ou", "d"] },
+            { word: "stretch", phonemes: ["s", "t", "r", "e", "tch"] },
+            { word: "out", phonemes: ["ou", "t"] },
+            { word: "and", phonemes: ["a", "n", "d"] },
+            { word: "purr", phonemes: ["p", "ur"] }
+          ]
+        }]
+      });
+      
+      // Generate the rest of the stories
+      for (let i = 1; i < 30; i++) {
+        const template = templates[i % templates.length];
+        const title = template.title + " " + (Math.floor(i / templates.length) + 1);
+        
+        // Convert text to words with phonemes
+        const words = template.text.split(/\s+/).map(word => {
+          const cleanWord = word.replace(/[.,!?]/g, "");
+          return {
+            word: cleanWord,
+            phonemes: breakIntoPhonemes(cleanWord)
+          };
+        });
+        
+        // Create story with 1-2 pages
+        const pages = [{ text: template.text, words }];
+        
+        // Add second page for some stories
+        if (i % 3 === 0) {
+          const secondPageWords = words.slice(0, words.length / 2).reverse();
+          pages.push({
+            text: secondPageWords.map(w => w.word).join(" ") + ".",
+            words: secondPageWords
+          });
+        }
+        
+        stories.push({ title, pages });
+      }
+    }
+    
+    // Navigation
+    function navigatePrev() {
+      if (state.currentPage > 0) {
+        state.currentPage--;
+      } else if (state.currentStory > 0) {
+        state.currentStory--;
+        elements.storySelect.value = state.currentStory;
+        state.currentPage = stories[state.currentStory].pages.length - 1;
+      }
+      renderCurrentPage();
+    }
+    
+    function navigateNext() {
+      if (state.currentPage < stories[state.currentStory].pages.length - 1) {
+        state.currentPage++;
+      } else if (state.currentStory < stories.length - 1) {
+        state.currentStory++;
+        elements.storySelect.value = state.currentStory;
+        state.currentPage = 0;
+      }
+      renderCurrentPage();
+    }
+    
+    // Toggle between teaching and reading modes
+    function toggleMode() {
+      state.teachingMode = !state.teachingMode;
+      elements.modeBtn.textContent = state.teachingMode ? 
+        "Switch to Reading Mode" : "Switch to Teaching Mode";
+      elements.phonemeBtns.style.display = state.teachingMode ? "flex" : "none";
+      renderCurrentPage();
+    }
+    
+    // Speech functions
+    function speakText(text) {
+      // Cancel any ongoing speech first
+      window.speechSynthesis.cancel();
+      
+      // Set the flag to indicate speech is happening
+      speechSynthesisActive = true;
+      
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.8; // Slower for learning
+        utterance.pitch = 1.1; // Slightly higher pitch for clarity
+        utterance.volume = 1.0; // Maximum volume
+        
+        // Handle speech completion
+        utterance.onend = function() {
+          // Reset the flag when speech is complete
+          if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
+            speechSynthesisActive = false;
+          }
+        };
+        
+        // Reset the speech synthesis if it's been inactive
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        }
+        
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+    
+    // Speak a phoneme and highlight it
+    function speakPhoneme(phoneme) {
+      // Set the flag to indicate speech is happening
+      speechSynthesisActive = true;
+      
+      // Highlight all instances of this phoneme
+      document.querySelectorAll(`.phoneme[data-phoneme="${phoneme}"]`).forEach(el => {
+        el.classList.add('highlight');
+        setTimeout(() => el.classList.remove('highlight'), 1000);
+      });
+      
+      // Map of phonemes to their actual sounds (in context)
+      const phonemeSounds = {
+        'a': 'ah', 'e': 'eh', 'i': 'ih', 'o': 'oh', 'u': 'uh',
+        'ai': 'ay', 'ay': 'ay', 'ea': 'ee', 'ee': 'ee', 'oa': 'oh',
+        'oo': 'oo', 'ou': 'ow', 'ow': 'ow', 'oi': 'oy', 'oy': 'oy',
+        'ar': 'ar', 'er': 'er', 'ir': 'er', 'or': 'or', 'ur': 'er',
+        'th': 'th', 'sh': 'sh', 'ch': 'ch', 'ph': 'f', 'wh': 'w',
+        'b': 'buh', 'c': 'kuh', 'd': 'duh', 'f': 'fuh', 'g': 'guh',
+        'h': 'huh', 'j': 'juh', 'k': 'kuh', 'l': 'luh', 'm': 'muh',
+        'n': 'nuh', 'p': 'puh', 'q': 'kwuh', 'r': 'ruh', 's': 'suh',
+        't': 'tuh', 'v': 'vuh', 'w': 'wuh', 'x': 'ks', 'y': 'yuh', 
+        'z': 'zuh', 'ing': 'ing', 'ed': 'd'
+      };
+      
+      // Use the phoneme sound mapping if available, otherwise use the phoneme itself
+      const sound = phonemeSounds[phoneme.toLowerCase()] || phoneme;
+      speakText(sound);
+    }
+    
+    // Teach a word by speaking its phonemes
+    function teachWord(word) {
+      // Cancel any ongoing speech first
+      window.speechSynthesis.cancel();
+      
+      // Clear previous selections
+      document.querySelectorAll('.word.active').forEach(el => {
+        el.classList.remove('active');
+      });
+      
+      // Find and highlight this word
+      const wordElements = document.querySelectorAll(`.word[data-word="${word.word}"]`);
+      wordElements.forEach(el => el.classList.add('active'));
+      
+      if (state.teachingMode) {
+        // Teach each phoneme then the whole word
+        let index = 0;
+        
+        function speakNextPhoneme() {
+          if (index < word.phonemes.length) {
+            const phoneme = word.phonemes[index];
+            
+            // Highlight the phoneme
+            wordElements.forEach(wordEl => {
+              const phonemeEl = wordEl.querySelector(`.phoneme[data-phoneme="${phoneme}"]`);
+              if (phonemeEl) {
+                phonemeEl.classList.add('highlight');
+                setTimeout(() => phonemeEl.classList.remove('highlight'), 800);
+              }
+            });
+            
+            // Speak the phoneme sound (not just the letter name)
+            speakPhoneme(phoneme);
+            index++;
+            setTimeout(speakNextPhoneme, 1000);
+          } else {
+            // After all phonemes, speak the whole word
+            setTimeout(() => {
+              speakText(word.word);
+              setTimeout(() => {
+                wordElements.forEach(el => el.classList.remove('active'));
+              }, 1000);
+            }, 800);
+          }
+        }
+        
+        speakNextPhoneme();
+      } else {
+        // Just speak the word in reading mode
+        speakText(word.word);
+        setTimeout(() => {
+          wordElements.forEach(el => el.classList.remove('active'));
+        }, 1000);
+      }
+    }
+    
+    // Read the whole page
+    function readPage() {
+      const story = stories[state.currentStory];
+      const page = story.pages[state.currentPage];
+      speakText(page.text);
+    }
+    
+    // Render the current page
+    function renderCurrentPage() {
+      const story = stories[state.currentStory];
+      const page = story.pages[state.currentPage];
+      
+      // Clear previous content
+      elements.storyContent.innerHTML = '';
+      elements.phonemeBtns.innerHTML = '';
+      
+      // Render words
+      page.words.forEach((word, index) => {
+        const wordElement = document.createElement('span');
+        wordElement.className = 'word';
+        wordElement.dataset.word = word.word;
+        
+        // Add phonemes
+        word.phonemes.forEach(phoneme => {
+          const phonemeElement = document.createElement('span');
+          phonemeElement.className = 'phoneme';
+          phonemeElement.dataset.phoneme = phoneme;
+          phonemeElement.textContent = phoneme;
+          wordElement.appendChild(phonemeElement);
+        });
+        
+        // Add click event
+        wordElement.addEventListener('click', () => teachWord(word));
+        elements.storyContent.appendChild(wordElement);
+        
+        // Add space after word (except last word)
+        if (index < page.words.length - 1) {
+          elements.storyContent.appendChild(document.createTextNode(' '));
+        }
+      });
+      
+      // Add phoneme buttons for practice
+      if (state.teachingMode) {
+        elements.phonemeBtns.style.display = "flex";
+        // Get unique phonemes from this page
+        const uniquePhonemes = [...new Set(
+          page.words.flatMap(word => word.phonemes)
+        )];
+        
+        uniquePhonemes.forEach(phoneme => {
+          const btn = document.createElement('button');
+          btn.className = 'phoneme-btn';
+          btn.textContent = phoneme;
+          btn.addEventListener('click', () => speakPhoneme(phoneme));
+          elements.phonemeBtns.appendChild(btn);
+        });
+      } else {
+        elements.phonemeBtns.style.display = "none";
+      }
+      
+      // Update navigation
+      const isFirstPage = (state.currentStory === 0 && state.currentPage === 0);
+      const isLastStory = (state.currentStory === stories.length - 1);
+      const isLastPage = (state.currentPage === stories[state.currentStory].pages.length - 1);
+      
+      elements.prevBtn.disabled = isFirstPage;
+      elements.nextBtn.disabled = (isLastStory && isLastPage);
+      
+      // Update page counter
+      const totalPages = stories[state.currentStory].pages.length;
+      elements.pageInfo.textContent = `Page ${state.currentPage + 1} of ${totalPages}`;
+      
+      // Update progress bar
+      const totalStoryPages = stories.reduce((total, story) => total + story.pages.length, 0);
+      let completedPages = 0;
+      
+      for (let i = 0; i < state.currentStory; i++) {
+        completedPages += stories[i].pages.length;
+      }
+      completedPages += state.currentPage;
+      
+      const progress = (completedPages / totalStoryPages) * 100;
+      elements.progressBar.style.width = `${progress}%`;
+    }
+    
+    // Start the app
+    init();
+  </script>
+</body>
+</html>
