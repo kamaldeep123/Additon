@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Phonics Reading App</title>
+<style>
+body{font-family:Arial;margin:0;padding:20px;background:#f0f8ff}
+.app{max-width:800px;margin:auto;background:white;padding:20px;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1)}
+h1,h2{color:#0066cc;text-align:center}
+.story{margin:20px 0;min-height:100px;border:1px solid #ddd;padding:15px;border-radius:5px}
+.word{display:inline-block;margin:5px;padding:5px;cursor:pointer;border-radius:5px;background:#f0f8ff}
+.word:hover{background:#e6f2ff}
+.word.active{background:#ffff99}
+.phoneme{transition:all 0.3s}
+.phoneme.highlight{background:#99ff99;padding:2px;border-radius:3px}
+button{padding:10px 15px;border:none;border-radius:5px;cursor:pointer;font-weight:bold;margin:5px}
+.btn-mode{background:#ff9933;color:white}
+.btn-read{background:#33cc33;color:white}
+.btn-upload{background:#0066cc;color:white}
+textarea{width:100%;height:150px;margin:10px 0;padding:10px;border:1px solid #ddd;border-radius:5px}
+.file-input{display:none}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Phonics Reader</h1>
+  
+  <div class="controls" style="text-align:center">
+    <button id="mode-btn" class="btn-mode">Teaching Mode</button>
+    <button id="read-btn" class="btn-read">Read Text</button>
+  </div>
+  
+  <h2>Text to Practice</h2>
+  <textarea id="story-text" placeholder="Enter text here or upload a file">The cat sat on the mat. It was a big cat with soft fur. The cat liked to sleep on the mat by the door. When the sun was warm, the cat would stretch out and purr.</textarea>
+  
+  <div style="text-align:center">
+    <input type="file" id="file-input" class="file-input" accept="text/plain">
+    <button id="upload-btn" class="btn-upload">Upload Text File</button>
+  </div>
+  
+  <div class="story" id="story-content"></div>
+</div>
+
+<script>
+// App state
+let teachingMode = true;
+let speechActive = false;
+
+// Keep speech synthesis active
+setInterval(() => {
+  if (speechActive && window.speechSynthesis) {
+    window.speechSynthesis.pause();
+    window.speechSynthesis.resume();
+  }
+}, 10000);
+
+// Elements
+const elements = {
+  storyText: document.getElementById('story-text'),
+  storyContent: document.getElementById('story-content'),
+  modeBtn: document.getElementById('mode-btn'),
+  readBtn: document.getElementById('read-btn'),
+  fileInput: document.getElementById('file-input'),
+  uploadBtn: document.getElementById('upload-btn')
+};
+
+// Phoneme sounds map
+const phonemeSounds = {
+  'a':'ah', 'e':'eh', 'i':'ih', 'o':'oh', 'u':'uh',
+  'ai':'ay', 'ay':'ay', 'ea':'ee', 'ee':'ee', 'oa':'oh',
+  'oo':'oo', 'ou':'ow', 'ow':'ow', 'oi':'oy', 'oy':'oy',
+  'ar':'ar', 'er':'er', 'ir':'er', 'or':'or', 'ur':'er',
+  'th':'th', 'sh':'sh', 'ch':'ch', 'ph':'f', 'wh':'w',
+  'b':'buh', 'c':'kuh', 'd':'duh', 'f':'fuh', 'g':'guh',
+  'h':'huh', 'j':'juh', 'k':'kuh', 'l':'luh', 'm':'muh',
+  'n':'nuh', 'p':'puh', 'q':'kwuh', 'r':'ruh', 's':'suh',
+  't':'tuh', 'v':'vuh', 'w':'wuh', 'x':'ks', 'y':'yuh', 
+  'z':'zuh', 'ing':'ing', 'ed':'d'
+};
+
+// Speech functions
+function speakText(text) {
+  window.speechSynthesis.cancel();
+  speechActive = true;
+  
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.8;
+    utterance.pitch = 1.1;
+    utterance.volume = 1.0;
+    
+    utterance.onend = function() {
+      if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
+        speechActive = false;
+      }
+    };
+    
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+    }
+    
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
+// Speak a phoneme
+function speakPhoneme(phoneme) {
+  speechActive = true;
+  
+  document.querySelectorAll(`.phoneme[data-phoneme="${phoneme}"]`).forEach(el => {
+    el.classList.add('highlight');
+    setTimeout(() => el.classList.remove('highlight'), 1000);
+  });
+  
+  const sound = phonemeSounds[phoneme.toLowerCase()] || phoneme;
+  speakText(sound);
+}
+
+// Break words into phonemes
+function breakIntoPhonemes(word) {
+  const phonemes = [];
+  const lwc = word.toLowerCase();
+  
+  const patterns = [
+    {p:'ee',s:'ee'}, {p:'ea',s:'ea'}, {p:'ai',s:'ai'}, {p:'ay',s:'ay'}, 
+    {p:'oa',s:'oa'}, {p:'ow',s:'ow'}, {p:'oo',s:'oo'}, {p:'ou',s:'ou'}, 
+    {p:'oi',s:'oi'}, {p:'oy',s:'oy'}, {p:'ar',s:'ar'}, {p:'er',s:'er'}, 
+    {p:'ir',s:'ir'}, {p:'or',s:'or'}, {p:'ur',s:'ur'}, {p:'sh',s:'sh'}, 
+    {p:'ch',s:'ch'}, {p:'th',s:'th'}, {p:'ph',s:'ph'}, {p:'wh',s:'wh'}, 
+    {p:'ck',s:'ck'}, {p:'ing',s:'ing'}, {p:'ed',s:'ed'}
+  ];
+  
+  let i = 0;
+  while (i < lwc.length) {
+    let matched = false;
+    
+    for (const {p, s} of patterns) {
+      if (i <= lwc.length - p.length && lwc.substring(i, i + p.length) === p) {
+        phonemes.push(s);
+        i += p.length;
+        matched = true;
+        break;
+      }
+    }
+    
+    if (!matched) {
+      phonemes.push(lwc[i]);
+      i++;
+    }
+  }
+  
+  return phonemes.length ? phonemes : [lwc];
+}
+
+// Teach a word by speaking its phonemes
+function teachWord(word) {
+  window.speechSynthesis.cancel();
+  
+  document.querySelectorAll('.word.active').forEach(el => el.classList.remove('active'));
+  
+  const wordElements = document.querySelectorAll(`.word[data-word="${word.word}"]`);
+  wordElements.forEach(el => el.classList.add('active'));
+  
+  if (teachingMode) {
+    let index = 0;
+    
+    function speakNext() {
+      if (index < word.phonemes.length) {
+        const phoneme = word.phonemes[index];
+        
+        wordElements.forEach(wordEl => {
+          const phonemeEl = wordEl.querySelector(`.phoneme[data-phoneme="${phoneme}"]`);
+          if (phonemeEl) {
+            phonemeEl.classList.add('highlight');
+            setTimeout(() => phonemeEl.classList.remove('highlight'), 800);
+          }
+        });
+        
+        speakPhoneme(phoneme);
+        index++;
+        setTimeout(speakNext, 1000);
+      } else {
+        setTimeout(() => {
+          speakText(word.word);
+          setTimeout(() => {
+            wordElements.forEach(el => el.classList.remove('active'));
+          }, 1000);
+        }, 800);
+      }
+    }
+    
+    speakNext();
+  } else {
+    speakText(word.word);
+    setTimeout(() => {
+      wordElements.forEach(el => el.classList.remove('active'));
+    }, 1000);
+  }
+}
+
+// Update story content
+function updateStoryContent() {
+  const text = elements.storyText.value;
+  
+  if (!text.trim()) {
+    elements.storyContent.innerHTML = '<p>Enter some text to practice reading</p>';
+    return;
+  }
+  
+  elements.storyContent.innerHTML = '';
+  
+  // Process words
+  const words = text.split(/\s+/).map(word => {
+    const cleanWord = word.replace(/[.,!?:;()\[\]{}'"]/g, '').trim();
+    if (cleanWord.length === 0) return null;
+    return {
+      word: cleanWord,
+      phonemes: breakIntoPhonemes(cleanWord)
+    };
+  }).filter(word => word !== null);
+  
+  // Create word elements
+  words.forEach(word => {
+    const wordElement = document.createElement('span');
+    wordElement.className = 'word';
+    wordElement.dataset.word = word.word;
+    
+    word.phonemes.forEach(phoneme => {
+      const phonemeElement = document.createElement('span');
+      phonemeElement.className = 'phoneme';
+      phonemeElement.dataset.phoneme = phoneme;
+      phonemeElement.textContent = phoneme;
+      wordElement.appendChild(phonemeElement);
+    });
+    
+    wordElement.addEventListener('click', () => teachWord(word));
+    elements.storyContent.appendChild(wordElement);
+    elements.storyContent.appendChild(document.createTextNode(' '));
+  });
+}
+
+// Toggle teaching mode
+function toggleMode() {
+  teachingMode = !teachingMode;
+  elements.modeBtn.textContent = teachingMode ? "Teaching Mode" : "Reading Mode";
+}
+
+// Read the story
+function readStory() {
+  const text = elements.storyText.value;
+  if (text.trim()) {
+    speakText(text);
+  }
+}
+
+// Handle file upload
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    elements.storyText.value = e.target.result;
+    updateStoryContent();
+  };
+  
+  reader.onerror = function() {
+    alert('Error reading file');
+  };
+  
+  reader.readAsText(file);
+}
+
+// Initialize app
+function init() {
+  // Initial content update
+  updateStoryContent();
+  
+  // Add event listeners
+  elements.storyText.addEventListener('input', updateStoryContent);
+  elements.modeBtn.addEventListener('click', toggleMode);
+  elements.readBtn.addEventListener('click', readStory);
+  elements.uploadBtn.addEventListener('click', () => elements.fileInput.click());
+  elements.fileInput.addEventListener('change', handleFileUpload);
+}
+
+// Start the app
+init();
+</script>
+</body>
+</html>
