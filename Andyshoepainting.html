@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andy's Amazing Shoe Paintings</title>
+    <style>
+        :root {
+            --primary-color: #ff007a;
+            --secondary-color: #00d4ff;
+            --accent-color: #ffbe0b;
+            --tertiary-color: #8a2be2;
+            --quaternary-color: #00fa9a;
+            --dark-color: #292f36;
+            --light-color: #f7fff7;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--tertiary-color), var(--quaternary-color));
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            animation: gradient 15s ease infinite;
+            background-size: 400% 400%;
+        }
+        
+        @keyframes gradient {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+        
+        .contact-info {
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .contact-info a {
+            color: white;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/api/placeholder/1200/400');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        section {
+            margin: 4rem 0;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--secondary-color);
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-10px);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .faq-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .faq-item {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .faq-item h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            font-size: 1.3rem;
+        }
+        
+        .testimonials {
+            margin-top: 3rem;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .testimonial-content::before {
+            content: """;
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            font-size: 4rem;
+            color: var(--secondary-color);
+            opacity: 0.3;
+            font-family: serif;
+        }
+        
+        .customer-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .customer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            background-color: var(--tertiary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .customer-details h4 {
+            margin: 0;
+            color: var(--dark-color);
+        }
+        
+        .customer-details p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .styles {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .style-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 300px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .style-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .style-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .style-info {
+            padding: 1.5rem;
+        }
+        
+        .style-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .contact-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .social-icon {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            color: var(--accent-color);
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        @media (max-width: 768px) {
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* Success message styling */
+        .success-message {
+            display: none;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+        
+        /* Loading indicator */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .loading::after {
+            content: "";
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Andy's Amazing Shoe Paintings</h1>
+            <p class="tagline">Where Art Meets Fashion - One Step at a Time</p>
+            <p class="contact-info">Contact: <a href="mailto:Barecanvascreations@gmail.com">Barecanvascreations@gmail.com</a></p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <section id="about">
+            <h2>About Andy</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Hi there! I'm Andy, an artist passionate about transforming ordinary shoes into wearable masterpieces. What started as a hobby during art school has blossomed into my personal artistic journey and full-time passion.</p>
+                    <p>Each pair of shoes I paint tells a unique story. Whether you're looking for a subtle design or a bold statement piece, I can bring your vision to life with vibrant colors and meticulous attention to detail. I use premium quality, long-lasting paints specifically formulated for fabric and leather that won't crack or fade with normal wear.</p>
+                    <p>My custom shoe paintings are not just accessories - they're conversation starters, confidence boosters, and a way to express your unique personality with every step you take. I've created pieces for everything from weddings and graduations to music festivals and corporate events.</p>
+                    <p>With over five years of experience and hundreds of happy customers worldwide, I pride myself on delivering exceptional quality and bringing your creative visions to life. Each pair of shoes becomes a wearable art piece that's uniquely yours!</p>
+                </div>
+                <div class="about-image">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Studio Background -->
+                        <rect width="600" height="400" fill="#f5f5f5"/>
+                        
+                        <!-- Artist's Desk -->
+                        <rect x="100" y="200" width="400" height="150" fill="#8b4513"/>
+                        <rect x="100" y="195" width="400" height="5" fill="#a0522d"/>
+                        
+                        <!-- Artist (Andy) -->
+                        <circle cx="300" cy="150" r="40" fill="#ffdbac"/> <!-- face -->
+                        <path d="M270 130 Q300 100 330 130" stroke="#5e3a1c" stroke-width="5" fill="none"/> <!-- hair -->
+                        <path d="M260 120 Q300 80 340 120" stroke="#5e3a1c" stroke-width="8" fill="none"/> <!-- hair -->
+                        <ellipse cx="285" cy="140" rx="5" ry="5" fill="#4b2c34"/> <!-- eye -->
+                        <ellipse cx="315" cy="140" rx="5" ry="5" fill="#4b2c34"/> <!-- eye -->
+                        <path d="M290 155 Q300 165 310 155" stroke="#d35d69" stroke-width="2" fill="#d35d69"/> <!-- mouth -->
+                        
+                        <!-- Upper Body -->
+                        <path d="M280 190 L270 270 L330 270 L320 190" fill="#ff007a"/> <!-- shirt -->
+                        <rect x="280" y="270" width="40" height="30" fill="#4b2c34"/> <!-- lap -->
+                        
+                        <!-- Artist's Arms -->
+                        <path d="M270 210 Q240 230 250 270" stroke="#ffdbac" stroke-width="20" fill="none"/> <!-- left arm -->
+                        <path d="M330 210 Q360 230 370 250" stroke="#ffdbac" stroke-width="20" fill="none"/> <!-- right arm -->
+                        
+                        <!-- Paintbrush in Hand -->
+                        <line x1="370" y1="250" x2="400" y2="230" stroke="#a05a2c" stroke-width="5"/>
+                        <path d="M400 230 L420 220" stroke="#8a2be2" stroke-width="3"/>
+                        
+                        <!-- Shoes on Table -->
+                        <path d="M150 220 C170 180 220 180 240 220" fill="#ffffff" stroke="#000000" stroke-width="2"/> <!-- shoe 1 outline -->
+                        <path d="M150 220 C170 230 220 230 240 220" fill="#ffffff" stroke="#000000" stroke-width="2"/> <!-- shoe 1 base -->
+                        <path d="M370 230 C390 190 440 190 460 230" fill="#ffffff" stroke="#000000" stroke-width="2"/> <!-- shoe 2 outline being painted -->
+                        <path d="M370 230 C390 240 440 240 460 230" fill="#ffffff" stroke="#000000" stroke-width="2"/> <!-- shoe 2 base -->
+                        
+                        <!-- Colorful Paint Design on Shoe -->
+                        <path d="M380 210 C400 190 420 190 440 210" stroke="#ff007a" stroke-width="3" fill="none"/>
+                        <path d="M385 215 C405 195 415 195 435 215" stroke="#00d4ff" stroke-width="3" fill="none"/>
+                        <path d="M390 220 C410 200 410 200 430 220" stroke="#ffbe0b" stroke-width="3" fill="none"/>
+                        <circle cx="410" cy="205" r="5" fill="#8a2be2"/>
+                        <circle cx="425" cy="205" r="3" fill="#00fa9a"/>
+                        <circle cx="395" cy="205" r="3" fill="#ff007a"/>
+                        
+                        <!-- Completed Shoe with Design -->
+                        <path d="M170 200 C180 190 190 190 200 200" stroke="#ff007a" stroke-width="3" fill="none"/>
+                        <path d="M165 205 C185 185 195 185 215 205" stroke="#00d4ff" stroke-width="3" fill="none"/>
+                        <path d="M160 210 C180 190 200 190 220 210" stroke="#ffbe0b" stroke-width="3" fill="none"/>
+                        <circle cx="190" cy="195" r="5" fill="#8a2be2"/>
+                        <circle cx="205" cy="195" r="3" fill="#00fa9a"/>
+                        <circle cx="175" cy="195" r="3" fill="#ff007a"/>
+                        
+                        <!-- Paint Supplies -->
+                        <rect x="280" y="220" width="60" height="20" rx="5" fill="#444444"/> <!-- paint palette -->
+                        <circle cx="290" cy="230" r="5" fill="#ff007a"/> <!-- paint -->
+                        <circle cx="305" cy="230" r="5" fill="#00d4ff"/> <!-- paint -->
+                        <circle cx="320" cy="230" r="5" fill="#ffbe0b"/> <!-- paint -->
+                        <circle cx="335" cy="230" r="5" fill="#8a2be2"/> <!-- paint -->
+                        
+                        <!-- Water Jar -->
+                        <rect x="460" y="230" width="30" height="40" fill="#a0d8ef" opacity="0.7"/>
+                        <line x1="465" y1="235" x2="485" y2="235" stroke="#00d4ff" stroke-width="1"/>
+                        <line x1="470" y1="240" x2="480" y2="240" stroke="#8a2be2" stroke-width="1"/>
+                        
+                        <!-- Extra Paintbrushes -->
+                        <line x1="450" y1="240" x2="450" y2="270" stroke="#8b4513" stroke-width="3"/>
+                        <line x1="455" y1="240" x2="455" y2="270" stroke="#8b4513" stroke-width="3"/>
+                        <path d="M450 240 L450 235" stroke="#00fa9a" stroke-width="3"/>
+                        <path d="M455 240 L455 235" stroke="#ff007a" stroke-width="3"/>
+                    </svg>
+                </div>
+            </div>
+        </section>
+        
+        <section id="process">
+            <h2>My Creative Process</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Creating the perfect custom shoe painting is a collaborative journey that begins with your ideas and ends with a one-of-a-kind wearable masterpiece. Here's how my process works:</p>
+                    
+                    <h3>1. Consultation & Design</h3>
+                    <p>We start with understanding your vision - whether you have a specific concept or just a color scheme in mind. I'll work with you to refine ideas, suggest complementary elements, and create digital mockups so you can visualize the final result.</p>
+                    
+                    <h3>2. Preparation</h3>
+                    <p>Once the design is approved, I carefully prepare your shoes by cleaning, conditioning, and priming the surface to ensure the best adhesion and longevity of the artwork.</p>
+                    
+                    <h3>3. Painting</h3>
+                    <p>Using professional-grade acrylic paints specially formulated for fabric and leather, I meticulously bring your design to life with careful attention to detail, color blending, and precision.</p>
+                    
+                    <h3>4. Sealing & Finishing</h3>
+                    <p>After the painting is complete, I apply multiple layers of flexible, water-resistant sealant that protects your artwork while maintaining the shoe's flexibility and comfort.</p>
+                    
+                    <h3>5. Delivery</h3>
+                    <p>Your custom painted shoes are carefully packaged and shipped to you, ready to wear and showcase to the world! Each pair comes with care instructions to keep them looking vibrant for years to come.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="gallery">
+            <h2>Featured Work</h2>
+            <div class="gallery">
+                <div class="faq-item">
+                    <h3>How much do custom painted shoes cost?</h3>
+                    <p>Pricing depends on the complexity of the design, type of shoes, and time required. Simple designs start at $150, while more complex custom artwork ranges from $200-500. I'll provide a detailed quote after our initial consultation.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>How long does it take to complete a custom order?</h3>
+                    <p>Most projects take 2-3 weeks from design approval to completion. Complex designs may require additional time. Rush orders may be available for an additional fee, depending on my current schedule.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Do I provide the shoes or do you?</h3>
+                    <p>You can either send me your shoes or I can purchase them for you (cost of shoes added to final price). I work with most shoe types including canvas sneakers, leather shoes, and athletic footwear.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Are the paintings waterproof and durable?</h3>
+                    <p>Yes! I use professional-grade paints and sealants specifically designed for footwear. While no painted shoe is completely indestructible, proper care will ensure your design remains vibrant for years. Each order includes care instructions.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>Do you ship internationally?</h3>
+                    <p>Absolutely! I ship worldwide with tracking. International shipping costs will be calculated based on your location.</p>
+                </div>
+                
+                <div class="faq-item">
+                    <h3>What if I don't like the final product?</h3>
+                    <p>Customer satisfaction is my top priority! I provide detailed mockups before beginning any painting to ensure we're aligned on the vision. In the rare case you're not completely satisfied, I offer revision options to make it right.</p>
+                </div>
+            </div>
+        </section>
+                <div class="gallery-item">
+                    <svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="400" height="300" fill="#f0f0f0"/>
+                        
+                        <!-- Shoe outline -->
+                        <path d="M100 200 C120 120 280 120 300 200 C300 220 280 240 200 250 C120 240 100 220 100 200 Z" fill="white" stroke="#333" stroke-width="3"/>
+                        
+                        <!-- Abstract patterns -->
+                        <path d="M120 180 C160 140 240 140 280 180" stroke="#ff007a" stroke-width="8" fill="none"/>
+                        <path d="M130 200 C170 160 230 160 270 200" stroke="#00d4ff" stroke-width="8" fill="none"/>
+                        <path d="M140 220 C180 180 220 180 260 220" stroke="#8a2be2" stroke-width="8" fill="none"/>
+                        
+                        <!-- Abstract shapes -->
+                        <circle cx="160" cy="170" r="15" fill="#ffbe0b"/>
+                        <circle cx="240" cy="170" r="15" fill="#00fa9a"/>
+                        <rect x="190" y="190" width="20" height="20" fill="#ff007a" transform="rotate(45 200 200)"/>
+                        
+                        <!-- Splashes -->
+                        <path d="M150 150 L160 140 L170 150 L180 140" stroke="#8a2be2" stroke-width="2"/>
+                        <path d="M220 150 L230 140 L240 150 L250 140" stroke="#00d4ff" stroke-width="2"/>
+                    </svg>
+                    <div class="gallery-caption">
+                        <h3>Abstract Dreams</h3>
+                        <p>Vibrant abstract patterns with bold colors and geometric shapes that create a sense of movement and energy. Perfect for the fashion-forward trendsetter!</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="400" height="300" fill="#0a0a2a"/>
+                        
+                        <!-- Shoe outline -->
+                        <path d="M100 200 C120 120 280 120 300 200 C300 220 280 240 200 250 C120 240 100 220 100 200 Z" fill="#090921" stroke="#333" stroke-width="3"/>
+                        
+                        <!-- Galaxy background on shoe -->
+                        <defs>
+                            <radialGradient id="galaxy" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                <stop offset="0%" stop-color="#5000ff"/>
+                                <stop offset="50%" stop-color="#3311aa"/>
+                                <stop offset="100%" stop-color="#000033"/>
+                            </radialGradient>
+                        </defs>
+                        <path d="M110 195 C130 125 270 125 290 195 C290 215 270 235 200 245 C130 235 110 215 110 195 Z" fill="url(#galaxy)"/>
+                        
+                        <!-- Nebula -->
+                        <ellipse cx="200" cy="180" rx="80" ry="40" fill="#5000ff" opacity="0.3"/>
+                        <ellipse cx="220" cy="170" rx="60" ry="30" fill="#ff007a" opacity="0.2"/>
+                        
+                        <!-- Stars -->
+                        <circle cx="130" cy="160" r="2" fill="white"/>
+                        <circle cx="150" cy="190" r="1" fill="white"/>
+                        <circle cx="170" cy="150" r="1.5" fill="white"/>
+                        <circle cx="190" cy="200" r="1" fill="white"/>
+                        <circle cx="210" cy="160" r="2" fill="white"/>
+                        <circle cx="230" cy="190" r="1" fill="white"/>
+                        <circle cx="250" cy="170" r="1.5" fill="white"/>
+                        <circle cx="270" cy="150" r="1" fill="white"/>
+                        
+                        <!-- Larger stars with glow -->
+                        <circle cx="160" cy="170" r="2" fill="white"/>
+                        <circle cx="160" cy="170" r="4" fill="white" opacity="0.3"/>
+                        
+                        <circle cx="240" cy="180" r="2" fill="white"/>
+                        <circle cx="240" cy="180" r="4" fill="white" opacity="0.3"/>
+                        
+                        <circle cx="200" cy="150" r="3" fill="white"/>
+                        <circle cx="200" cy="150" r="6" fill="white" opacity="0.3"/>
+                        
+                        <!-- Shooting star -->
+                        <line x1="120" y1="140" x2="150" y2="170" stroke="white" stroke-width="1"/>
+                        <circle cx="150" cy="170" r="1" fill="white"/>
+                    </svg>
+                    <div class="gallery-caption">
+                        <h3>Cosmic Journey</h3>
+                        <p>Dive into the depths of space with this breathtaking galaxy design featuring swirling nebulas, twinkling stars, and cosmic dust. Each pair is uniquely hand-painted with glow-in-the-dark accents for an out-of-this-world experience!</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="400" height="300" fill="#f8f9fa"/>
+                        
+                        <!-- Shoe outline -->
+                        <path d="M100 200 C120 120 280 120 300 200 C300 220 280 240 200 250 C120 240 100 220 100 200 Z" fill="white" stroke="#333" stroke-width="3"/>
+                        
+                        <!-- Base color -->
+                        <path d="M110 195 C130 125 270 125 290 195 C290 215 270 235 200 245 C130 235 110 215 110 195 Z" fill="#f0f8ff"/>
+                        
+                        <!-- Flowers -->
+                        <!-- Flower 1 -->
+                        <circle cx="140" cy="160" r="15" fill="#ffccdd"/>
+                        <circle cx="150" cy="150" r="5" fill="#ffffaa"/>
+                        <circle cx="130" cy="150" r="5" fill="#ffffaa"/>
+                        <circle cx="140" cy="140" r="5" fill="#ffffaa"/>
+                        <circle cx="150" cy="170" r="5" fill="#ffffaa"/>
+                        <circle cx="130" cy="170" r="5" fill="#ffffaa"/>
+                        <circle cx="140" cy="160" r="5" fill="#ffaa77"/>
+                        
+                        <!-- Flower 2 -->
+                        <circle cx="190" cy="180" r="12" fill="#ccddff"/>
+                        <circle cx="198" cy="172" r="4" fill="#ffffaa"/>
+                        <circle cx="182" cy="172" r="4" fill="#ffffaa"/>
+                        <circle cx="190" cy="164" r="4" fill="#ffffaa"/>
+                        <circle cx="198" cy="188" r="4" fill="#ffffaa"/>
+                        <circle cx="182" cy="188" r="4" fill="#ffffaa"/>
+                        <circle cx="190" cy="180" r="4" fill="#ffaa77"/>
+                        
+                        <!-- Flower 3 -->
+                        <circle cx="240" cy="150" r="14" fill="#ddffcc"/>
+                        <circle cx="248" cy="142" r="5" fill="#ffffaa"/>
+                        <circle cx="232" cy="142" r="5" fill="#ffffaa"/>
+                        <circle cx="240" cy="134" r="5" fill="#ffffaa"/>
+                        <circle cx="248" cy="158" r="5" fill="#ffffaa"/>
+                        <circle cx="232" cy="158" r="5" fill="#ffffaa"/>
+                        <circle cx="240" cy="150" r="5" fill="#ffaa77"/>
+                        
+                        <!-- Vines -->
+                        <path d="M130 200 C150 180 170 190 190 170 C210 150 230 170 250 150 C270 130 290 160 290 190" stroke="#88cc88" stroke-width="2" fill="none"/>
+                        
+                        <!-- Leaves -->
+                        <path d="M150 185 C155 180 160 180 165 185" stroke="#88cc88" stroke-width="2" fill="#aaddaa"/>
+                        <path d="M210 160 C215 155 220 155 225 160" stroke="#88cc88" stroke-width="2" fill="#aaddaa"/>
+                        <path d="M230 165 C225 160 225 155 230 150" stroke="#88cc88" stroke-width="2" fill="#aaddaa"/>
+                        <path d="M270 170 C275 165 280 165 285 170" stroke="#88cc88" stroke-width="2" fill="#aaddaa"/>
+                    </svg>
+                    <div class="gallery-caption">
+                        <h3>Spring Bloom</h3>
+                        <p>Celebrate nature's beauty with these delicate hand-painted floral designs featuring cherry blossoms, daisies, and intricate vine work. Each flower is carefully crafted with soft pastel hues that bring a touch of springtime wherever you go. Perfect for garden parties, weddings, or adding a feminine touch to any outfit!</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="400" height="300" fill="#fafafa"/>
+                        
+                        <!-- Shoe outline -->
+                        <path d="M100 200 C120 120 280 120 300 200 C300 220 280 240 200 250 C120 240 100 220 100 200 Z" fill="white" stroke="#333" stroke-width="3"/>
+                        
+                        <!-- Base color -->
+                        <path d="M110 195 C130 125 270 125 290 195 C290 215 270 235 200 245 C130 235 110 215 110 195 Z" fill="#eeeeff"/>
+                        
+                        <!-- Anime Character 1 (Simplified) -->
+                        <circle cx="160" cy="160" r="25" fill="#ffe0b2"/> <!-- face -->
+                        <ellipse cx="153" cy="155" rx="3" ry="5" fill="#333333"/> <!-- eye -->
+                        <ellipse cx="167" cy="155" rx="3" ry="5" fill="#333333"/> <!-- eye -->
+                        <path d="M155 165 Q160 170 165 165" stroke="#ff5252" stroke-width="2" fill="none"/> <!-- mouth -->
+                        <path d="M135 145 Q160 125 185 145" stroke="#ff9800" stroke-width="8" fill="none"/> <!-- hair -->
+                        <path d="M135 145 L135 165" stroke="#ff9800" stroke-width="8" fill="none"/> <!-- hair -->
+                        <path d="M185 145 L185 165" stroke="#ff9800" stroke-width="8" fill="none"/> <!-- hair -->
+                        
+                        <!-- Anime Character 2 (Simplified) -->
+                        <circle cx="240" cy="160" r="25" fill="#ffe0b2"/> <!-- face -->
+                        <ellipse cx="233" cy="155" rx="3" ry="5" fill="#333333"/> <!-- eye -->
+                        <ellipse cx="247" cy="155" rx="3" ry="5" fill="#333333"/> <!-- eye -->
+                        <path d="M235 165 Q240 170 245 165" stroke="#ff5252" stroke-width="2" fill="none"/> <!-- mouth -->
+                        <path d="M220 130 Q240 120 260 130" stroke="#3f51b5" stroke-width="8" fill="none"/> <!-- hair -->
+                        <path d="M215 140 Q240 110 265 140" stroke="#3f51b5" stroke-width="8" fill="none"/> <!-- hair -->
+                        
+                        <!-- Anime symbols -->
+                        <circle cx="200" cy="200" r="15" fill="#ff9800" stroke="#333" stroke-width="2"/>
+                        <path d="M195 200 L205 200 M200 195 L200 205" stroke="#333" stroke-width="2"/> <!-- symbol -->
+                        
+                        <!-- Speed lines -->
+                        <line x1="120" y1="220" x2="170" y2="220" stroke="#333" stroke-width="1"/>
+                        <line x1="130" y1="210" x2="180" y2="210" stroke="#333" stroke-width="1"/>
+                        <line x1="220" y1="220" x2="270" y2="220" stroke="#333" stroke-width="1"/>
+                        <line x1="230" y1="210" x2="280" y2="210" stroke="#333" stroke-width="1"/>
+                        
+                        <!-- Japanese symbols (simplified) -->
+                        <path d="M280 150 L290 150 M285 145 L285 155" stroke="#ff4081" stroke-width="2"/>
+                        <path d="M120 150 L130 150 M125 145 L125 155" stroke="#ff4081" stroke-width="2"/>
+                    </svg>
+                    <div class="gallery-caption">
+                        <h3>Anime Fusion</h3>
+                        <p>Express your love for Japanese animation with these vibrant anime-inspired designs! Each pair features meticulously hand-painted characters with bold outlines, expressive eyes, and dynamic action poses. Choose your favorite series or let me create a custom design featuring multiple characters. These shoes are perfect for conventions, cosplay events, or showing off your otaku pride!</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/400/304" alt="Geometric pattern painted shoes">
+                    <div class="gallery-caption">
+                        <h3>Geometric Wonders</h3>
+                        <p>Clean lines and geometric shapes in modern design</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="400" height="300" fill="#e5e5e5"/>
+                        
+                        <!-- Shoe outline -->
+                        <path d="M100 200 C120 120 280 120 300 200 C300 220 280 240 200 250 C120 240 100 220 100 200 Z" fill="white" stroke="#333" stroke-width="3"/>
+                        
+                        <!-- Base color -->
+                        <path d="M110 195 C130 125 270 125 290 195 C290 215 270 235 200 245 C130 235 110 215 110 195 Z" fill="#f5f5f5"/>
+                        
+                        <!-- City Skyline -->
+                        <!-- Buildings -->
+                        <rect x="120" y="140" width="20" height="60" fill="#333333"/>
+                        <rect x="140" y="120" width="30" height="80" fill="#444444"/>
+                        <rect x="170" y="140" width="20" height="60" fill="#333333"/>
+                        <rect x="190" y="100" width="35" height="100" fill="#555555"/>
+                        <rect x="225" y="130" width="25" height="70" fill="#444444"/>
+                        <rect x="250" y="110" width="40" height="90" fill="#333333"/>
+                        
+                        <!-- Windows -->
+                        <rect x="125" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="125" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="125" y="170" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="130" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="130" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="130" y="170" width="5" height="5" fill="#ffdf00"/>
+                        
+                        <rect x="145" y="130" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="145" y="140" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="145" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="145" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="145" y="170" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="155" y="130" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="155" y="140" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="155" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="155" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="155" y="170" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="165" y="130" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="165" y="140" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="165" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="165" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="165" y="170" width="5" height="5" fill="#ffdf00"/>
+                        
+                        <rect x="175" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="175" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="175" y="170" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="180" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="180" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="180" y="170" width="5" height="5" fill="#ffdf00"/>
+                        
+                        <rect x="200" y="110" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="200" y="120" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="200" y="130" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="200" y="140" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="200" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="200" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="200" y="170" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="210" y="110" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="210" y="120" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="210" y="130" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="210" y="140" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="210" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="210" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="210" y="170" width="5" height="5" fill="#ffdf00"/>
+                        
+                        <rect x="230" y="140" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="230" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="230" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="230" y="170" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="240" y="140" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="240" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="240" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="240" y="170" width="5" height="5" fill="#ffdf00"/>
+                        
+                        <rect x="260" y="120" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="260" y="130" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="260" y="140" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="260" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="260" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="260" y="170" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="270" y="120" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="270" y="130" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="270" y="140" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="270" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="270" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="270" y="170" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="280" y="120" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="280" y="130" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="280" y="140" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="280" y="150" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="280" y="160" width="5" height="5" fill="#ffdf00"/>
+                        <rect x="280" y="170" width="5" height="5" fill="#ffdf00"/>
+                        
+                        <!-- Sky gradient -->
+                        <defs>
+                            <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ff007a;stop-opacity:0.5" />
+                                <stop offset="50%" style="stop-color:#8a2be2;stop-opacity:0.3" />
+                                <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:0.1" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="120" y="60" width="170" height="80" fill="url(#skyGradient)" />
+                        
+                        <!-- Moon -->
+                        <circle cx="250" cy="80" r="15" fill="#ffdf00" />
+                        <circle cx="245" cy="75" r="5" fill="#e5e5e5" opacity="0.5" />
+                    </svg>
+                    <div class="gallery-caption">
+                        <h3>Urban Landscape</h3>
+                        <p>Bring the city to your feet with these metropolitan masterpieces featuring detailed skylines with glowing windows against a sunset gradient. Each pair captures the energy and architecture of urban life with intricate building silhouettes and tiny illuminated details. Perfect for city dwellers, travelers, and architecture enthusiasts who want to showcase their love for urban environments!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="styles">
+            <h2>Painting Styles</h2>
+            <div class="styles">
+                <div class="style-card">
+                    <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="400" height="200" fill="#f0f0f5"/>
+                        
+                        <!-- Abstract shoe design -->
+                        <path d="M50 120 C80 60 320 60 350 120 C350 150 320 180 200 190 C80 180 50 150 50 120 Z" fill="#f8f8ff" stroke="#333" stroke-width="2"/>
+                        
+                        <!-- Abstract patterns -->
+                        <path d="M100 100 C150 70 250 70 300 100" stroke="#ff007a" stroke-width="10" fill="none" stroke-linecap="round"/>
+                        <path d="M80 130 C150 100 250 100 320 130" stroke="#00d4ff" stroke-width="8" fill="none" stroke-linecap="round"/>
+                        <path d="M90 160 C150 130 250 130 310 160" stroke="#8a2be2" stroke-width="6" fill="none" stroke-linecap="round"/>
+                        
+                        <!-- Abstract shapes -->
+                        <circle cx="130" cy="115" r="15" fill="#ffbe0b"/>
+                        <circle cx="270" cy="115" r="15" fill="#00fa9a"/>
+                        <rect x="190" y="120" width="20" height="20" fill="#ff007a" transform="rotate(45 200 130)"/>
+                        
+                        <!-- Splashes and dots -->
+                        <circle cx="160" cy="90" r="3" fill="#ff007a"/>
+                        <circle cx="180" cy="85" r="2" fill="#00d4ff"/>
+                        <circle cx="200" cy="80" r="4" fill="#8a2be2"/>
+                        <circle cx="220" cy="85" r="2" fill="#00fa9a"/>
+                        <circle cx="240" cy="90" r="3" fill="#ffbe0b"/>
+                        
+                        <path d="M120 100 L130 90 L140 100" stroke="#ff007a" stroke-width="2" fill="none"/>
+                        <path d="M260 100 L270 90 L280 100" stroke="#00d4ff" stroke-width="2" fill="none"/>
+                    </svg>
+                    <div class="style-info">
+                        <h3 class="style-name">Abstract</h3>
+                        <p>Bold, colorful designs with free-flowing patterns and textures that create a unique visual experience. My abstract designs use vibrant color combinations, dynamic shapes, and unexpected patterns to create eye-catching, one-of-a-kind footwear that makes a statement wherever you go. Perfect for art lovers and those who want to stand out from the crowd!</p>
+                    </div>
+                </div>
+                <div class="style-card">
+                    <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="400" height="200" fill="#f0f0f5"/>
+                        
+                        <!-- Pop Art shoe design -->
+                        <path d="M50 120 C80 60 320 60 350 120 C350 150 320 180 200 190 C80 180 50 150 50 120 Z" fill="#ffff66" stroke="#000000" stroke-width="4"/>
+                        
+                        <!-- Pop Art elements -->
+                        <!-- Comic style speech bubble -->
+                        <path d="M100 100 C100 80 140 80 140 100 L130 120 L120 100 C100 100 100 80 100 100 Z" fill="#ffffff" stroke="#000000" stroke-width="3"/>
+                        <text x="120" y="95" font-family="Arial" font-size="15" text-anchor="middle" fill="#000000">POP!</text>
+                        
+                        <!-- Comic style explosion -->
+                        <path d="M270 90 L280 70 L290 90 L310 80 L295 100 L315 120 L290 110 L280 130 L270 110 L245 120 L265 100 L245 80 Z" fill="#ff007a" stroke="#000000" stroke-width="3"/>
+                        <text x="280" y="105" font-family="Arial" font-size="15" text-anchor="middle" fill="#ffffff">WOW!</text>
+                        
+                        <!-- Halftone dots pattern -->
+                        <circle cx="210" cy="140" r="5" fill="#000000"/>
+                        <circle cx="230" cy="140" r="5" fill="#000000"/>
+                        <circle cx="250" cy="140" r="5" fill="#000000"/>
+                        <circle cx="200" cy="160" r="5" fill="#000000"/>
+                        <circle cx="220" cy="160" r="5" fill="#000000"/>
+                        <circle cx="240" cy="160" r="5" fill="#000000"/>
+                        <circle cx="260" cy="160" r="5" fill="#000000"/>
+                        
+                        <circle cx="90" cy="140" r="5" fill="#000000"/>
+                        <circle cx="110" cy="140" r="5" fill="#000000"/>
+                        <circle cx="130" cy="140" r="5" fill="#000000"/>
+                        <circle cx="80" cy="160" r="5" fill="#000000"/>
+                        <circle cx="100" cy="160" r="5" fill="#000000"/>
+                        <circle cx="120" cy="160" r="5" fill="#000000"/>
+                        <circle cx="140" cy="160" r="5" fill="#000000"/>
+                        
+                        <!-- Red lips -->
+                        <path d="M170 120 C180 110 200 110 210 120 C200 130 180 130 170 120 Z" fill="#ff0055" stroke="#000000" stroke-width="2"/>
+                    </svg>
+                    <div class="style-info">
+                        <h3 class="style-name">Pop Art</h3>
+                        <p>Inspired by icons like Andy Warhol and Roy Lichtenstein, my Pop Art shoes feature bold outlines, vibrant primary colors, and comic-style elements. Each design incorporates halftone dots, speech bubbles, onomatopoeia text, and cultural references that bring a playful, retro vibe to your footwear. These conversation-starting pieces are perfect for art enthusiasts, vintage lovers, and anyone looking to add a splash of pop culture to their wardrobe!</p>
+                    </div>
+                </div>
+                <div class="style-card">
+                    <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="400" height="200" fill="#f8f8f8"/>
+                        
+                        <!-- Minimalist shoe design -->
+                        <path d="M50 120 C80 60 320 60 350 120 C350 150 320 180 200 190 C80 180 50 150 50 120 Z" fill="#ffffff" stroke="#333333" stroke-width="2"/>
+                        
+                        <!-- Minimalist design elements -->
+                        <!-- Simple line -->
+                        <path d="M100 120 L300 120" stroke="#333333" stroke-width="2" fill="none"/>
+                        
+                        <!-- Small dot -->
+                        <circle cx="200" cy="100" r="10" fill="#ff007a"/>
+                        
+                        <!-- Simple geometric shape -->
+                        <rect x="190" y="140" width="20" height="20" fill="#333333"/>
+                        
+                        <!-- Subtle accent line -->
+                        <path d="M150 130 L250 130" stroke="#00d4ff" stroke-width="1" fill="none"/>
+                    </svg>
+                    <div class="style-info">
+                        <h3 class="style-name">Minimalist</h3>
+                        <p>My minimalist designs embrace the "less is more" philosophy with clean lines, subtle color accents, and carefully balanced negative space. These sophisticated shoes feature restrained color palettes—often monochromatic with just one or two accent colors—and focus on essential geometric elements that create visual harmony. Perfect for modern fashion enthusiasts who appreciate understated elegance, these designs pair seamlessly with any outfit while still making a refined artistic statement.</p>
+                    </div>
+                </div>
+                <div class="style-card">
+                    <svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="400" height="200" fill="#f0f0f5"/>
+                        
+                        <!-- Realistic shoe design -->
+                        <path d="M50 120 C80 60 320 60 350 120 C350 150 320 180 200 190 C80 180 50 150 50 120 Z" fill="#ffffff" stroke="#333333" stroke-width="2"/>
+                        
+                        <!-- Realistic painting of a tiger face (simplified for SVG) -->
+                        <ellipse cx="200" cy="120" rx="100" ry="60" fill="#f39c12"/>
+                        
+                        <!-- Tiger stripes -->
+                        <path d="M130 80 C135 90 140 100 135 110" stroke="#000000" stroke-width="4" fill="none"/>
+                        <path d="M150 70 C155 90 155 110 150 130" stroke="#000000" stroke-width="4" fill="none"/>
+                        <path d="M170 70 C175 90 175 110 170 130" stroke="#000000" stroke-width="4" fill="none"/>
+                        <path d="M190 70 C195 90 195 110 190 130" stroke="#000000" stroke-width="4" fill="none"/>
+                        <path d="M210 70 C215 90 215 110 210 130" stroke="#000000" stroke-width="4" fill="none"/>
+                        <path d="M230 70 C235 90 235 110 230 130" stroke="#000000" stroke-width="4" fill="none"/>
+                        <path d="M250 70 C255 90 255 110 250 130" stroke="#000000" stroke-width="4" fill="none"/>
+                        <path d="M270 80 C265 90 260 100 265 110" stroke="#000000" stroke-width="4" fill="none"/>
+                        
+                        <!-- Tiger eyes -->
+                        <ellipse cx="150" cy="100" rx="12" ry="8" fill="white"/>
+                        <ellipse cx="250" cy="100" rx="12" ry="8" fill="white"/>
+                        <ellipse cx="150" cy="100" rx="5" ry="8" fill="black"/>
+                        <ellipse cx="250" cy="100" rx="5" ry="8" fill="black"/>
+                        <ellipse cx="147" cy="97" rx="2" ry="2" fill="white"/>
+                        <ellipse cx="247" cy="97" rx="2" ry="2" fill="white"/>
+                        
+                        <!-- Tiger nose -->
+                        <path d="M195 120 L205 120 L200 130 Z" fill="#333333"/>
+                        
+                        <!-- Tiger mouth -->
+                        <path d="M175 135 C200 150 200 150 225 135" stroke="#333333" stroke-width="2" fill="none"/>
+                        
+                        <!-- Tiger whiskers -->
+                        <line x1="175" y1="125" x2="140" y2="120" stroke="#333333" stroke-width="1"/>
+                        <line x1="175" y1="130" x2="140" y2="130" stroke="#333333" stroke-width="1"/>
+                        <line x1="175" y1="135" x2="140" y2="140" stroke="#333333" stroke-width="1"/>
+                        
+                        <line x1="225" y1="125" x2="260" y2="120" stroke="#333333" stroke-width="1"/>
+                        <line x1="225" y1="130" x2="260" y2="130" stroke="#333333" stroke-width="1"/>
+                        <line x1="225" y1="135" x2="260" y2="140" stroke="#333333" stroke-width="1"/>
+                        
+                        <!-- Fur detail highlights -->
+                        <path d="M120 90 C125 85 130 87 132 90" stroke="#e67e22" stroke-width="1" fill="none"/>
+                        <path d="M140 80 C145 75 150 77 152 80" stroke="#e67e22" stroke-width="1" fill="none"/>
+                        <path d="M260 90 C265 85 270 87 272 90" stroke="#e67e22" stroke-width="1" fill="none"/>
+                        <path d="M240 80 C245 75 250 77 252 80" stroke="#e67e22" stroke-width="1" fill="none"/>
+                    </svg>
+                    <div class="style-info">
+                        <h3 class="style-name">Realism</h3>
+                        <p>My realistic paintings showcase lifelike representations with meticulous attention to detail, texture, light, and shadow. Each design features photorealistic portraits of animals, landscapes, or people that appear to leap off the shoe. Using specialized techniques and premium paints, I create depth and dimension that make these wearable masterpieces truly extraordinary. Perfect for nature lovers, pet owners wanting their beloved animal companions immortalized, or anyone seeking a truly personalized piece of art that showcases incredible technical skill.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact">
+            <h2>Get In Touch</h2>
+            <div class="contact-form">
+                <form id="shoeRequestForm">
+                    <div class="form-group">
+                        <label for="name">Your Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Your Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number (Optional)</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="shoeType">Shoe Type *</label>
+                        <input type="text" id="shoeType" name="shoeType" placeholder="e.g., Sneakers, Boots, Heels" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stylePreference">Style Preference *</label>
+                        <input type="text" id="stylePreference" name="stylePreference" placeholder="e.g., Abstract, Floral, Custom design" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Additional Details *</label>
+                        <textarea id="message" name="message" placeholder="Tell me about your vision for your custom painted shoes..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Request</button>
+                </form>
+                <div class="loading" id="loadingIndicator"></div>
+                <div class="success-message" id="successMessage">
+                    Thank you for your request! Andy will get back to you soon!
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>© 2025 Bare Canvas Creations by Andy. All Rights Reserved.</p>
+            <p>Contact: <a href="mailto:Barecanvascreations@gmail.com">Barecanvascreations@gmail.com</a></p>
+            <div class="social-links">
+                <a href="#" class="social-icon">FB</a>
+                <a href="#" class="social-icon">IG</a>
+                <a href="#" class="social-icon">TW</a>
+                <a href="#" class="social-icon">PIN</a>
+            </div>
+        </div>
+    </footer>
+    
+    <a href="#" class="back-to-top" id="backToTop">↑</a>
+    
+    <script>
+        // Back to top button functionality
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Form submission handler
+        const form = document.getElementById('shoeRequestForm');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const successMessage = document.getElementById('successMessage');
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            
+            // Get form data
+            const formData = new FormData(form);
+            const formValues = {};
+            
+            formData.forEach((value, key) => {
+                formValues[key] = value;
+            });
+            
+            // In a real application, this would send an email to Andy
+            // This is a simulation for demonstration purposes
+            setTimeout(() => {
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+                
+                // Show success message
+                successMessage.style.display = 'block';
+                
+                // Reset form
+                form.reset();
+                
+                // Log form data to console (for demonstration)
+                console.log('Form submitted with data:', formValues);
+                
+                // Email would be sent to Andy at Barecanvascreations@gmail.com
+                // with the formValues data
+                
+                // After 5 seconds, hide the success message
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            }, 2000);
+        });
+        
+        // Image hover effect for gallery items
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        
+        galleryItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const caption = item.querySelector('.gallery-caption');
+                caption.style.transform = 'translateY(0)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                const caption = item.querySelector('.gallery-caption');
+                caption.style.transform = 'translateY(100%)';
+            });
+        });
+        
+        // In a real-world application, here you would add actual email sending functionality
+        // using a backend service like EmailJS, Formspree, or a custom server-side solution
+        
+        /*
+        // Example of how to implement EmailJS (would require an account and proper setup)
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                shoeType: document.getElementById('shoeType').value,
+                stylePreference: document.getElementById('stylePreference').value,
+                message: document.getElementById('message').value,
+                to_email: 'amazingandy2025@gmail.com'
+            };
+            
+            // Send email using EmailJS
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', formData, 'YOUR_USER_ID')
+                .then(function() {
+                    // Hide loading indicator
+                    loadingIndicator.style.display = 'none';
+                    
+                    // Show success message
+                    successMessage.style.display = 'block';
+                    
+                    // Reset form
+                    form.reset();
+                    
+                    // After 5 seconds, hide the success message
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 5000);
+                }, function(error) {
+                    // Hide loading indicator
+                    loadingIndicator.style.display = 'none';
+                    
+                    // Show error message
+                    alert('Oops! Something went wrong. Please try again later.');
+                    console.error('EmailJS error:', error);
+                });
+        });
+        */
+    </script>
+</body>
+</html>
