@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Scribble Text Formatter</title>
+    <style>
+        body {
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #f2f2f7;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            background-color: #007aff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 0;
+            font-size: 24px;
+        }
+        p.instructions {
+            text-align: center;
+            margin: 10px 0 20px 0;
+            color: #333;
+        }
+        /* Special styling for Scribble compatibility */
+        .scribble-area {
+            width: 100%;
+            height: 250px;
+            border: 3px dashed #007aff;
+            border-radius: 10px;
+            background-color: white;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        /* This is the actual input field for Scribble */
+        textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding: 15px;
+            font-size: 20px;
+            box-sizing: border-box;
+            background: transparent;
+            z-index: 2;
+            position: absolute;
+            top: 0;
+            left: 0;
+            -webkit-appearance: none;
+            outline: none;
+            resize: none;
+        }
+        /* Label overlay for Scribble area */
+        .scribble-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #007aff;
+            opacity: 0.5;
+            font-size: 18px;
+            pointer-events: none;
+            z-index: 1;
+            text-align: center;
+            width: 80%;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin: 15px 0;
+            background-color: #007aff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        #result {
+            margin-top: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        .box {
+            background-color: #f2f2f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+            font-size: 18px;
+        }
+        h3 {
+            color: #007aff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .change-item {
+            background-color: #f2f2f7;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        /* iPad-specific */
+        @media only screen and (min-width: 768px) {
+            .scribble-area {
+                height: 350px;
+            }
+            textarea {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Scribble Text Formatter</h1>
+    <p class="instructions">Write here with your finger or Apple Pencil using Scribble</p>
+    
+    <div class="scribble-area">
+        <div class="scribble-label">Write or draw here with your finger or Apple Pencil</div>
+        <textarea id="input" placeholder=""></textarea>
+    </div>
+    
+    <button id="check">CHECK FORMAT</button>
+    <button id="clear" style="background-color: #ff3b30;">CLEAR TEXT</button>
+    
+    <div id="result">
+        <h3>Original Text:</h3>
+        <div id="original" class="box"></div>
+        
+        <h3>Formatted Text:</h3>
+        <div id="formatted" class="box"></div>
+        
+        <h3>Changes Made:</h3>
+        <div id="changes"></div>
+    </div>
+    
+    <script>
+        // Get elements
+        const input = document.getElementById('input');
+        const checkBtn = document.getElementById('check');
+        const clearBtn = document.getElementById('clear');
+        const result = document.getElementById('result');
+        const original = document.getElementById('original');
+        const formatted = document.getElementById('formatted');
+        const changes = document.getElementById('changes');
+        const scribbleLabel = document.querySelector('.scribble-label');
+        
+        // Hide label when text is entered
+        input.addEventListener('input', function() {
+            if (input.value.trim()) {
+                scribbleLabel.style.display = 'none';
+            } else {
+                scribbleLabel.style.display = 'block';
+            }
+        });
+        
+        // Focus the textarea to activate Scribble
+        setTimeout(function() {
+            input.focus();
+        }, 1000);
+        
+        // Check format
+        checkBtn.addEventListener('click', function() {
+            const text = input.value.trim();
+            
+            if (!text) {
+                alert('Please write some text first');
+                return;
+            }
+            
+            // Show original
+            original.textContent = text;
+            
+            // Format text
+            let formattedText = text;
+            let changesMade = [];
+            
+            // 1. Capitalize first letter
+            if (/^[a-z]/.test(formattedText)) {
+                formattedText = formattedText.charAt(0).toUpperCase() + formattedText.slice(1);
+                changesMade.push('Capitalized first letter');
+            }
+            
+            // 2. Add period at end if missing
+            if (/[a-zA-Z0-9]$/.test(formattedText)) {
+                formattedText += '.';
+                changesMade.push('Added period at end');
+            }
+            
+            // 3. Fix sentence capitalization
+            formattedText = formattedText.replace(/([.!?]\s+)([a-z])/g, function(m, p1, p2) {
+                changesMade.push('Capitalized sentence starting with "' + p2 + '"');
+                return p1 + p2.toUpperCase();
+            });
+            
+            // 4. Fix spacing after punctuation
+            formattedText = formattedText.replace(/([.!?,;:])([A-Za-z])/g, function(m, p1, p2) {
+                changesMade.push('Added space after punctuation: "' + p1 + p2 + '" → "' + p1 + ' ' + p2 + '"');
+                return p1 + ' ' + p2;
+            });
+            
+            // Display formatted text
+            formatted.textContent = formattedText;
+            
+            // Display changes
+            changes.innerHTML = '';
+            if (changesMade.length > 0) {
+                changesMade.forEach(change => {
+                    const div = document.createElement('div');
+                    div.className = 'change-item';
+                    div.textContent = change;
+                    changes.appendChild(div);
+                });
+            } else {
+                const div = document.createElement('div');
+                div.className = 'change-item';
+                div.textContent = 'No changes needed! Your text is already well formatted.';
+                changes.appendChild(div);
+            }
+            
+            // Show results
+            result.style.display = 'block';
+            
+            // Scroll to results
+            result.scrollIntoView({behavior: 'smooth'});
+        });
+        
+        // Clear text
+        clearBtn.addEventListener('click', function() {
+            input.value = '';
+            result.style.display = 'none';
+            scribbleLabel.style.display = 'block';
+            input.focus();
+        });
+    </script>
+</body>
+</html>
