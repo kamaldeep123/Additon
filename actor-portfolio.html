@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kamaldeep Purba - Actor Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #3498db;
+            --accent-color: #f39c12;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --success-color: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--light-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            opacity: 0.2;
+            z-index: 1;
+        }
+        
+        .actor-name {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-buttons {
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+        }
+        
+        /* About Section */
+        .about-section {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--dark-color);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary-color);
+            margin: 0.5rem auto;
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .highlight {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .skills-container {
+            margin-top: 2rem;
+        }
+        
+        .skill-item {
+            background-color: var(--light-color);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 5px;
+            font-weight: 500;
+            color: var(--dark-color);
+            border: 1px solid #ddd;
+        }
+        
+        /* Video Gallery */
+        .video-section {
+            padding: 5rem 0;
+            background-color: #f8f9fa;
+        }
+        
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 3rem;
+        }
+        
+        .video-item {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        
+        .video-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-info {
+            padding: 20px;
+        }
+        
+        .video-title {
+            font-size: 1.2rem;
+            margin: 0 0 10px 0;
+            color: var(--dark-color);
+        }
+        
+        .video-description {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        
+        .video-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+        
+        /* Experience Section */
+        .experience-section {
+            padding: 5rem 0;
+            background-color: white;
+        }
+        
+        .experience-item {
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .experience-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .experience-title {
+            font-size: 1.4rem;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .experience-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .experience-description {
+            color: #555;
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            text-align: center;
+        }
+        
+        .contact-section .section-title {
+            color: white;
+        }
+        
+        .contact-section .section-title::after {
+            background-color: white;
+        }
+        
+        .contact-info {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .contact-method {
+            margin: 1.5rem 0;
+        }
+        
+        .contact-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .contact-value {
+            font-size: 1.2rem;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            display: inline-block;
+            min-width: 300px;
+        }
+        
+        .social-links {
+            margin-top: 2rem;
+        }
+        
+        .social-icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background-color: white;
+            color: var(--primary-color);
+            border-radius: 50%;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .back-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .actor-name {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                margin: 5px;
+                display: block;
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .video-gallery {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            .contact-value {
+                min-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <h1 class="actor-name">Kamaldeep Purba</h1>
+            <p class="tagline">Actor • Performer • Storyteller</p>
+            <div class="cta-buttons">
+                <a href="#videos" class="btn btn-primary">View My Work</a>
+                <a href="#contact" class="btn btn-secondary">Contact Me</a>
+            </div>
+        </div>
+    </header>
+    
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Welcome to my portfolio! I am a passionate actor trained in the <span class="highlight">Meisner technique</span>, dedicated to bringing authentic and compelling performances to the screen. With a focus on truthful emotional connection and moment-to-moment reality, I strive to create memorable characters that resonate with audiences.</p>
+                    
+                    <p>I am actively seeking opportunities in <span class="highlight">film and commercial projects</span>, where I can apply my training and natural abilities to tell powerful stories. My approach to acting emphasizes genuine human connection, active listening, and emotional authenticity – core principles of the Meisner technique.</p>
+                    
+                    <div class="skills-container">
+                        <h3>Skills & Training</h3>
+                        <div class="skill-item">Meisner Technique</div>
+                        <div class="skill-item">Character Development</div>
+                        <div class="skill-item">Emotional Authenticity</div>
+                        <div class="skill-item">Scene Analysis</div>
+                        <div class="skill-item">Commercial Acting</div>
+                        <div class="skill-item">Film Acting</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="videos" class="video-section">
+        <div class="container">
+            <h2 class="section-title">My Work</h2>
+            <div class="video-gallery">
+                <div class="video-item">
+                    <div class="video-container">
+                        <video controls>
+                            <source src="VIDEO-2023-10-09-09-56-57 2.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Performance Showcase</h3>
+                        <p class="video-description">A demonstration of character work and emotional range in this dramatic scene.</p>
+                        <span class="video-tag">Drama</span>
+                        <span class="video-tag">Character Study</span>
+                    </div>
+                </div>
+                
+                <div class="video-item">
+                    <div class="video-container">
+                        <video controls>
+                            <source src="VIDEO-2023-10-09-10-01-17.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Commercial Sample</h3>
+                        <p class="video-description">Showcasing versatility and camera presence in this commercial-style performance.</p>
+                        <span class="video-tag">Commercial</span>
+                        <span class="video-tag">Brand Representation</span>
+                    </div>
+                </div>
+                
+                <div class="video-item">
+                    <div class="video-container">
+                        <video controls>
+                            <source src="VIDEO-2023-10-19-11-53-47 2.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Dramatic Scene</h3>
+                        <p class="video-description">Exploring emotional depth and connection in this powerful dramatic scene.</p>
+                        <span class="video-tag">Drama</span>
+                        <span class="video-tag">Emotional Range</span>
+                    </div>
+                </div>
+                
+                <div class="video-item">
+                    <div class="video-container">
+                        <video controls>
+                            <source src="VIDEO-2023-10-27-05-32-22.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Character Study</h3>
+                        <p class="video-description">A detailed exploration of character development and nuanced performance.</p>
+                        <span class="video-tag">Character Work</span>
+                        <span class="video-tag">Film</span>
+                    </div>
+                </div>
+                
+                <div class="video-item">
+                    <div class="video-container">
+                        <video controls>
+                            <source src="VIDEO-2023-11-02-17-14-52.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Meisner Technique Demonstration</h3>
+                        <p class="video-description">Showcasing the principles of Meisner technique through authentic interaction.</p>
+                        <span class="video-tag">Meisner</span>
+                        <span class="video-tag">Technique</span>
+                    </div>
+                </div>
+                
+                <div class="video-item">
+                    <div class="video-container">
+                        <video controls>
+                            <source src="VIDEO-2023-11-15-15-55-11.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Commercial Reel Highlight</h3>
+                        <p class="video-description">Highlighting versatility and on-camera presence for commercial work.</p>
+                        <span class="video-tag">Commercial</span>
+                        <span class="video-tag">Reel</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="experience-section">
+        <div class="container">
+            <h2 class="section-title">Experience & Training</h2>
+            
+            <div class="experience-item">
+                <h3 class="experience-title">Meisner Technique Training</h3>
+                <div class="experience-meta">
+                    <span>Professional Acting Program</span>
+                    <span>2023</span>
+                </div>
+                <p class="experience-description">Intensive training in the Meisner technique, focusing on moment-to-moment truthfulness, emotional authenticity, and genuine human connection. Developed skills in improvisation, character development, and scene analysis.</p>
+            </div>
+            
+            <div class="experience-item">
+                <h3 class="experience-title">Introduction to Acting</h3>
+                <div class="experience-meta">
+                    <span>Foundational Acting Course</span>
+                    <span>2022</span>
+                </div>
+                <p class="experience-description">Comprehensive introduction to acting fundamentals, including script analysis, character development, vocal techniques, and movement. Established a strong foundation for further specialized training.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Contact Me</h2>
+            
+            <div class="contact-info">
+                <p>For casting inquiries, collaboration opportunities, or any questions, please feel free to reach out:</p>
+                
+                <div class="contact-method">
+                    <span class="contact-label">Email</span>
+                    <div class="contact-value">walkandreallytalk@gmail.com</div>
+                </div>
+                
+                <a href="mailto:walkandreallytalk@gmail.com" class="btn btn-primary">Send Email</a>
+                
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Kamaldeep Purba | Actor Portfolio</p>
+            <a href="index.html" class="back-link">← Back to Addition Quiz</a>
+        </div>
+    </footer>
+</body>
+</html>
