@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5th Grade Division Practice</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #4a7ba7;
+            padding-bottom: 10px;
+        }
+
+        .title {
+            color: #4a7ba7;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6a6a6a;
+            font-size: 18px;
+        }
+
+        .instruction {
+            background-color: #fff8dc;
+            border: 1px dashed #ffa500;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .problems-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .problem {
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .problem-number {
+            font-weight: bold;
+            color: #4a7ba7;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .division-problem {
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .vertical-division {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #f5f5f5;
+        }
+
+        .division-setup {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 15px;
+        }
+
+        .divisor {
+            font-size: 24px;
+            padding-right: 10px;
+            position: relative;
+        }
+
+        .divisor::after {
+            content: ")";
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 40px;
+            transform: scale(1, 2);
+        }
+
+        .dividend {
+            font-size: 24px;
+            border-bottom: 2px solid #333;
+            padding-left: 5px;
+        }
+
+        .working-row {
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 5px;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #4a7ba7;
+            color: white;
+            border-radius: 50%;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .work-box {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .work-input {
+            width: 100%;
+            padding: 8px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            font-family: monospace;
+        }
+
+        .add-step-btn {
+            background-color: #4a7ba7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .add-step-btn:hover {
+            background-color: #3a6a96;
+        }
+
+        .answer-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .answer-box {
+            display: flex;
+            align-items: center;
+        }
+
+        .answer-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .answer-input {
+            width: 80px;
+            height: 40px;
+            font-size: 20px;
+            text-align: center;
+            border: 2px solid #4a7ba7;
+            border-radius: 8px;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #ff7f50;
+            box-shadow: 0 0 5px #ff7f50;
+        }
+
+        .feedback-icon {
+            width: 24px;
+            height: 24px;
+            margin-left: 10px;
+            visibility: hidden;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 30px auto;
+            background-color: #4a7ba7;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #3a6a96;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .score-container {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            color: #4a7ba7;
+            font-weight: bold;
+            min-height: 40px;
+        }
+
+        .new-set-btn {
+            display: block;
+            margin: 20px auto;
+            background-color: #ff7f50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .new-set-btn:hover {
+            background-color: #ff6b3d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .correct {
+            color: #2e8b57;
+        }
+
+        .incorrect {
+            color: #dc3545;
+        }
+
+        .quotient-input-box { /* New style for quotient input at the top */
+            width: 80px;
+            height: 40px;
+            font-size: 20px;
+            text-align: center;
+            border: 2px solid #4a7ba7;
+            border-radius: 8px;
+            margin-bottom: 10px; /* Add some margin below the input */
+        }
+
+        .quotient-input-box:focus {
+            outline: none;
+            border-color: #ff7f50;
+            box-shadow: 0 0 5px #ff7f50;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">5th Grade Division Practice</h1>
+        <p class="subtitle">Solve each division problem step-by-step</p>
+    </div>
+
+    <div class="instruction">
+        <p><strong>Instructions:</strong> For each problem:</p>
+        <ol>
+            <li>Work through the division problem step-by-step in the boxes provided</li>
+            <li>Each box represents one step in the process (subtract, bring down)</li>
+            <li>Click "Add Step" if you need more working space</li>
+            <li>Enter your final quotient and remainder answers</li>
+            <li>Click "Check Answers" when you're done with all problems</li>
+        </ol>
+    </div>
+
+    <div class="problems-container" id="problemsContainer">
+        </div>
+
+    <button class="submit-btn" id="submitBtn">Check Answers</button>
+
+    <div class="score-container" id="scoreContainer"></div>
+
+    <button class="new-set-btn" id="newSetBtn">Get New Problems</button>
+
+    <script>
+        // Function to generate a random number within a range
+        function randomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // Function to generate division problems with appropriate difficulty for 5th grade
+        function generateDivisionProblem() {
+            // Different types of division problems for varied difficulty
+            const problemTypes = [
+                // Type 1: 2-digit by 1-digit with remainder
+                () => {
+                    const divisor = randomNumber(2, 9);
+                    const quotient = randomNumber(10, 40);
+                    const remainder = randomNumber(0, divisor - 1);
+                    const dividend = divisor * quotient + remainder;
+                    return {
+                        dividend,
+                        divisor,
+                        quotient,
+                        remainder
+                    };
+                },
+                // Type 2: 3-digit by 1-digit with remainder
+                () => {
+                    const divisor = randomNumber(3, 9);
+                    const quotient = randomNumber(50, 150);
+                    const remainder = randomNumber(0, divisor - 1);
+                    const dividend = divisor * quotient + remainder;
+                    return {
+                        dividend,
+                        divisor,
+                        quotient,
+                        remainder
+                    };
+                },
+                // Type 3: 3-digit by 2-digit with remainder
+                () => {
+                    const divisor = randomNumber(11, 25);
+                    const quotient = randomNumber(15, 50);
+                    const remainder = randomNumber(0, divisor - 1);
+                    const dividend = divisor * quotient + remainder;
+                    return {
+                        dividend,
+                        divisor,
+                        quotient,
+                        remainder
+                    };
+                },
+                // Type 4: 4-digit by 2-digit with remainder
+                () => {
+                    const divisor = randomNumber(15, 30);
+                    const quotient = randomNumber(40, 120);
+                    const remainder = randomNumber(0, divisor - 1);
+                    const dividend = divisor * quotient + remainder;
+                    return {
+                        dividend,
+                        divisor,
+                        quotient,
+                        remainder
+                    };
+                },
+                // Type 5: 4-digit by 1-digit with remainder (challenging)
+                () => {
+                    const divisor = randomNumber(6, 9);
+                    const quotient = randomNumber(700, 1200);
+                    const remainder = randomNumber(0, divisor - 1);
+                    const dividend = divisor * quotient + remainder;
+                    return {
+                        dividend,
+                        divisor,
+                        quotient,
+                        remainder
+                    };
+                }
+            ];
+
+            // Randomly select a problem type
+            const randomProblemType = problemTypes[Math.floor(Math.random() * problemTypes.length)];
+            return randomProblemType();
+        }
+
+        // Function to create HTML for each problem
+        function createProblemHTML(problem, index) {
+            return `
+                <div class="problem" id="problem${index}">
+                    <div class="problem-number">Problem ${index + 1}</div>
+                    <div class="division-problem">${problem.dividend} ÷ ${problem.divisor}</div>
+
+                    <input type="number" class="quotient-input-box" id="workingQuotient${index}" placeholder="Quotient" min="0">
+
+                    <div class="vertical-division" id="verticalDivision${index}">
+                        <div class="division-setup">
+                            <div class="divisor">${problem.divisor}</div>
+                            <div class="dividend">${problem.dividend}</div>
+                        </div>
+
+                        <div class="working-rows" id="workingRows${index}">
+                            <div class="working-row">
+                                <div class="step-number">1</div>
+                                <div class="work-box">
+                                    <input type="text" class="work-input" placeholder="Subtract...">
+                                </div>
+                            </div>
+                            <div class="working-row">
+                                <div class="step-number">2</div>
+                                 <div class="work-box">
+                                    <input type="text" class="work-input" placeholder="Subtract...">
+                                </div>
+                            </div>
+                            <div class="working-row">
+                                <div class="step-number">3</div>
+                                <div class="work-box">
+                                    <input type="text" class="work-input" placeholder="Subtract...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="add-step-btn" id="addStepBtn${index}">Add Step</button>
+                    </div>
+
+                    <div class="answer-section">
+                        <div class="answer-box">
+                            <span class="answer-label">Quotient:</span>
+                            <input type="number" class="answer-input" id="quotient${index}" min="0">
+                        </div>
+                        <div class="answer-box">
+                            <span class="answer-label">Remainder:</span>
+                            <input type="number" class="answer-input" id="remainder${index}" min="0">
+                        </div>
+                        <img src="/api/placeholder/24/24" alt="Feedback" class="feedback-icon" id="feedback${index}">
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to add a new working step row
+        function addWorkingRow(problemIndex) {
+            const workingRowsContainer = document.getElementById(`workingRows${problemIndex}`);
+            const currentSteps = workingRowsContainer.querySelectorAll('.working-row').length;
+            const newStepNumber = currentSteps + 1;
+
+            const newRowElement = document.createElement('div');
+            newRowElement.className = 'working-row';
+            newRowElement.innerHTML = `
+                <div class="step-number">${newStepNumber}</div>
+                <div class="work-box">
+                    <input type="text" class="work-input" placeholder="Subtract...">
+                </div>
+            `;
+
+            workingRowsContainer.appendChild(newRowElement);
+        }
+
+        // Function to generate all problems
+        function generateProblems() {
+            const problemsContainer = document.getElementById('problemsContainer');
+            problemsContainer.innerHTML = '';
+
+            // Array to store problem data for checking answers later
+            window.problemData = [];
+
+            // Generate 5 division problems
+            for (let i = 0; i < 5; i++) {
+                const problem = generateDivisionProblem();
+                window.problemData.push(problem);
+                const problemHTML = createProblemHTML(problem, i);
+                problemsContainer.innerHTML += problemHTML;
+            }
+
+            // Add event listeners to "Add Step" buttons
+            for (let i = 0; i < 5; i++) {
+                document.getElementById(`addStepBtn${i}`).addEventListener('click', function() {
+                    addWorkingRow(i);
+                });
+            }
+
+            // Reset score container
+            document.getElementById('scoreContainer').textContent = '';
+        }
+
+        // Function to check answers
+        function checkAnswers() {
+            let correctCount = 0;
+
+            for (let i = 0; i < 5; i++) {
+                const problem = window.problemData[i];
+                const userQuotient = parseInt(document.getElementById(`quotient${i}`).value) || 0;
+                const userRemainder = parseInt(document.getElementById(`remainder${i}`).value) || 0;
+                const feedbackIcon = document.getElementById(`feedback${i}`);
+                const userWorkingQuotient = parseInt(document.getElementById(`workingQuotient${i}`).value) || 0;
+
+
+                // Check if the answer is correct
+                if (userQuotient === problem.quotient && userRemainder === problem.remainder) {
+                    feedbackIcon.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-.997-6l7.07-7.071-1.414-1.414-5.656 5.657-2.829-2.829-1.414 1.414L11.003 16z' fill='%232e8b57'/%3E%3C/svg%3E";
+                    feedbackIcon.style.visibility = 'visible';
+                    correctCount++;
+                } else {
+                    feedbackIcon.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-11.414L9.172 7.757 7.757 9.172 10.586 12l-2.829 2.828 1.415 1.415L12 13.414l2.828 2.829 1.415-1.415L13.414 12l2.829-2.828-1.415-1.415L12 10.586z' fill='%23dc3545'/%3E%3C/svg%3E";
+                    feedbackIcon.style.visibility = 'visible';
+                }
+            }
+
+            // Display score
+            const scoreContainer = document.getElementById('scoreContainer');
+            scoreContainer.textContent = `You got ${correctCount} out of 5 correct!`;
+
+            if (correctCount === 5) {
+                scoreContainer.innerHTML += "<p>🎉 Perfect Score! Amazing job! 🎉</p>";
+                scoreContainer.className = "score-container correct";
+            } else if (correctCount >= 3) {
+                scoreContainer.innerHTML += "<p>Good job! Keep practicing!</p>";
+                scoreContainer.className = "score-container";
+            } else {
+                scoreContainer.innerHTML += "<p>Keep practicing! You'll get better!</p>";
+                scoreContainer.className = "score-container incorrect";
+            }
+        }
+
+        // Function to provide hints for the division process
+        function addHintPlaceholders() {
+            // Get all work input fields
+            const workInputs = document.querySelectorAll('.work-input');
+
+            // For the first three inputs in each problem, add more specific placeholders
+            for (let i = 0; i < 5; i++) {
+                const inputs = document.querySelectorAll(`#workingRows${i} .work-input`);
+
+                if (inputs.length >= 1) {
+                    inputs[0].placeholder = "Subtract";
+                }
+
+                if (inputs.length >= 2) {
+                    inputs[1].placeholder = "Bring down next digit / Subtract";
+                }
+
+                if (inputs.length >= 3) {
+                    inputs[2].placeholder = "Bring down next digit / Subtract";
+                }
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate initial problems
+            generateProblems();
+
+            // Add more specific placeholders
+            addHintPlaceholders();
+
+            // Add event listener to check answers button
+            document.getElementById('submitBtn').addEventListener('click', checkAnswers);
+
+            // Add event listener to new set button
+            document.getElementById('newSetBtn').addEventListener('click', function() {
+                generateProblems();
+                addHintPlaceholders();
+            });
+        });
+    </script>
+</body>
+</html>
