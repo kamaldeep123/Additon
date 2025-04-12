@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>3D Math Adventure (Grade 5)</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #87CEEB; font-family: 'Arial', sans-serif; }
+        canvas { display: block; }
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            display:block;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px #000000;
+        }
+        #scoreContainer {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0,0,0,0.3);
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+        #score, #highScore {
+            color: white;
+            font-size: 18px;
+            text-shadow: 1px 1px 2px #000000;
+            margin: 2px 0;
+        }
+         #messageBox {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 25px 35px;
+            background-color: rgba(0, 0, 0, 0.75);
+            color: white;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+            z-index: 200;
+            border: 3px solid white;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            10%, 90% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        #messageBox.show {
+            display: block;
+            animation: fadeInOut 1.5s ease-in-out forwards;
+        }
+        #startButton {
+             position: absolute;
+             top: 10px;
+             left: 10px;
+             z-index: 200;
+             padding: 10px 15px;
+             font-size: 16px;
+             cursor: pointer;
+             background-color: #4CAF50;
+             color: white;
+             border: none;
+             border-radius: 5px;
+             box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+         #startButton:hover {
+             background-color: #45a049;
+         }
+    </style>
+</head>
+<body>
+    <button id="startButton">Start Sound & Game</button>
+
+    <div id="info">Problem: ? + ? = ?</div>
+    <div id="scoreContainer">
+        <div id="score">Score: 0</div>
+        <div id="highScore">High Score: 0</div>
+    </div>
+    <div id="messageBox">Correct!</div>
+
+    <script>
+        // --- Basic Setup ---
+        let scene, camera, renderer;
+        let player, playerVelocity = new THREE.Vector3();
+        const answerObjects = [];
+        const obstacles = [];
+        let particleSystem;
+        let currentProblem = { num1: 0, num2: 0, operator: '+', answer: 0 };
+        let score = 0;
+        let highScore = 0;
+        let gameActive = false;
+        let soundStarted = false;
+        const clock = new THREE.Clock();
+        let touchStartX, touchStartY;
+        const touchSensitivity = 0.015;
+        let isPointerDown = false;
+        let correctSound, incorrectSound, backgroundMusicLoop;
+
+        // --- Initialization ---
+        function init() {
+            console.log("Initializing scene...");
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+            scene.fog = new THREE.Fog(0x87CEEB, 15, 60);
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 7, 18); camera.lookAt(0, 0, 0);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            document.body.appendChild(renderer.domElement);
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9); directionalLight.position.set(10, 15, 10); directionalLight.castShadow = true; directionalLight.shadow.bias = -0.0005; directionalLight.shadow.mapSize.width = 1024; directionalLight.shadow.mapSize.height = 1024; directionalLight.shadow.camera.near = 1; directionalLight.shadow.camera.far = 50; directionalLight.shadow.camera.left = -25; directionalLight.shadow.camera.right = 25; directionalLight.shadow.camera.top = 25; directionalLight.shadow.camera.bottom = -25; scene.add(directionalLight);
+            // Ground
+            const groundTexture = createCheckerboardTexture(100, 100); const groundMaterial = new THREE.MeshStandardMaterial({ map: groundTexture, side: THREE.DoubleSide }); const groundGeometry = new THREE.PlaneGeometry(100, 100); const ground = new THREE.Mesh(groundGeometry, groundMaterial); ground.rotation.x = -Math.PI / 2; ground.position.y = -1.5; ground.receiveShadow = true; scene.add(ground);
+            // Player, Obstacles, Clouds, Particles
+            player = createPlayerShip(); player.position.y = -0.5; player.castShadow = true; scene.add(player);
+            createObstacles(15); createClouds(20); createParticleSystem();
+            // UI and Sound
+            loadHighScore(); initSound();
+            // Start Button
+            const startButton = document.getElementById('startButton'); startButton.onclick = startGame;
+            // Event Listeners
+            window.addEventListener('resize', onWindowResize, false); window.addEventListener('mousedown', onPointerDown); window.addEventListener('mousemove', onPointerMove); window.addEventListener('mouseup', onPointerUp); window.addEventListener('touchstart', onPointerDown, { passive: false }); window.addEventListener('touchmove', onPointerMove, { passive: false }); window.addEventListener('touchend', onPointerUp, false);
+            console.log("Initialization complete. Waiting for Start button.");
+            animate(); // Start render loop
+        }
+
+        // --- Start Game Function ---
+        function startGame() {
+            console.log("Start button clicked!");
+            const startButton = document.getElementById('startButton'); if (startButton) startButton.style.display = 'none';
+            Tone.start().then(() => {
+                console.log("AudioContext started."); soundStarted = true;
+                if (Tone.Transport.state !== 'started') { Tone.Transport.start(); if (backgroundMusicLoop) backgroundMusicLoop.start(0); console.log("Tone Transport started."); }
+                console.log("Requesting first problem generation..."); generateNewProblem();
+            }).catch(e => { console.error("Error starting Tone.js:", e); console.warn("Game starting without sound due to Tone.js error."); generateNewProblem(); });
+        }
+
+        // --- Texture Creation (Unchanged) ---
+        function createCheckerboardTexture(width = 2, height = 2) { const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const context = canvas.getContext('2d'); context.fillStyle = '#90EE90'; context.fillRect(0, 0, width, height); context.fillStyle = '#3CB371'; for (let i = 0; i < width; i += 2) { for (let j = 0; j < height; j += 2) { if ((i / 2 + j / 2) % 2 === 0) { context.fillRect(i, j, 2, 2); } } } const texture = new THREE.CanvasTexture(canvas); texture.wrapS = THREE.RepeatWrapping; texture.wrapT = THREE.RepeatWrapping; texture.repeat.set(50, 50); return texture; }
+        function createCloudTexture() { const canvas = document.createElement('canvas'); canvas.width = 128; canvas.height = 128; const context = canvas.getContext('2d'); const centerX = canvas.width / 2; const centerY = canvas.height / 2; const radius = canvas.width / 3; const gradient = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius); gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)'); gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.7)'); gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); context.fillStyle = gradient; context.fillRect(0, 0, canvas.width, canvas.height); context.fillStyle = 'rgba(255, 255, 255, 0.8)'; for(let i=0; i<5; i++) { context.beginPath(); context.arc( centerX + (Math.random() - 0.5) * radius * 1.5, centerY + (Math.random() - 0.5) * radius * 1.5, radius * (Math.random() * 0.5 + 0.5), 0, Math.PI * 2 ); context.fill(); } return new THREE.CanvasTexture(canvas); }
+
+        // --- Object Creation (Player, Obstacles - Unchanged) ---
+        function createPlayerShip() { const shipGroup = new THREE.Group(); const bodyGeometry = new THREE.ConeGeometry(0.6, 1.5, 16); const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xC0C0C0, metalness: 0.5, roughness: 0.6 }); const body = new THREE.Mesh(bodyGeometry, bodyMaterial); body.rotation.x = Math.PI / 2; body.position.y = 0.2; shipGroup.add(body); const cockpitGeometry = new THREE.SphereGeometry(0.3, 16, 16); const cockpitMaterial = new THREE.MeshStandardMaterial({ color: 0x4682B4, emissive: 0x336699, roughness: 0.3 }); const cockpit = new THREE.Mesh(cockpitGeometry, cockpitMaterial); cockpit.position.set(0, 0.3, -0.3); shipGroup.add(cockpit); const wingShape = new THREE.Shape(); wingShape.moveTo(0, 0); wingShape.lineTo(0.8, 0.2); wingShape.lineTo(0.8, -0.2); wingShape.lineTo(0, 0); const extrudeSettings = { depth: 0.1, bevelEnabled: false }; const wingGeometry = new THREE.ExtrudeGeometry(wingShape, extrudeSettings); const wingMaterial = new THREE.MeshStandardMaterial({ color: 0xB00000, roughness: 0.7 }); const leftWing = new THREE.Mesh(wingGeometry, wingMaterial); leftWing.rotation.y = Math.PI / 2; leftWing.position.set(-0.5, 0.1, 0.2); shipGroup.add(leftWing); const rightWing = leftWing.clone(); rightWing.position.x = 0.5; shipGroup.add(rightWing); shipGroup.traverse((child) => { if (child.isMesh) { child.castShadow = true; child.receiveShadow = false; } }); return shipGroup; }
+        function createObstacles(count) { const rockGeometry = new THREE.IcosahedronGeometry(0.8, 0); const rockMaterial = new THREE.MeshStandardMaterial({ color: 0x808080, roughness: 0.8 }); const playArea = 25; for (let i = 0; i < count; i++) { const rock = new THREE.Mesh(rockGeometry, rockMaterial); let posX, posZ; do { posX = (Math.random() - 0.5) * playArea * 1.5; posZ = (Math.random() - 0.5) * playArea * 1.5; } while (Math.abs(posX) < 5 || (posZ > -10 && posZ < 5)); rock.position.set(posX, -1.0, posZ); rock.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI); rock.castShadow = true; rock.receiveShadow = true; scene.add(rock); obstacles.push(rock); } }
+        function createClouds(count) { const cloudTexture = createCloudTexture(); const cloudMaterial = new THREE.SpriteMaterial({ map: cloudTexture, color: 0xffffff, transparent: true, opacity: 0.8, fog: false }); const skyHeight = 15; const spread = 50; for (let i = 0; i < count; i++) { const cloud = new THREE.Sprite(cloudMaterial); const scale = Math.random() * 5 + 5; cloud.scale.set(scale * 1.5, scale, scale); cloud.position.set( (Math.random() - 0.5) * spread * 2, skyHeight + (Math.random() - 0.5) * 5, (Math.random() - 0.5) * spread * 2 ); scene.add(cloud); } }
+
+        // --- Particle System (Unchanged) ---
+        function createParticleSystem() { const particleCount = 100; const particles = new THREE.BufferGeometry(); const positions = new Float32Array(particleCount * 3); const colors = new Float32Array(particleCount * 3); const color = new THREE.Color(); for (let i = 0; i < particleCount; i++) { positions[i * 3] = 0; positions[i * 3 + 1] = 0; positions[i * 3 + 2] = 0; color.setHSL(Math.random() * 0.1 + 0.1, 0.9, 0.7); colors[i * 3] = color.r; colors[i * 3 + 1] = color.g; colors[i * 3 + 2] = color.b; } particles.setAttribute('position', new THREE.BufferAttribute(positions, 3)); particles.setAttribute('color', new THREE.BufferAttribute(colors, 3)); const particleMaterial = new THREE.PointsMaterial({ size: 0.3, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, sizeAttenuation: true, depthWrite: false }); particleSystem = new THREE.Points(particles, particleMaterial); particleSystem.visible = false; scene.add(particleSystem); }
+        function triggerParticles(position) { if (!particleSystem) return; const particles = particleSystem.geometry; const positions = particles.attributes.position.array; const velocities = []; for (let i = 0; i < positions.length / 3; i++) { positions[i * 3] = position.x; positions[i * 3 + 1] = position.y; positions[i * 3 + 2] = position.z; velocities.push( new THREE.Vector3( (Math.random() - 0.5), (Math.random() - 0.5), (Math.random() - 0.5) ).normalize().multiplyScalar(Math.random() * 0.1 + 0.05) ); } particles.attributes.position.needsUpdate = true; particleSystem.visible = true; particleSystem.userData.velocities = velocities; particleSystem.userData.life = 1.0; }
+        function updateParticles(deltaTime) { if (!particleSystem || !particleSystem.visible) return; particleSystem.userData.life -= deltaTime; if (particleSystem.userData.life <= 0) { particleSystem.visible = false; return; } const particles = particleSystem.geometry; const positions = particles.attributes.position.array; const velocities = particleSystem.userData.velocities; const opacity = Math.max(0, particleSystem.userData.life); particleSystem.material.opacity = opacity; for (let i = 0; i < velocities.length; i++) { positions[i * 3] += velocities[i].x * deltaTime * 60; positions[i * 3 + 1] += velocities[i].y * deltaTime * 60; positions[i * 3 + 2] += velocities[i].z * deltaTime * 60; } particles.attributes.position.needsUpdate = true; }
+
+        // --- Sound Initialization (Unchanged) ---
+        function initSound() { correctSound = new Tone.Synth({ oscillator: { type: 'triangle' }, envelope: { attack: 0.01, decay: 0.3, sustain: 0.1, release: 0.2 } }).toDestination(); incorrectSound = new Tone.NoiseSynth({ noise: { type: 'pink' }, envelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 0.1 } }).toDestination(); incorrectSound.volume.value = -10; const synth = new Tone.PolySynth(Tone.Synth, { oscillator: { type: 'amsine', harmonicity: 1.1 }, envelope: { attack: 1, decay: 0.5, sustain: 0.8, release: 2 }, volume: -25 }).toDestination(); const pattern = new Tone.Pattern((time, note) => { synth.triggerAttackRelease(note, '2n', time); }, ['C3', 'G3', 'E3', 'A3'], 'randomWalk'); pattern.interval = '1m'; backgroundMusicLoop = pattern; console.log("Sound objects initialized."); }
+        function playCorrectSound() { if (!soundStarted) return; Tone.start().then(() => { correctSound.triggerAttackRelease('C5', '8n', Tone.now()); correctSound.triggerAttackRelease('G5', '8n', Tone.now() + 0.1); }); }
+        function playIncorrectSound() { if (!soundStarted) return; Tone.start().then(() => { incorrectSound.triggerAttackRelease('0.2n'); }); }
+
+        // --- Game Logic ---
+
+        // *** UPDATED FUNCTION: Increased Math Difficulty ***
+        function generateNewProblem() {
+            console.log("Generating new problem (Grade 5 level)...");
+            answerObjects.forEach(objData => { if (objData.mesh && objData.mesh.parent) { scene.remove(objData.mesh); } });
+            answerObjects.length = 0;
+
+            // --- Difficulty Scaling ---
+            // Base number range increases with score, aiming for Grade 5 levels
+            const baseMaxNum = 50 + score * 8; // Base range grows with score
+            const addSubMax = Math.min(2000, baseMaxNum); // Cap +/- numbers around 2000
+            const mulMaxFactor = Math.min(99, Math.floor(baseMaxNum / 10) + 10); // Cap multiplication factors at 99
+
+            // --- Operator Selection ---
+            // Increase chance of multiplication as score rises
+            const difficultyFactor = Math.min(score / 20, 0.6); // Factor from 0 to 0.6 based on score (caps at score 12)
+            const opRoll = Math.random();
+            if (opRoll < 0.4 - difficultyFactor * 0.2) { // Less addition bias
+                currentProblem.operator = '+';
+            } else if (opRoll < 0.7 - difficultyFactor * 0.1) { // Subtraction is common
+                 currentProblem.operator = '-';
+            } else { // Multiplication becomes more likely
+                 currentProblem.operator = '*';
+            }
+
+            // --- Number Generation (Grade 5 Level) ---
+            let num1, num2;
+            if (currentProblem.operator === '+') {
+                num1 = Math.floor(Math.random() * addSubMax) + 10; // Ensure numbers are at least 10
+                num2 = Math.floor(Math.random() * addSubMax) + 10;
+                currentProblem.answer = num1 + num2;
+            } else if (currentProblem.operator === '-') {
+                // Ensure num1 is larger than num2 for positive results typical in early grades
+                num1 = Math.floor(Math.random() * (addSubMax - 50)) + 50; // Ensure num1 is reasonably large
+                num2 = Math.floor(Math.random() * (num1 - 10)) + 10; // Ensure num2 is smaller and > 10
+                currentProblem.answer = num1 - num2;
+            } else { // Multiplication
+                num1 = Math.floor(Math.random() * mulMaxFactor) + 1; // Use capped factor range
+                num2 = Math.floor(Math.random() * mulMaxFactor) + 1;
+                // Maybe bias towards simpler multiplication initially? e.g., 1-digit x 2-digit
+                if (score < 10 && Math.random() > 0.5) {
+                    num2 = Math.floor(Math.random() * 9) + 1; // Force one factor to be 1-digit early on
+                }
+                currentProblem.answer = num1 * num2;
+            }
+
+            currentProblem.num1 = num1; currentProblem.num2 = num2;
+            document.getElementById('info').innerText = `Problem: ${num1} ${currentProblem.operator} ${num2} = ?`;
+
+            // --- Answer Option Generation (Adjusted Offset) ---
+            const options = new Set([currentProblem.answer]);
+             while (options.size < 3) {
+                let wrongAnswer;
+                // Offset based on answer magnitude, minimum offset of ~5-10
+                const offsetMagnitude = Math.max(10, Math.floor(currentProblem.answer * 0.1));
+                const offset = Math.floor(Math.random() * offsetMagnitude) + Math.floor(offsetMagnitude / 2) + 1; // Random offset within magnitude range
+
+                wrongAnswer = Math.random() > 0.5
+                              ? currentProblem.answer + offset
+                              : Math.max(0, currentProblem.answer - offset); // Ensure non-negative
+
+                // Avoid trivial wrong answers (e.g., differing only by 1) for larger numbers if offset allows
+                if (Math.abs(wrongAnswer - currentProblem.answer) > 2 && wrongAnswer !== currentProblem.answer) {
+                     options.add(wrongAnswer);
+                } else if (options.size < 2 && wrongAnswer !== currentProblem.answer) {
+                    // Allow closer answers if struggling to find distinct options
+                    options.add(wrongAnswer);
+                }
+            }
+
+            // --- Create and position answer objects (Cubes) ---
+            const shuffledOptions = Array.from(options).sort(() => Math.random() - 0.5);
+            const spread = 18; const forwardDist = -20;
+            shuffledOptions.forEach((value, index) => {
+                 const xPos = (index - 1) * spread + (Math.random() - 0.5) * 4; const yPos = (Math.random() - 0.5) * 2; const zPos = forwardDist + (Math.random() - 0.5) * 5;
+                createAnswerObject(value, xPos, yPos, zPos);
+            });
+
+            // Reset player state
+            player.position.set(0, -0.5, 0); playerVelocity.set(0, 0, 0); player.rotation.set(0, 0, 0);
+            gameActive = true; // Activate game for the next round
+            console.log("Problem generated. Answer:", currentProblem.answer, "Game Active:", gameActive);
+        }
+
+        // *** UPDATED FUNCTION (Answer Object Creation - Same as previous fix) ***
+        function createAnswerObject(value, x, y, z) {
+            const cubeSize = 2.0; const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
+            const canvasSize = 256; const canvas = document.createElement('canvas'); const context = canvas.getContext('2d'); canvas.width = canvasSize; canvas.height = canvasSize;
+            context.clearRect(0, 0, canvasSize, canvasSize);
+            const circleRadius = canvasSize * 0.4; context.fillStyle = 'rgba(255, 255, 255, 0.8)'; context.beginPath(); context.arc(canvasSize / 2, canvasSize / 2, circleRadius, 0, Math.PI * 2); context.fill(); context.strokeStyle = 'rgba(0, 0, 0, 0.5)'; context.lineWidth = 5; context.stroke();
+            const fontSize = canvasSize * 0.4; context.font = `Bold ${fontSize}px Arial`; context.fillStyle = 'black'; context.textAlign = 'center'; context.textBaseline = 'middle';
+            // Adjust font size slightly for very large numbers if needed (basic check)
+             if (value.toString().length > 3) {
+                context.font = `Bold ${fontSize * 0.8}px Arial`;
+             }
+             if (value.toString().length > 4) {
+                 context.font = `Bold ${fontSize * 0.7}px Arial`;
+             }
+            context.fillText(value.toString(), canvasSize / 2, canvasSize / 2);
+            const texture = new THREE.CanvasTexture(canvas); texture.needsUpdate = true;
+             const numberMaterial = new THREE.MeshStandardMaterial({ map: texture, color: 0xffffff, metalness: 0.2, roughness: 0.8, transparent: true });
+             const plainMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color().setHSL(Math.random(), 0.7, 0.6), metalness: 0.2, roughness: 0.8 });
+             const materials = [ plainMaterial, plainMaterial, plainMaterial, plainMaterial, numberMaterial, plainMaterial ]; // Front face = number
+            const cube = new THREE.Mesh(geometry, materials); cube.position.set(x, y, z); cube.castShadow = true; cube.userData = { value: value, rotationSpeed: (Math.random() - 0.5) * 0.02 };
+            scene.add(cube); answerObjects.push({ mesh: cube, value: value });
+        }
+
+        // --- UI & Feedback (Unchanged) ---
+        function showMessage(text, duration = 1500) { const messageBox = document.getElementById('messageBox'); messageBox.innerText = text; messageBox.classList.add('show'); setTimeout(() => { messageBox.classList.remove('show'); }, duration); }
+        function animatePlayerFeedback(isCorrect) { const duration = 0.3; const jumpHeight = 0.5; const shakeAmount = 0.1; const initialY = player.position.y; const initialRotZ = player.rotation.z; const startTime = clock.elapsedTime; function feedbackLoop() { const currentElapsedTime = clock.elapsedTime - startTime; const progress = Math.min(currentElapsedTime / duration, 1); if (isCorrect) player.position.y = initialY + Math.sin(progress * Math.PI) * jumpHeight; else player.rotation.z = initialRotZ + Math.sin(progress * Math.PI * 4) * shakeAmount; if (progress < 1) requestAnimationFrame(feedbackLoop); else { player.position.y = initialY; player.rotation.z = initialRotZ; } } requestAnimationFrame(feedbackLoop); }
+
+        // --- Collision Detection (Unchanged) ---
+        function checkCollision() { const playerCollider = new THREE.Box3().setFromObject(player); let collisionDetected = false; const objectsToRemove = []; answerObjects.forEach((objData, index) => { if (collisionDetected || !objData.mesh || !objData.mesh.parent) return; const objectCollider = new THREE.Box3().setFromObject(objData.mesh); if (playerCollider.intersectsBox(objectCollider)) { console.log("Collision with answer object:", objData.value); collisionDetected = true; gameActive = false; playerVelocity.set(0, 0, 0); if (objData.value === currentProblem.answer) { score++; updateScoreDisplay(); showMessage("Correct!", 1000); playCorrectSound(); triggerParticles(objData.mesh.position); animatePlayerFeedback(true); objectsToRemove.push(...answerObjects); console.log("Correct answer hit. Scheduling next problem in 1s. Setting gameActive=false"); setTimeout(generateNewProblem, 1000); } else { if (score > 0) score = Math.max(0, score -1); updateScoreDisplay(); showMessage(`Oops! Answer: ${currentProblem.answer}`, 2000); playIncorrectSound(); animatePlayerFeedback(false); objectsToRemove.push(...answerObjects); console.log("Incorrect answer hit. Scheduling next problem in 2s. Setting gameActive=false"); setTimeout(generateNewProblem, 2000); } } }); objectsToRemove.forEach(objData => { const index = answerObjects.indexOf(objData); if (index > -1) { if (objData.mesh && objData.mesh.parent) { scene.remove(objData.mesh); } answerObjects.splice(index, 1); } }); obstacles.forEach(obstacle => { if (collisionDetected) return; const obstacleCollider = new THREE.Box3().setFromObject(obstacle); if (playerCollider.intersectsBox(obstacleCollider)) { console.log("Collision with obstacle"); playerVelocity.negate().multiplyScalar(0.5); const direction = player.position.clone().sub(obstacle.position).normalize(); player.position.add(direction.multiplyScalar(0.2)); } }); }
+
+        // --- Controls (Unchanged) ---
+        function onPointerDown(event) { if (!gameActive) return; isPointerDown = true; const touch = event.touches ? event.touches[0] : event; touchStartX = touch.clientX; touchStartY = touch.clientY; if (event.touches) event.preventDefault(); }
+        function onPointerMove(event) { if (!isPointerDown || !gameActive) return; const touch = event.touches ? event.touches[0] : event; const touchX = touch.clientX; const touchY = touch.clientY; const deltaX = touchX - touchStartX; const deltaY = touchY - touchStartY; const moveSpeed = 0.005; playerVelocity.x = deltaX * touchSensitivity / moveSpeed; playerVelocity.z = deltaY * touchSensitivity / moveSpeed; const maxSpeed = 0.3; if (playerVelocity.length() > maxSpeed) { playerVelocity.normalize().multiplyScalar(maxSpeed); } touchStartX = touchX; touchStartY = touchY; if (event.touches) event.preventDefault(); }
+        function onPointerUp(event) { isPointerDown = false; }
+
+        // --- High Score (Unchanged) ---
+        function loadHighScore() { const storedScore = localStorage.getItem('mathAdventureHighScore'); highScore = storedScore ? parseInt(storedScore, 10) : 0; updateScoreDisplay(); }
+        function saveHighScore() { if (score > highScore) { highScore = score; localStorage.setItem('mathAdventureHighScore', highScore.toString()); } }
+        function updateScoreDisplay() { saveHighScore(); document.getElementById('score').innerText = `Score: ${score}`; document.getElementById('highScore').innerText = `High Score: ${highScore}`; }
+
+        // --- Window Resize (Unchanged) ---
+        function onWindowResize() { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
+
+        // --- Animation Loop (Unchanged) ---
+        function animate() { requestAnimationFrame(animate); const deltaTime = clock.getDelta(); if (gameActive) { player.position.addScaledVector(playerVelocity, deltaTime * 60); if (!isPointerDown) { playerVelocity.multiplyScalar(0.92); } const playArea = 30; player.position.x = Math.max(-playArea, Math.min(playArea, player.position.x)); player.position.z = Math.max(-playArea - 5, Math.min(playArea - 15, player.position.z)); player.position.y = -0.5; const maxTilt = 0.5; const targetTilt = -playerVelocity.x * 2; player.rotation.z += (targetTilt - player.rotation.z) * 0.1; player.rotation.z = Math.max(-maxTilt, Math.min(maxTilt, player.rotation.z)); checkCollision(); } else { playerVelocity.set(0,0,0); player.rotation.z += (0 - player.rotation.z) * 0.1; } answerObjects.forEach(objData => { if (objData.mesh && objData.mesh.parent) { objData.mesh.rotation.y += objData.mesh.userData.rotationSpeed * deltaTime * 60; } }); updateParticles(deltaTime); const targetCameraPosition = player.position.clone().add(new THREE.Vector3(0, 7, 18)); camera.position.lerp(targetCameraPosition, 0.05); camera.lookAt(player.position.x, player.position.y + 1, player.position.z); renderer.render(scene, camera); }
+
+        // --- Start ---
+        document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+</body>
+</html>
