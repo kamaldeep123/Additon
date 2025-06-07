@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Learning App for Kids</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: white;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 1.2em;
+    }
+
+    .start-screen {
+        text-align: center;
+        padding: 50px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 20px;
+        margin-bottom: 30px;
+    }
+
+    .start-btn {
+        display: inline-block;
+        margin: 20px auto;
+        padding: 20px 50px;
+        font-size: 24px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        animation: pulse 2s infinite;
+        transition: all 0.3s;
+    }
+
+    .start-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    @keyframes pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+        50% { box-shadow: 0 0 0 20px rgba(76, 175, 80, 0); }
+    }
+
+    .app-content {
+        display: none;
+    }
+
+    .modes {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .mode-btn {
+        margin: 5px;
+        padding: 12px 25px;
+        background: rgba(255,255,255,0.2);
+        border: none;
+        border-radius: 25px;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s;
+    }
+
+    .mode-btn:hover {
+        background: rgba(255,255,255,0.3);
+        transform: translateY(-2px);
+    }
+
+    .mode-btn.active {
+        background: #4CAF50;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .lessons {
+        display: none;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .lesson-card {
+        background: rgba(255,255,255,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        cursor: pointer;
+        text-align: center;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+    }
+
+    .lesson-card:hover {
+        transform: scale(1.05);
+        border-color: rgba(255,255,255,0.3);
+    }
+
+    .lesson-card.completed {
+        background: rgba(76,175,80,0.3);
+        border-color: #4CAF50;
+    }
+
+    .piano-wrapper {
+        background: rgba(0,0,0,0.4);
+        padding: 40px 20px;
+        border-radius: 20px;
+        overflow-x: auto;
+        margin-bottom: 30px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+
+    .piano {
+        display: flex;
+        position: relative;
+        width: fit-content;
+        margin: 0 auto;
+    }
+
+    .key {
+        position: relative;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.1s;
+    }
+
+    .white {
+        width: 52px;
+        height: 200px;
+        background: linear-gradient(to bottom, #fff 0%, #f0f0f0 100%);
+        border: 1px solid #ccc;
+        border-radius: 0 0 5px 5px;
+        margin: 0 1px;
+        box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+    }
+
+    .white:hover {
+        background: linear-gradient(to bottom, #fff 0%, #e0e0e0 100%);
+    }
+
+    .white:active, .white.active {
+        background: linear-gradient(to bottom, #ffeb3b 0%, #ffc107 100%);
+        transform: translateY(2px);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 0 30px #ffeb3b;
+    }
+
+    .black {
+        width: 36px;
+        height: 130px;
+        background: linear-gradient(to bottom, #333 0%, #000 100%);
+        position: absolute;
+        z-index: 2;
+        border-radius: 0 0 3px 3px;
+        margin-left: -18px;
+        box-shadow: 0 3px 7px rgba(0,0,0,0.5);
+    }
+
+    .black:hover {
+        background: linear-gradient(to bottom, #444 0%, #111 100%);
+    }
+
+    .black:active, .black.active {
+        background: linear-gradient(to bottom, #ff9800 0%, #f57c00 100%);
+        transform: translateY(2px);
+        box-shadow: 0 1px 5px rgba(0,0,0,0.5), 0 0 30px #ff9800;
+    }
+
+    .key-label {
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+        pointer-events: none;
+    }
+
+    .white .key-label {
+        color: #333;
+        font-size: 14px;
+    }
+
+    .black .key-label {
+        color: white;
+        font-size: 12px;
+        bottom: 5px;
+    }
+
+    .highlight {
+        animation: glow 1s infinite;
+    }
+
+    @keyframes glow {
+        0%, 100% { 
+            box-shadow: 0 0 10px 3px #ffeb3b, 0 0 20px 6px #ffeb3b;
+            transform: scale(1.02);
+        }
+        50% { 
+            box-shadow: 0 0 20px 10px #ffeb3b, 0 0 40px 15px #ffeb3b;
+            transform: scale(1.05);
+        }
+    }
+
+    .info-panel {
+        background: rgba(255,255,255,0.1);
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .score {
+        font-size: 28px;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    .message {
+        font-size: 20px;
+        margin: 15px 0;
+        min-height: 35px;
+        font-weight: 500;
+    }
+
+    .controls {
+        margin: 20px 0;
+    }
+
+    .control-btn {
+        margin: 5px;
+        padding: 12px 30px;
+        background: #4CAF50;
+        border: none;
+        border-radius: 25px;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    .control-btn:hover {
+        background: #45a049;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .volume-control {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .volume-slider {
+        width: 200px;
+        height: 8px;
+        -webkit-appearance: none;
+        appearance: none;
+        background: rgba(255,255,255,0.3);
+        border-radius: 5px;
+        outline: none;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #4CAF50;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .sequence-display {
+        display: none;
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .note-item {
+        display: inline-block;
+        margin: 5px;
+        padding: 15px 25px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 15px;
+        font-size: 24px;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    .note-item.current {
+        background: #ffeb3b;
+        color: #333;
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .note-item.done {
+        background: #4CAF50;
+        transform: scale(0.95);
+    }
+
+    .audio-test {
+        margin-top: 20px;
+        padding: 15px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+    }
+
+    .achievement {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4CAF50;
+        padding: 20px 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        animation: slideIn 0.5s ease-out;
+        z-index: 1000;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateX(400px); }
+        to { transform: translateX(0); }
+    }
+
+    @media (max-width: 768px) {
+        .white {
+            width: 42px;
+            height: 150px;
+        }
+        .black {
+            width: 30px;
+            height: 100px;
+            margin-left: -15px;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        .start-btn {
+            font-size: 20px;
+            padding: 15px 40px;
+        }
+    }
+
+    .keyboard-guide {
+        margin-top: 15px;
+        padding: 15px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        font-size: 14px;
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <h1>🎹 Piano Learning Adventure</h1>
+        <p class="subtitle">Learn piano step by step with fun interactive lessons!</p>
+
+```
+    <div class="start-screen" id="startScreen">
+        <h2>Welcome to Piano Learning Adventure!</h2>
+        <p style="margin: 20px 0;">Click the button below to start your musical journey!</p>
+        <button class="start-btn" id="startBtn">🎵 Start Playing Piano! 🎵</button>
+        <div class="audio-test">
+            <p>🔊 Make sure your sound is turned on!</p>
+        </div>
+    </div>
+    
+    <div class="app-content" id="appContent">
+        <div class="modes">
+            <button class="mode-btn active" data-mode="free">Free Play</button>
+            <button class="mode-btn" data-mode="learn">Learn Notes</button>
+            <button class="mode-btn" data-mode="practice">Practice</button>
+            <button class="mode-btn" data-mode="game">Note Game</button>
+            <button class="mode-btn" data-mode="songs">Play Songs</button>
+        </div>
+        
+        <div class="lessons" id="lessons"></div>
+        
+        <div class="sequence-display" id="sequenceDisplay"></div>
+        
+        <div class="piano-wrapper">
+            <div class="piano" id="piano"></div>
+            <div class="keyboard-guide">
+                💡 Keyboard: White keys (A S D F G H J K L ;) | Black keys (W E T Y U)
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <div class="score">🏆 Score: <span id="score">0</span></div>
+            <div class="message" id="message">Welcome! Start playing the piano!</div>
+            <div class="controls">
+                <button class="control-btn" id="playBtn">▶️ Play</button>
+                <button class="control-btn" id="resetBtn">🔄 Reset</button>
+                <button class="control-btn" id="hintBtn">💡 Hint</button>
+            </div>
+            <div class="volume-control">
+                <span>🔊 Volume:</span>
+                <input type="range" class="volume-slider" id="volume" min="0" max="100" value="70">
+                <span id="volumeText">70%</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Create a simple sound system that will work everywhere
+    class SimplePiano {
+        constructor() {
+            this.audioContext = null;
+            this.volume = 0.7;
+            this.isInitialized = false;
+        }
+
+        async init() {
+            try {
+                // Create audio context
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Resume if suspended
+                if (this.audioContext.state === 'suspended') {
+                    await this.audioContext.resume();
+                }
+                
+                this.isInitialized = true;
+                console.log('Audio initialized successfully');
+                return true;
+            } catch (error) {
+                console.error('Audio initialization failed:', error);
+                return false;
+            }
+        }
+
+        playNote(frequency, duration = 0.5) {
+            if (!this.isInitialized || !this.audioContext) {
+                console.warn('Audio not initialized');
+                return;
+            }
+
+            try {
+                const now = this.audioContext.currentTime;
+                
+                // Create oscillator
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                const filter = this.audioContext.createBiquadFilter();
+                
+                // Set up the audio graph
+                oscillator.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                // Configure oscillator
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(frequency, now);
+                
+                // Configure filter for warmer sound
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(2000, now);
+                filter.Q.setValueAtTime(1, now);
+                
+                // Configure envelope
+                gainNode.gain.setValueAtTime(0, now);
+                gainNode.gain.linearRampToValueAtTime(this.volume * 0.4, now + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+                
+                // Play the note
+                oscillator.start(now);
+                oscillator.stop(now + duration);
+                
+                // Clean up
+                oscillator.onended = () => {
+                    oscillator.disconnect();
+                    filter.disconnect();
+                    gainNode.disconnect();
+                };
+                
+            } catch (error) {
+                console.error('Error playing note:', error);
+            }
+        }
+
+        setVolume(value) {
+            this.volume = value;
+        }
+    }
+
+    // Global variables
+    const piano = new SimplePiano();
+    let currentMode = 'free';
+    let score = 0;
+    let targetNote = null;
+    let sequence = [];
+    let sequenceIndex = 0;
+    let currentLesson = null;
+    let gameTimer = null;
+
+    // Note frequencies
+    const noteFreqs = {
+        'C': 261.63, 'C#': 277.18, 'D': 293.66, 'D#': 311.13,
+        'E': 329.63, 'F': 349.23, 'F#': 369.99, 'G': 392.00,
+        'G#': 415.30, 'A': 440.00, 'A#': 466.16, 'B': 493.88,
+        'C2': 523.25, 'D2': 587.33, 'E2': 659.25
+    };
+
+    // Lessons data
+    const lessonsData = {
+        learn: [
+            {title: '🎵 Basic Notes (C-D-E)', notes: ['C', 'D', 'E'], completed: false},
+            {title: '🎶 More Notes (F-G)', notes: ['F', 'G'], completed: false},
+            {title: '🎹 Complete Scale', notes: ['A', 'B', 'C2'], completed: false},
+            {title: '⚫ Black Keys', notes: ['C#', 'D#', 'F#', 'G#', 'A#'], completed: false}
+        ],
+        practice: [
+            {title: '🎼 C Major Scale', notes: ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C2'], completed: false},
+            {title: '🎵 Basic Chord', notes: ['C', 'E', 'G'], completed: false},
+            {title: '🎶 Simple Pattern', notes: ['C', 'D', 'E', 'D', 'C'], completed: false},
+            {title: '🎹 Arpeggio', notes: ['C', 'E', 'G', 'C2', 'G', 'E', 'C'], completed: false}
+        ],
+        songs: [
+            {title: '🐑 Mary Had a Little Lamb', notes: ['E', 'D', 'C', 'D', 'E', 'E', 'E', 'D', 'D', 'D', 'E', 'G', 'G'], completed: false},
+            {title: '⭐ Twinkle Twinkle', notes: ['C', 'C', 'G', 'G', 'A', 'A', 'G', 'F', 'F', 'E', 'E', 'D', 'D', 'C'], completed: false},
+            {title: '🎂 Happy Birthday', notes: ['C', 'C', 'D', 'C', 'F', 'E', 'C', 'C', 'D', 'C', 'G', 'F'], completed: false},
+            {title: '🎵 Ode to Joy', notes: ['E', 'E', 'F', 'G', 'G', 'F', 'E', 'D', 'C', 'C', 'D', 'E', 'E', 'D', 'D'], completed: false}
+        ]
+    };
+
+    // Initialize app when start button is clicked
+    document.getElementById('startBtn').addEventListener('click', async function() {
+        // Initialize audio
+        const audioInitialized = await piano.init();
+        
+        if (audioInitialized) {
+            // Test sound
+            piano.playNote(440, 0.2);
+            
+            // Hide start screen and show app
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('appContent').style.display = 'block';
+            
+            // Create piano keys
+            createPiano();
+            
+            showMessage('🎉 Great! Click on the piano keys to play!');
+        } else {
+            alert('Audio failed to initialize. Please refresh the page and try again.');
+        }
+    });
+
+    // Create piano keys
+    function createPiano() {
+        const pianoDiv = document.getElementById('piano');
+        const whiteKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C2', 'D2', 'E2'];
+        const blackKeys = {'C#': 34, 'D#': 86, 'F#': 190, 'G#': 242, 'A#': 294};
+        
+        // Create white keys
+        whiteKeys.forEach((note, i) => {
+            const key = document.createElement('div');
+            key.className = 'key white';
+            key.dataset.note = note;
+            key.innerHTML = `<div class="key-label">${note}</div>`;
+            
+            // Add event listeners
+            key.addEventListener('mousedown', () => handleKeyPress(note));
+            key.addEventListener('mouseup', () => handleKeyRelease(note));
+            key.addEventListener('mouseleave', () => handleKeyRelease(note));
+            key.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                handleKeyPress(note);
+            });
+            key.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                handleKeyRelease(note);
+            });
+            
+            pianoDiv.appendChild(key);
+        });
+        
+        // Create black keys
+        Object.entries(blackKeys).forEach(([note, position]) => {
+            const key = document.createElement('div');
+            key.className = 'key black';
+            key.dataset.note = note;
+            key.style.left = position + 'px';
+            key.innerHTML = `<div class="key-label">${note}</div>`;
+            
+            // Add event listeners
+            key.addEventListener('mousedown', () => handleKeyPress(note));
+            key.addEventListener('mouseup', () => handleKeyRelease(note));
+            key.addEventListener('mouseleave', () => handleKeyRelease(note));
+            key.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                handleKeyPress(note);
+            });
+            key.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                handleKeyRelease(note);
+            });
+            
+            pianoDiv.appendChild(key);
+        });
+    }
+
+    // Handle key press
+    function handleKeyPress(note) {
+        // Visual feedback
+        const key = document.querySelector(`[data-note="${note}"]`);
+        key.classList.add('active');
+        
+        // Play sound
+        piano.playNote(noteFreqs[note]);
+        
+        // Check game logic
+        checkGameLogic(note);
+    }
+
+    // Handle key release
+    function handleKeyRelease(note) {
+        const key = document.querySelector(`[data-note="${note}"]`);
+        key.classList.remove('active');
+    }
+
+    // Check game logic based on mode
+    function checkGameLogic(note) {
+        if (currentMode === 'learn' && targetNote === note) {
+            score += 10;
+            updateScore();
+            showMessage('✅ Correct! Well done! 🎉');
+            showAchievement('+10 Points!');
+            setTimeout(nextLearnNote, 1000);
+        } else if (currentMode === 'game' && targetNote === note) {
+            score += 10;
+            updateScore();
+            showMessage('⭐ Great! Keep going!');
+            nextGameNote();
+        } else if ((currentMode === 'practice' || currentMode === 'songs') && sequence.length > 0) {
+            if (note === sequence[sequenceIndex]) {
+                updateSequenceDisplay();
+                sequenceIndex++;
+                if (sequenceIndex >= sequence.length) {
+                    score += 50;
+                    updateScore();
+                    showMessage('🎊 Perfect! You completed it!');
+                    showAchievement('Sequence Complete! +50 Points!');
+                    currentLesson.completed = true;
+                    sequenceIndex = 0;
+                    setTimeout(() => {
+                        displaySequence();
+                        showLessons();
+                    }, 2000);
+                }
+            } else {
+                showMessage('❌ Oops! Try again.');
+            }
+        }
+    }
+
+    // Mode buttons
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentMode = this.dataset.mode;
+            resetGame();
+            
+            if (currentMode === 'learn' || currentMode === 'practice' || currentMode === 'songs') {
+                showLessons();
+            } else {
+                document.getElementById('lessons').style.display = 'none';
+                document.getElementById('sequenceDisplay').style.display = 'none';
+                if (currentMode === 'game') {
+                    showMessage('🎮 Press Play to start the game!');
+                } else {
+                    showMessage('🎹 Free play mode - enjoy making music!');
+                }
+            }
+        });
+    });
+
+    // Show lessons
+    function showLessons() {
+        const lessonsDiv = document.getElementById('lessons');
+        lessonsDiv.innerHTML = '';
+        lessonsDiv.style.display = 'grid';
+        
+        const lessons = lessonsData[currentMode] || [];
+        lessons.forEach((lesson, i) => {
+            const card = document.createElement('div');
+            card.className = 'lesson-card' + (lesson.completed ? ' completed' : '');
+            card.innerHTML = `
+                <h3>${lesson.title}</h3>
+                <p>${lesson.completed ? '✅ Completed!' : '📚 Click to start'}</p>
+            `;
+            card.addEventListener('click', () => startLesson(lesson));
+            lessonsDiv.appendChild(card);
+        });
+    }
+
+    // Start lesson
+    function startLesson(lesson) {
+        currentLesson = lesson;
+        document.getElementById('lessons').style.display = 'none';
+        
+        if (currentMode === 'learn') {
+            showMessage(`🎵 Learn these notes: ${lesson.notes.join(', ')}`);
+            lesson.notes.forEach(note => {
+                document.querySelector(`[data-note="${note}"]`).classList.add('highlight');
+            });
+            setTimeout(() => {
+                document.querySelectorAll('.key').forEach(key => key.classList.remove('highlight'));
+            }, 3000);
+        } else if (currentMode === 'practice' || currentMode === 'songs') {
+            sequence = lesson.notes;
+            sequenceIndex = 0;
+            displaySequence();
+            showMessage(`🎶 Follow the sequence! Press Play to hear it first.`);
+        }
+    }
+
+    // Display sequence
+    function displaySequence() {
+        const display = document.getElementById('sequenceDisplay');
+        display.innerHTML = '';
+        display.style.display = 'block';
+        
+        sequence.forEach((note, i) => {
+            const item = document.createElement('div');
+            item.className = 'note-item';
+            if (i === sequenceIndex) item.classList.add('current');
+            if (i < sequenceIndex) item.classList.add('done');
+            item.textContent = note;
+            display.appendChild(item);
+        });
+    }
+
+    // Update sequence display
+    function updateSequenceDisplay() {
+        const items = document.querySelectorAll('.note-item');
+        items.forEach((item, i) => {
+            item.classList.remove('current');
+            if (i === sequenceIndex) item.classList.add('done');
+            if (i === sequenceIndex + 1) item.classList.add('current');
+        });
+    }
+
+    // Control buttons
+    document.getElementById('playBtn').addEventListener('click', function() {
+        if (currentMode === 'learn') {
+            nextLearnNote();
+        } else if (currentMode === 'game') {
+            startGame();
+        } else if ((currentMode === 'practice' || currentMode === 'songs') && sequence.length > 0) {
+            playSequenceDemo();
+        }
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', resetGame);
+
+    document.getElementById('hintBtn').addEventListener('click', function() {
+        if (targetNote) {
+            const key = document.querySelector(`[data-note="${targetNote}"]`);
+            key.classList.add('highlight');
+            setTimeout(() => key.classList.remove('highlight'), 2000);
+            showMessage(`💡 Look for the ${targetNote} key!`);
+        } else if (sequence.length > 0 && sequenceIndex < sequence.length) {
+            const key = document.querySelector(`[data-note="${sequence[sequenceIndex]}"]`);
+            key.classList.add('highlight');
+            setTimeout(() => key.classList.remove('highlight'), 2000);
+            showMessage(`💡 Next note is ${sequence[sequenceIndex]}`);
+        }
+    });
+
+    // Volume control
+    document.getElementById('volume').addEventListener('input', function() {
+        piano.setVolume(this.value / 100);
+        document.getElementById('volumeText').textContent = this.value + '%';
+    });
+
+    // Helper functions
+    function nextLearnNote() {
+        if (!currentLesson) return;
+        targetNote = currentLesson.notes[Math.floor(Math.random() * currentLesson.notes.length)];
+        showMessage(`🎵 Find and play: ${targetNote}`);
+        document.querySelectorAll('.key').forEach(key => key.classList.remove('highlight'));
+    }
+
+    function startGame() {
+        score = 0;
+        updateScore();
+        nextGameNote();
+        showMessage('🎮 Game started! Find the notes quickly!');
+        
+        // Start timer
+        let timeLeft = 30;
+        gameTimer = setInterval(() => {
+            timeLeft--;
+```
