@@ -1,0 +1,2226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz for Kids - Area & Perimeter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1.2rem;
+        }
+
+        .chapter-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chapter-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid transparent;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: #667eea;
+        }
+
+        .chapter-card h3 {
+            color: #4a5568;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .chapter-card p {
+            color: #718096;
+            font-size: 1rem;
+        }
+
+        .quiz-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .quiz-title {
+            font-size: 1.8rem;
+            color: #4a5568;
+        }
+
+        .quiz-progress {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: #2d3748;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .option-button {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option-button:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .option-button.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option-button.correct {
+            background: #48bb78;
+            color: white;
+            border-color: #48bb78;
+        }
+
+        .option-button.incorrect {
+            background: #f56565;
+            color: white;
+            border-color: #f56565;
+        }
+
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #718096;
+        }
+
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+
+        .results-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .results-title {
+            font-size: 2.5rem;
+            color: #4a5568;
+            margin-bottom: 20px;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .score-message {
+            font-size: 1.3rem;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .chapter-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .progress-bar {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .quiz-controls > * {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        .emoji {
+            font-size: 2rem;
+            margin: 0 10px;
+        }
+
+        .celebration {
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧮 Math Quiz for Kids 📐</h1>
+            <p>Learn Area and Perimeter with Fun Questions!</p>
+        </div>
+
+        <!-- Chapter Selection -->
+        <div id="chapterSelection" class="chapter-selection">
+            <!-- Chapters will be dynamically generated here -->
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quizContainer" class="quiz-container">
+            <div class="quiz-header">
+                <h2 id="quizTitle" class="quiz-title">Chapter 1</h2>
+                <div class="quiz-progress">
+                    <span id="questionCounter">Question 1 of 10</span>
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="questionCard" class="question-card">
+                <div id="questionText" class="question-text">
+                    <!-- Question will be displayed here -->
+                </div>
+                <div id="optionsContainer" class="options-container">
+                    <!-- Options will be displayed here -->
+                </div>
+            </div>
+
+            <div class="quiz-controls">
+                <button id="backBtn" class="btn btn-secondary">← Back to Chapters</button>
+                <div>
+                    <button id="prevBtn" class="btn btn-secondary">Previous</button>
+                    <button id="nextBtn" class="btn">Next</button>
+                    <button id="submitBtn" class="btn hidden">Submit Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Container -->
+        <div id="resultsContainer" class="results-container">
+            <h2 class="results-title">🎉 Quiz Complete! 🎉</h2>
+            <div id="scoreDisplay" class="score-display">
+                <!-- Score will be displayed here -->
+            </div>
+            <div id="scoreMessage" class="score-message">
+                <!-- Score message will be displayed here -->
+            </div>
+            <button id="restartBtn" class="btn">Try Another Chapter</button>
+        </div>
+    </div>
+
+    <script>
+        // Embedded questions data
+        const QUESTIONS_DATA = [
+  {
+    "chapter": 1,
+    "questions": [
+      {
+        "id": "1_1",
+        "type": "perimeter_rectangle",
+        "question": "Emma is decorating a rectangular picture frame. The frame is 6 cm long and 4 cm wide. What is the perimeter of the picture frame?",
+        "answer": "20 cm",
+        "options": ["10 cm", "20 cm", "24 cm", "12 cm"]
+      },
+      {
+        "id": "1_2",
+        "type": "area_rectangle",
+        "question": "Liam wants to put new tiles on his kitchen floor. The floor is 5 meters long and 3 meters wide. What is the area of the floor?",
+        "answer": "15 sq. meters",
+        "options": ["8 sq. meters", "15 sq. meters", "16 sq. meters", "25 sq. meters"]
+      },
+      {
+        "id": "1_3",
+        "type": "perimeter_rectangle",
+        "question": "A garden is 7 meters long and 2 meters wide. What is the perimeter of the garden?",
+        "answer": "18 meters",
+        "options": ["9 meters", "14 meters", "18 meters", "28 meters"]
+      },
+      {
+        "id": "1_4",
+        "type": "perimeter_irregular",
+        "question": "What is the perimeter of a shape with sides 7 ft, 3 ft, 5 ft, 2 ft, 5 ft?",
+        "answer": "22 ft",
+        "options": ["17 ft", "20 ft", "22 ft", "25 ft"]
+      },
+      {
+        "id": "1_5",
+        "type": "perimeter_triangle",
+        "question": "What is the perimeter of a triangle with sides 5 ft, 8 ft, and 10 ft?",
+        "answer": "23 ft",
+        "options": ["13 ft", "18 ft", "23 ft", "40 ft"]
+      },
+      {
+        "id": "1_6",
+        "type": "area_grid",
+        "question": "What is the area of the shaded shape on a grid where each square is 1 sq. unit? (Assume 8 shaded squares)",
+        "answer": "8 sq. units",
+        "options": ["8 sq. units", "12 sq. units", "16 sq. units", "20 sq. units"]
+      },
+      {
+        "id": "1_7",
+        "type": "perimeter_triangle",
+        "question": "Which triangle has a perimeter of 25 feet? (Triangle A: 5ft, 8ft, 10ft; Triangle B: 9ft, 7ft, 9ft; Triangle C: 11ft, 7ft, 9ft; Triangle D: 8ft, 8ft, 8ft)",
+        "answer": "Triangle B",
+        "options": ["Triangle A", "Triangle B", "Triangle C", "Triangle D"]
+      },
+      {
+        "id": "1_8",
+        "type": "perimeter_rectangle",
+        "question": "Use your centimeter ruler to find the perimeter of the rectangle. (Assume rectangle is 5cm long and 3cm wide)",
+        "answer": "16 cm",
+        "options": ["8 cm", "15 cm", "16 cm", "30 cm"]
+      },
+      {
+        "id": "1_9",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of the figure with sides 8 ft, 12 ft, 9 ft.",
+        "answer": "29 ft",
+        "options": ["20 ft", "21 ft", "29 ft", "30 ft"]
+      },
+      {
+        "id": "1_10",
+        "type": "area_rectangle",
+        "question": "Find the area of this rectangle. It is 4 feet long and 3 feet wide.",
+        "answer": "12 sq. feet",
+        "options": ["9 sq. feet", "14 sq. feet", "7 sq. feet", "12 sq. feet"]
+      }
+    ]
+  },
+  {
+    "chapter": 2,
+    "questions": [
+      {
+        "id": "2_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular swimming pool is 10 meters long and 5 meters wide. What is its perimeter?",
+        "answer": "30 meters",
+        "options": ["15 meters", "20 meters", "30 meters", "50 meters"]
+      },
+      {
+        "id": "2_2",
+        "type": "area_rectangle",
+        "question": "A square garden has sides of 7 feet. What is the area of the garden?",
+        "answer": "49 sq. feet",
+        "options": ["14 sq. feet", "28 sq. feet", "49 sq. feet", "35 sq. feet"]
+      },
+      {
+        "id": "2_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular park has sides measuring 12m, 15m, and 18m. What is the perimeter of the park?",
+        "answer": "45 meters",
+        "options": ["30 meters", "35 meters", "45 meters", "50 meters"]
+      },
+      {
+        "id": "2_4",
+        "type": "area_rectangle",
+        "question": "A classroom floor is 8 meters long and 6 meters wide. What is the area of the floor?",
+        "answer": "48 sq. meters",
+        "options": ["14 sq. meters", "28 sq. meters", "48 sq. meters", "56 sq. meters"]
+      },
+      {
+        "id": "2_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 4cm, 3cm, 2cm, 5cm, 6cm.",
+        "answer": "20 cm",
+        "options": ["15 cm", "18 cm", "20 cm", "22 cm"]
+      },
+      {
+        "id": "2_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 10 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "10 sq. units",
+        "options": ["8 sq. units", "10 sq. units", "12 sq. units", "14 sq. units"]
+      },
+      {
+        "id": "2_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular field has a length of 20 meters and a width of 12 meters. What is its perimeter?",
+        "answer": "64 meters",
+        "options": ["32 meters", "40 meters", "64 meters", "240 meters"]
+      },
+      {
+        "id": "2_8",
+        "type": "area_rectangle",
+        "question": "A piece of paper is 20 cm long and 15 cm wide. What is its area?",
+        "answer": "300 sq. cm",
+        "options": ["35 sq. cm", "70 sq. cm", "150 sq. cm", "300 sq. cm"]
+      },
+      {
+        "id": "2_9",
+        "type": "perimeter_triangle",
+        "question": "A triangle has sides of 6 inches, 8 inches, and 10 inches. What is its perimeter?",
+        "answer": "24 inches",
+        "options": ["18 inches", "20 inches", "24 inches", "48 inches"]
+      },
+      {
+        "id": "2_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 7m, 7m, 7m, 7m, 7m.",
+        "answer": "35 meters",
+        "options": ["28 meters", "30 meters", "35 meters", "42 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 3,
+    "questions": [
+      {
+        "id": "3_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular table is 1.5 meters long and 0.8 meters wide. What is its perimeter?",
+        "answer": "4.6 meters",
+        "options": ["2.3 meters", "3.1 meters", "4.6 meters", "1.2 meters"]
+      },
+      {
+        "id": "3_2",
+        "type": "area_rectangle",
+        "question": "A painting is 60 cm long and 40 cm wide. What is the area of the painting?",
+        "answer": "2400 sq. cm",
+        "options": ["100 sq. cm", "200 sq. cm", "240 sq. cm", "2400 sq. cm"]
+      },
+      {
+        "id": "3_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular sign has sides of 30cm, 40cm, and 50cm. What is its perimeter?",
+        "answer": "120 cm",
+        "options": ["70 cm", "90 cm", "120 cm", "150 cm"]
+      },
+      {
+        "id": "3_4",
+        "type": "area_rectangle",
+        "question": "A book cover is 25 cm long and 18 cm wide. What is the area of the book cover?",
+        "answer": "450 sq. cm",
+        "options": ["43 sq. cm", "86 sq. cm", "225 sq. cm", "450 sq. cm"]
+      },
+      {
+        "id": "3_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 10m, 8m, 5m, 3m, 2m, 1m.",
+        "answer": "29 meters",
+        "options": ["20 meters", "25 meters", "29 meters", "30 meters"]
+      },
+      {
+        "id": "3_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 15 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "15 sq. units",
+        "options": ["10 sq. units", "15 sq. units", "20 sq. units", "25 sq. units"]
+      },
+      {
+        "id": "3_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular mirror is 90 cm long and 60 cm wide. What is its perimeter?",
+        "answer": "300 cm",
+        "options": ["150 cm", "200 cm", "300 cm", "5400 cm"]
+      },
+      {
+        "id": "3_8",
+        "type": "area_rectangle",
+        "question": "A window pane is 75 cm long and 50 cm wide. What is its area?",
+        "answer": "3750 sq. cm",
+        "options": ["125 sq. cm", "250 sq. cm", "375 sq. cm", "3750 sq. cm"]
+      },
+      {
+        "id": "3_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of land has sides of 20m, 21m, and 29m. What is its perimeter?",
+        "answer": "70 meters",
+        "options": ["50 meters", "60 meters", "70 meters", "80 meters"]
+      },
+      {
+        "id": "3_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 5cm, 5cm, 5cm, 5cm, 5cm, 5cm.",
+        "answer": "30 cm",
+        "options": ["20 cm", "25 cm", "30 cm", "35 cm"]
+      }
+    ]
+  },
+  {
+    "chapter": 4,
+    "questions": [
+      {
+        "id": "4_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular rug is 3 meters long and 2 meters wide. What is its perimeter?",
+        "answer": "10 meters",
+        "options": ["5 meters", "6 meters", "10 meters", "12 meters"]
+      },
+      {
+        "id": "4_2",
+        "type": "area_rectangle",
+        "question": "A chessboard is 8 squares by 8 squares. If each square is 1 inch by 1 inch, what is the area of the chessboard?",
+        "answer": "64 sq. inches",
+        "options": ["16 sq. inches", "32 sq. inches", "64 sq. inches", "80 sq. inches"]
+      },
+      {
+        "id": "4_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular sail has sides of 9 feet, 12 feet, and 15 feet. What is its perimeter?",
+        "answer": "36 feet",
+        "options": ["27 feet", "30 feet", "36 feet", "40 feet"]
+      },
+      {
+        "id": "4_4",
+        "type": "area_rectangle",
+        "question": "A mobile phone screen is 12 cm long and 6 cm wide. What is the area of the screen?",
+        "answer": "72 sq. cm",
+        "options": ["18 sq. cm", "36 sq. cm", "72 sq. cm", "108 sq. cm"]
+      },
+      {
+        "id": "4_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 7cm, 2cm, 7cm, 2cm.",
+        "answer": "18 cm",
+        "options": ["14 cm", "16 cm", "18 cm", "20 cm"]
+      },
+      {
+        "id": "4_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 18 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "18 sq. units",
+        "options": ["16 sq. units", "18 sq. units", "20 sq. units", "22 sq. units"]
+      },
+      {
+        "id": "4_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular garden is 15 meters long and 8 meters wide. What is its perimeter?",
+        "answer": "46 meters",
+        "options": ["23 meters", "30 meters", "46 meters", "120 meters"]
+      },
+      {
+        "id": "4_8",
+        "type": "area_rectangle",
+        "question": "A photograph is 10 inches long and 8 inches wide. What is its area?",
+        "answer": "80 sq. inches",
+        "options": ["18 sq. inches", "36 sq. inches", "80 sq. inches", "100 sq. inches"]
+      },
+      {
+        "id": "4_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular plot of land has sides of 10m, 24m, and 26m. What is its perimeter?",
+        "answer": "60 meters",
+        "options": ["40 meters", "50 meters", "60 meters", "70 meters"]
+      },
+      {
+        "id": "4_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 1cm, 2cm, 3cm, 4cm, 5cm, 6cm, 7cm.",
+        "answer": "28 cm",
+        "options": ["21 cm", "24 cm", "28 cm", "30 cm"]
+      }
+    ]
+  },
+  {
+    "chapter": 5,
+    "questions": [
+      {
+        "id": "5_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular picture frame is 25 cm long and 15 cm wide. What is the perimeter of the picture frame?",
+        "answer": "80 cm",
+        "options": ["40 cm", "50 cm", "80 cm", "375 cm"]
+      },
+      {
+        "id": "5_2",
+        "type": "area_rectangle",
+        "question": "A rectangular carpet is 4 meters long and 3 meters wide. What is the area of the carpet?",
+        "answer": "12 sq. meters",
+        "options": ["7 sq. meters", "10 sq. meters", "12 sq. meters", "14 sq. meters"]
+      },
+      {
+        "id": "5_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular garden has sides measuring 7m, 8m, and 9m. What is the perimeter of the garden?",
+        "answer": "24 meters",
+        "options": ["16 meters", "20 meters", "24 meters", "28 meters"]
+      },
+      {
+        "id": "5_4",
+        "type": "area_rectangle",
+        "question": "A bedroom floor is 5 meters long and 4 meters wide. What is the area of the floor?",
+        "answer": "20 sq. meters",
+        "options": ["9 sq. meters", "18 sq. meters", "20 sq. meters", "25 sq. meters"]
+      },
+      {
+        "id": "5_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 3cm, 3cm, 3cm, 3cm, 3cm, 3cm, 3cm.",
+        "answer": "21 cm",
+        "options": ["18 cm", "20 cm", "21 cm", "24 cm"]
+      },
+      {
+        "id": "5_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 20 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "20 sq. units",
+        "options": ["15 sq. units", "18 sq. units", "20 sq. units", "22 sq. units"]
+      },
+      {
+        "id": "5_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular blackboard is 2 meters long and 1 meter wide. What is its perimeter?",
+        "answer": "6 meters",
+        "options": ["3 meters", "4 meters", "6 meters", "8 meters"]
+      },
+      {
+        "id": "5_8",
+        "type": "area_rectangle",
+        "question": "A kitchen counter is 3 meters long and 0.6 meters wide. What is its area?",
+        "answer": "1.8 sq. meters",
+        "options": ["1.2 sq. meters", "1.5 sq. meters", "1.8 sq. meters", "2.0 sq. meters"]
+      },
+      {
+        "id": "5_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular flag has sides of 50cm, 120cm, and 130cm. What is its perimeter?",
+        "answer": "300 cm",
+        "options": ["200 cm", "250 cm", "300 cm", "350 cm"]
+      },
+      {
+        "id": "5_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 8m, 8m, 8m, 8m.",
+        "answer": "32 meters",
+        "options": ["24 meters", "28 meters", "32 meters", "36 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 6,
+    "questions": [
+      {
+        "id": "6_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular door is 2.1 meters high and 0.9 meters wide. What is its perimeter?",
+        "answer": "6 meters",
+        "options": ["3 meters", "4.2 meters", "6 meters", "1.89 meters"]
+      },
+      {
+        "id": "6_2",
+        "type": "area_rectangle",
+        "question": "A small garden plot is 2.5 meters long and 1.2 meters wide. What is its area?",
+        "answer": "3 sq. meters",
+        "options": ["3.7 sq. meters", "5 sq. meters", "3 sq. meters", "2.5 sq. meters"]
+      },
+      {
+        "id": "6_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of fabric has sides measuring 10cm, 10cm, and 10cm. What is the perimeter of the fabric?",
+        "answer": "30 cm",
+        "options": ["20 cm", "25 cm", "30 cm", "40 cm"]
+      },
+      {
+        "id": "6_4",
+        "type": "area_rectangle",
+        "question": "A rectangular window is 1.5 meters long and 1 meter wide. What is the area of the window?",
+        "answer": "1.5 sq. meters",
+        "options": ["2.5 sq. meters", "3 sq. meters", "1.5 sq. meters", "0.5 sq. meters"]
+      },
+      {
+        "id": "6_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 4m, 4m, 4m, 4m, 4m.",
+        "answer": "20 meters",
+        "options": ["16 meters", "18 meters", "20 meters", "24 meters"]
+      },
+      {
+        "id": "6_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 22 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "22 sq. units",
+        "options": ["20 sq. units", "22 sq. units", "24 sq. units", "25 sq. units"]
+      },
+      {
+        "id": "6_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular picture is 30 cm long and 20 cm wide. What is its perimeter?",
+        "answer": "100 cm",
+        "options": ["50 cm", "60 cm", "100 cm", "600 cm"]
+      },
+      {
+        "id": "6_8",
+        "type": "area_rectangle",
+        "question": "A table top is 1.8 meters long and 0.9 meters wide. What is its area?",
+        "answer": "1.62 sq. meters",
+        "options": ["2.7 sq. meters", "1.62 sq. meters", "0.9 sq. meters", "1.8 sq. meters"]
+      },
+      {
+        "id": "6_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of wood has sides of 7 inches, 24 inches, and 25 inches. What is its perimeter?",
+        "answer": "56 inches",
+        "options": ["49 inches", "50 inches", "56 inches", "60 inches"]
+      },
+      {
+        "id": "6_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 2m, 3m, 4m, 5m, 6m.",
+        "answer": "20 meters",
+        "options": ["15 meters", "18 meters", "20 meters", "22 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 7,
+    "questions": [
+      {
+        "id": "7_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular park is 50 meters long and 30 meters wide. What is its perimeter?",
+        "answer": "160 meters",
+        "options": ["80 meters", "100 meters", "160 meters", "1500 meters"]
+      },
+      {
+        "id": "7_2",
+        "type": "area_rectangle",
+        "question": "A rectangular piece of land is 100 meters long and 50 meters wide. What is its area?",
+        "answer": "5000 sq. meters",
+        "options": ["150 sq. meters", "300 sq. meters", "5000 sq. meters", "10000 sq. meters"]
+      },
+      {
+        "id": "7_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular roof section has sides measuring 6m, 8m, and 10m. What is the perimeter of the roof section?",
+        "answer": "24 meters",
+        "options": ["18 meters", "20 meters", "24 meters", "28 meters"]
+      },
+      {
+        "id": "7_4",
+        "type": "area_rectangle",
+        "question": "A rectangular screen is 25 cm long and 10 cm wide. What is the area of the screen?",
+        "answer": "250 sq. cm",
+        "options": ["35 sq. cm", "70 sq. cm", "250 sq. cm", "500 sq. cm"]
+      },
+      {
+        "id": "7_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 9cm, 9cm, 9cm, 9cm.",
+        "answer": "36 cm",
+        "options": ["27 cm", "30 cm", "36 cm", "40 cm"]
+      },
+      {
+        "id": "7_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 25 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "25 sq. units",
+        "options": ["20 sq. units", "22 sq. units", "25 sq. units", "30 sq. units"]
+      },
+      {
+        "id": "7_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular mirror is 1.2 meters long and 0.8 meters wide. What is its perimeter?",
+        "answer": "4 meters",
+        "options": ["2 meters", "2.4 meters", "4 meters", "0.96 meters"]
+      },
+      {
+        "id": "7_8",
+        "type": "area_rectangle",
+        "question": "A small picture is 15 cm long and 10 cm wide. What is its area?",
+        "answer": "150 sq. cm",
+        "options": ["25 sq. cm", "50 sq. cm", "150 sq. cm", "300 sq. cm"]
+      },
+      {
+        "id": "7_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of cardboard has sides of 15 inches, 20 inches, and 25 inches. What is its perimeter?",
+        "answer": "60 inches",
+        "options": ["45 inches", "50 inches", "60 inches", "75 inches"]
+      },
+      {
+        "id": "7_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 10m, 10m, 5m, 5m.",
+        "answer": "30 meters",
+        "options": ["20 meters", "25 meters", "30 meters", "35 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 8,
+    "questions": [
+      {
+        "id": "8_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular swimming pool is 25 meters long and 10 meters wide. What is its perimeter?",
+        "answer": "70 meters",
+        "options": ["35 meters", "50 meters", "70 meters", "250 meters"]
+      },
+      {
+        "id": "8_2",
+        "type": "area_rectangle",
+        "question": "A square piece of fabric has sides of 1.5 meters. What is the area of the fabric?",
+        "answer": "2.25 sq. meters",
+        "options": ["3 sq. meters", "4.5 sq. meters", "2.25 sq. meters", "6 sq. meters"]
+      },
+      {
+        "id": "8_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular garden has sides measuring 13m, 14m, and 15m. What is the perimeter of the garden?",
+        "answer": "42 meters",
+        "options": ["30 meters", "35 meters", "42 meters", "45 meters"]
+      },
+      {
+        "id": "8_4",
+        "type": "area_rectangle",
+        "question": "A classroom whiteboard is 3 meters long and 1.2 meters wide. What is the area of the whiteboard?",
+        "answer": "3.6 sq. meters",
+        "options": ["4.2 sq. meters", "3.6 sq. meters", "2.4 sq. meters", "1.8 sq. meters"]
+      },
+      {
+        "id": "8_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 6cm, 6cm, 6cm, 6cm, 6cm, 6cm.",
+        "answer": "36 cm",
+        "options": ["30 cm", "32 cm", "36 cm", "40 cm"]
+      },
+      {
+        "id": "8_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 28 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "28 sq. units",
+        "options": ["25 sq. units", "28 sq. units", "30 sq. units", "32 sq. units"]
+      },
+      {
+        "id": "8_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular desk is 1.5 meters long and 0.7 meters wide. What is its perimeter?",
+        "answer": "4.4 meters",
+        "options": ["2.2 meters", "3 meters", "4.4 meters", "1.05 meters"]
+      },
+      {
+        "id": "8_8",
+        "type": "area_rectangle",
+        "question": "A small painting is 40 cm long and 30 cm wide. What is its area?",
+        "answer": "1200 sq. cm",
+        "options": ["70 sq. cm", "140 sq. cm", "1200 sq. cm", "2400 sq. cm"]
+      },
+      {
+        "id": "8_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of paper has sides of 8 inches, 15 inches, and 17 inches. What is its perimeter?",
+        "answer": "40 inches",
+        "options": ["30 inches", "35 inches", "40 inches", "45 inches"]
+      },
+      {
+        "id": "8_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 3cm, 4cm, 5cm, 6cm, 7cm.",
+        "answer": "25 cm",
+        "options": ["20 cm", "22 cm", "25 cm", "28 cm"]
+      }
+    ]
+  },
+  {
+    "chapter": 9,
+    "questions": [
+      {
+        "id": "9_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular field is 30 meters long and 15 meters wide. What is its perimeter?",
+        "answer": "90 meters",
+        "options": ["45 meters", "60 meters", "90 meters", "450 meters"]
+      },
+      {
+        "id": "9_2",
+        "type": "area_rectangle",
+        "question": "A square table has sides of 0.9 meters. What is the area of the table?",
+        "answer": "0.81 sq. meters",
+        "options": ["1.8 sq. meters", "0.81 sq. meters", "0.9 sq. meters", "3.6 sq. meters"]
+      },
+      {
+        "id": "9_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular plot of land has sides measuring 10m, 10m, and 12m. What is the perimeter of the plot?",
+        "answer": "32 meters",
+        "options": ["20 meters", "25 meters", "32 meters", "35 meters"]
+      },
+      {
+        "id": "9_4",
+        "type": "area_rectangle",
+        "question": "A rectangular mirror is 1.8 meters long and 0.6 meters wide. What is the area of the mirror?",
+        "answer": "1.08 sq. meters",
+        "options": ["2.4 sq. meters", "1.08 sq. meters", "1.2 sq. meters", "3.6 sq. meters"]
+      },
+      {
+        "id": "9_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 7m, 7m, 3m, 3m.",
+        "answer": "20 meters",
+        "options": ["14 meters", "16 meters", "20 meters", "24 meters"]
+      },
+      {
+        "id": "9_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 30 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "30 sq. units",
+        "options": ["25 sq. units", "28 sq. units", "30 sq. units", "35 sq. units"]
+      },
+      {
+        "id": "9_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular photo frame is 20 cm long and 12 cm wide. What is its perimeter?",
+        "answer": "64 cm",
+        "options": ["32 cm", "40 cm", "64 cm", "240 cm"]
+      },
+      {
+        "id": "9_8",
+        "type": "area_rectangle",
+        "question": "A piece of cloth is 2.5 meters long and 1.5 meters wide. What is its area?",
+        "answer": "3.75 sq. meters",
+        "options": ["4 sq. meters", "3.75 sq. meters", "2.5 sq. meters", "5 sq. meters"]
+      },
+      {
+        "id": "9_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular garden has sides of 9 feet, 40 feet, and 41 feet. What is its perimeter?",
+        "answer": "90 feet",
+        "options": ["50 feet", "60 feet", "90 feet", "100 feet"]
+      },
+      {
+        "id": "9_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 4cm, 5cm, 6cm, 7cm, 8cm.",
+        "answer": "30 cm",
+        "options": ["25 cm", "28 cm", "30 cm", "32 cm"]
+      }
+    ]
+  },
+  {
+    "chapter": 10,
+    "questions": [
+      {
+        "id": "10_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular carpet is 6 meters long and 4 meters wide. What is its perimeter?",
+        "answer": "20 meters",
+        "options": ["10 meters", "12 meters", "20 meters", "24 meters"]
+      },
+      {
+        "id": "10_2",
+        "type": "area_rectangle",
+        "question": "A square window has sides of 0.7 meters. What is the area of the window?",
+        "answer": "0.49 sq. meters",
+        "options": ["1.4 sq. meters", "0.49 sq. meters", "0.7 sq. meters", "2.8 sq. meters"]
+      },
+      {
+        "id": "10_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of wood has sides measuring 11cm, 13cm, and 15cm. What is the perimeter of the wood?",
+        "answer": "39 cm",
+        "options": ["30 cm", "35 cm", "39 cm", "40 cm"]
+      },
+      {
+        "id": "10_4",
+        "type": "area_rectangle",
+        "question": "A rectangular garden is 18 meters long and 9 meters wide. What is the area of the garden?",
+        "answer": "162 sq. meters",
+        "options": ["27 sq. meters", "54 sq. meters", "162 sq. meters", "324 sq. meters"]
+      },
+      {
+        "id": "10_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 8m, 8m, 4m, 4m.",
+        "answer": "24 meters",
+        "options": ["16 meters", "20 meters", "24 meters", "28 meters"]
+      },
+      {
+        "id": "10_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 32 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "32 sq. units",
+        "options": ["28 sq. units", "30 sq. units", "32 sq. units", "35 sq. units"]
+      },
+      {
+        "id": "10_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular table is 2.2 meters long and 1.1 meters wide. What is its perimeter?",
+        "answer": "6.6 meters",
+        "options": ["3.3 meters", "4.4 meters", "6.6 meters", "2.42 meters"]
+      },
+      {
+        "id": "10_8",
+        "type": "area_rectangle",
+        "question": "A piece of paper is 28 cm long and 21 cm wide. What is its area?",
+        "answer": "588 sq. cm",
+        "options": ["49 sq. cm", "98 sq. cm", "588 sq. cm", "1176 sq. cm"]
+      },
+      {
+        "id": "10_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular park has sides of 16m, 30m, and 34m. What is its perimeter?",
+        "answer": "80 meters",
+        "options": ["60 meters", "70 meters", "80 meters", "90 meters"]
+      },
+      {
+        "id": "10_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 5m, 5m, 5m, 5m.",
+        "answer": "20 meters",
+        "options": ["15 meters", "18 meters", "20 meters", "25 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 11,
+    "questions": [
+      {
+        "id": "11_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular photo is 15 cm long and 10 cm wide. What is its perimeter?",
+        "answer": "50 cm",
+        "options": ["25 cm", "30 cm", "50 cm", "150 cm"]
+      },
+      {
+        "id": "11_2",
+        "type": "area_rectangle",
+        "question": "A square picture frame has sides of 20 cm. What is the area of the picture frame?",
+        "answer": "400 sq. cm",
+        "options": ["40 sq. cm", "80 sq. cm", "400 sq. cm", "1600 sq. cm"]
+      },
+      {
+        "id": "11_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of land has sides measuring 20m, 21m, and 29m. What is the perimeter of the land?",
+        "answer": "70 meters",
+        "options": ["50 meters", "60 meters", "70 meters", "80 meters"]
+      },
+      {
+        "id": "11_4",
+        "type": "area_rectangle",
+        "question": "A rectangular door is 2 meters high and 0.8 meters wide. What is the area of the door?",
+        "answer": "1.6 sq. meters",
+        "options": ["2.8 sq. meters", "1.6 sq. meters", "0.8 sq. meters", "3.2 sq. meters"]
+      },
+      {
+        "id": "11_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 12cm, 12cm, 12cm, 12cm.",
+        "answer": "48 cm",
+        "options": ["36 cm", "40 cm", "48 cm", "50 cm"]
+      },
+      {
+        "id": "11_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 35 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "35 sq. units",
+        "options": ["30 sq. units", "32 sq. units", "35 sq. units", "40 sq. units"]
+      },
+      {
+        "id": "11_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular swimming pool is 18 meters long and 9 meters wide. What is its perimeter?",
+        "answer": "54 meters",
+        "options": ["27 meters", "36 meters", "54 meters", "162 meters"]
+      },
+      {
+        "id": "11_8",
+        "type": "area_rectangle",
+        "question": "A kitchen floor is 4 meters long and 3.5 meters wide. What is its area?",
+        "answer": "14 sq. meters",
+        "options": ["7.5 sq. meters", "14 sq. meters", "10 sq. meters", "12 sq. meters"]
+      },
+      {
+        "id": "11_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular flag has sides of 60cm, 80cm, and 100cm. What is its perimeter?",
+        "answer": "240 cm",
+        "options": ["180 cm", "200 cm", "240 cm", "280 cm"]
+      },
+      {
+        "id": "11_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 2m, 2m, 2m, 2m, 2m, 2m, 2m, 2m.",
+        "answer": "16 meters",
+        "options": ["12 meters", "14 meters", "16 meters", "18 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 12,
+    "questions": [
+      {
+        "id": "12_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular garden is 12 meters long and 7 meters wide. What is its perimeter?",
+        "answer": "38 meters",
+        "options": ["19 meters", "24 meters", "38 meters", "84 meters"]
+      },
+      {
+        "id": "12_2",
+        "type": "area_rectangle",
+        "question": "A rectangular table is 1.6 meters long and 0.9 meters wide. What is the area of the table?",
+        "answer": "1.44 sq. meters",
+        "options": ["2.5 sq. meters", "1.44 sq. meters", "0.7 sq. meters", "3.2 sq. meters"]
+      },
+      {
+        "id": "12_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of fabric has sides measuring 10cm, 24cm, and 26cm. What is the perimeter of the fabric?",
+        "answer": "60 cm",
+        "options": ["40 cm", "50 cm", "60 cm", "70 cm"]
+      },
+      {
+        "id": "12_4",
+        "type": "area_rectangle",
+        "question": "A rectangular window is 1.8 meters long and 1.2 meters wide. What is the area of the window?",
+        "answer": "2.16 sq. meters",
+        "options": ["3 sq. meters", "2.16 sq. meters", "1.8 sq. meters", "3.6 sq. meters"]
+      },
+      {
+        "id": "12_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 5cm, 5cm, 5cm, 5cm, 5cm, 5cm, 5cm.",
+        "answer": "35 cm",
+        "options": ["25 cm", "30 cm", "35 cm", "40 cm"]
+      },
+      {
+        "id": "12_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 38 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "38 sq. units",
+        "options": ["35 sq. units", "38 sq. units", "40 sq. units", "42 sq. units"]
+      },
+      {
+        "id": "12_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular blackboard is 2.5 meters long and 1.5 meters wide. What is its perimeter?",
+        "answer": "8 meters",
+        "options": ["4 meters", "5 meters", "8 meters", "3.75 meters"]
+      },
+      {
+        "id": "12_8",
+        "type": "area_rectangle",
+        "question": "A small painting is 50 cm long and 35 cm wide. What is its area?",
+        "answer": "1750 sq. cm",
+        "options": ["85 sq. cm", "170 sq. cm", "1750 sq. cm", "3500 sq. cm"]
+      },
+      {
+        "id": "12_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of wood has sides of 7 inches, 24 inches, and 25 inches. What is its perimeter?",
+        "answer": "56 inches",
+        "options": ["49 inches", "50 inches", "56 inches", "60 inches"]
+      },
+      {
+        "id": "12_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 6m, 6m, 6m, 6m.",
+        "answer": "24 meters",
+        "options": ["18 meters", "20 meters", "24 meters", "28 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 13,
+    "questions": [
+      {
+        "id": "13_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular park is 60 meters long and 40 meters wide. What is its perimeter?",
+        "answer": "200 meters",
+        "options": ["100 meters", "120 meters", "200 meters", "2400 meters"]
+      },
+      {
+        "id": "13_2",
+        "type": "area_rectangle",
+        "question": "A rectangular piece of land is 120 meters long and 60 meters wide. What is its area?",
+        "answer": "7200 sq. meters",
+        "options": ["180 sq. meters", "360 sq. meters", "7200 sq. meters", "14400 sq. meters"]
+      },
+      {
+        "id": "13_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular roof section has sides measuring 9m, 12m, and 15m. What is the perimeter of the roof section?",
+        "answer": "36 meters",
+        "options": ["27 meters", "30 meters", "36 meters", "40 meters"]
+      },
+      {
+        "id": "13_4",
+        "type": "area_rectangle",
+        "question": "A rectangular screen is 30 cm long and 15 cm wide. What is the area of the screen?",
+        "answer": "450 sq. cm",
+        "options": ["45 sq. cm", "90 sq. cm", "450 sq. cm", "900 sq. cm"]
+      },
+      {
+        "id": "13_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 10cm, 10cm, 10cm, 10cm.",
+        "answer": "40 cm",
+        "options": ["30 cm", "35 cm", "40 cm", "45 cm"]
+      },
+      {
+        "id": "13_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 40 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "40 sq. units",
+        "options": ["35 sq. units", "38 sq. units", "40 sq. units", "45 sq. units"]
+      },
+      {
+        "id": "13_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular mirror is 1.5 meters long and 0.9 meters wide. What is its perimeter?",
+        "answer": "4.8 meters",
+        "options": ["2.4 meters", "3 meters", "4.8 meters", "1.35 meters"]
+      },
+      {
+        "id": "13_8",
+        "type": "area_rectangle",
+        "question": "A small picture is 20 cm long and 12 cm wide. What is its area?",
+        "answer": "240 sq. cm",
+        "options": ["32 sq. cm", "64 sq. cm", "240 sq. cm", "480 sq. cm"]
+      },
+      {
+        "id": "13_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of cardboard has sides of 20 inches, 21 inches, and 29 inches. What is its perimeter?",
+        "answer": "70 inches",
+        "options": ["50 inches", "60 inches", "70 inches", "80 inches"]
+      },
+      {
+        "id": "13_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 12m, 12m, 6m, 6m.",
+        "answer": "36 meters",
+        "options": ["24 meters", "30 meters", "36 meters", "40 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 14,
+    "questions": [
+      {
+        "id": "14_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular swimming pool is 30 meters long and 12 meters wide. What is its perimeter?",
+        "answer": "84 meters",
+        "options": ["42 meters", "60 meters", "84 meters", "360 meters"]
+      },
+      {
+        "id": "14_2",
+        "type": "area_rectangle",
+        "question": "A square piece of fabric has sides of 2.5 meters. What is the area of the fabric?",
+        "answer": "6.25 sq. meters",
+        "options": ["5 sq. meters", "6.25 sq. meters", "7.5 sq. meters", "10 sq. meters"]
+      },
+      {
+        "id": "14_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular garden has sides measuring 15m, 15m, and 18m. What is the perimeter of the garden?",
+        "answer": "48 meters",
+        "options": ["30 meters", "35 meters", "48 meters", "50 meters"]
+      },
+      {
+        "id": "14_4",
+        "type": "area_rectangle",
+        "question": "A classroom whiteboard is 4 meters long and 1.5 meters wide. What is the area of the whiteboard?",
+        "answer": "6 sq. meters",
+        "options": ["5.5 sq. meters", "6 sq. meters", "7.5 sq. meters", "8 sq. meters"]
+      },
+      {
+        "id": "14_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 7cm, 7cm, 7cm, 7cm, 7cm.",
+        "answer": "35 cm",
+        "options": ["28 cm", "30 cm", "35 cm", "40 cm"]
+      },
+      {
+        "id": "14_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 42 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "42 sq. units",
+        "options": ["38 sq. units", "40 sq. units", "42 sq. units", "45 sq. units"]
+      },
+      {
+        "id": "14_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular desk is 1.8 meters long and 0.8 meters wide. What is its perimeter?",
+        "answer": "5.2 meters",
+        "options": ["2.6 meters", "3.6 meters", "5.2 meters", "1.44 meters"]
+      },
+      {
+        "id": "14_8",
+        "type": "area_rectangle",
+        "question": "A small painting is 50 cm long and 40 cm wide. What is its area?",
+        "answer": "2000 sq. cm",
+        "options": ["90 sq. cm", "180 sq. cm", "2000 sq. cm", "4000 sq. cm"]
+      },
+      {
+        "id": "14_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of paper has sides of 10 inches, 24 inches, and 26 inches. What is its perimeter?",
+        "answer": "60 inches",
+        "options": ["40 inches", "50 inches", "60 inches", "70 inches"]
+      },
+      {
+        "id": "14_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 4cm, 4cm, 4cm, 4cm, 4cm, 4cm.",
+        "answer": "24 cm",
+        "options": ["20 cm", "22 cm", "24 cm", "28 cm"]
+      }
+    ]
+  },
+  {
+    "chapter": 15,
+    "questions": [
+      {
+        "id": "15_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular carpet is 7 meters long and 5 meters wide. What is its perimeter?",
+        "answer": "24 meters",
+        "options": ["12 meters", "14 meters", "24 meters", "35 meters"]
+      },
+      {
+        "id": "15_2",
+        "type": "area_rectangle",
+        "question": "A square window has sides of 0.8 meters. What is the area of the window?",
+        "answer": "0.64 sq. meters",
+        "options": ["1.6 sq. meters", "0.64 sq. meters", "0.8 sq. meters", "3.2 sq. meters"]
+      },
+      {
+        "id": "15_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of wood has sides measuring 12cm, 16cm, and 20cm. What is the perimeter of the wood?",
+        "answer": "48 cm",
+        "options": ["36 cm", "40 cm", "48 cm", "50 cm"]
+      },
+      {
+        "id": "15_4",
+        "type": "area_rectangle",
+        "question": "A rectangular garden is 20 meters long and 10 meters wide. What is the area of the garden?",
+        "answer": "200 sq. meters",
+        "options": ["30 sq. meters", "60 sq. meters", "200 sq. meters", "400 sq. meters"]
+      },
+      {
+        "id": "15_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 9m, 9m, 5m, 5m.",
+        "answer": "28 meters",
+        "options": ["18 meters", "20 meters", "28 meters", "30 meters"]
+      },
+      {
+        "id": "15_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 45 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "45 sq. units",
+        "options": ["40 sq. units", "42 sq. units", "45 sq. units", "50 sq. units"]
+      },
+      {
+        "id": "15_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular table is 2.5 meters long and 1.2 meters wide. What is its perimeter?",
+        "answer": "7.4 meters",
+        "options": ["3.7 meters", "5 meters", "7.4 meters", "3 sq. meters"]
+      },
+      {
+        "id": "15_8",
+        "type": "area_rectangle",
+        "question": "A piece of paper is 30 cm long and 22 cm wide. What is its area?",
+        "answer": "660 sq. cm",
+        "options": ["52 sq. cm", "104 sq. cm", "660 sq. cm", "1320 sq. cm"]
+      },
+      {
+        "id": "15_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular park has sides of 20m, 48m, and 52m. What is its perimeter?",
+        "answer": "120 meters",
+        "options": ["90 meters", "100 meters", "120 meters", "130 meters"]
+      },
+      {
+        "id": "15_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 6m, 7m, 8m, 9m.",
+        "answer": "30 meters",
+        "options": ["25 meters", "28 meters", "30 meters", "32 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 16,
+    "questions": [
+      {
+        "id": "16_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular photo is 22 cm long and 14 cm wide. What is its perimeter?",
+        "answer": "72 cm",
+        "options": ["36 cm", "44 cm", "72 cm", "308 cm"]
+      },
+      {
+        "id": "16_2",
+        "type": "area_rectangle",
+        "question": "A square picture frame has sides of 25 cm. What is the area of the picture frame?",
+        "answer": "625 sq. cm",
+        "options": ["50 sq. cm", "100 sq. cm", "625 sq. cm", "1250 sq. cm"]
+      },
+      {
+        "id": "16_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of land has sides measuring 25m, 30m, and 35m. What is the perimeter of the land?",
+        "answer": "90 meters",
+        "options": ["70 meters", "80 meters", "90 meters", "100 meters"]
+      },
+      {
+        "id": "16_4",
+        "type": "area_rectangle",
+        "question": "A rectangular door is 2.2 meters high and 0.9 meters wide. What is the area of the door?",
+        "answer": "1.98 sq. meters",
+        "options": ["3.1 sq. meters", "1.98 sq. meters", "1.3 meters", "4.4 sq. meters"]
+      },
+      {
+        "id": "16_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 15cm, 15cm, 15cm, 15cm.",
+        "answer": "60 cm",
+        "options": ["45 cm", "50 cm", "60 cm", "65 cm"]
+      },
+      {
+        "id": "16_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 48 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "48 sq. units",
+        "options": ["40 sq. units", "45 sq. units", "48 sq. units", "50 sq. units"]
+      },
+      {
+        "id": "16_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular swimming pool is 20 meters long and 10 meters wide. What is its perimeter?",
+        "answer": "60 meters",
+        "options": ["30 meters", "40 meters", "60 meters", "200 meters"]
+      },
+      {
+        "id": "16_8",
+        "type": "area_rectangle",
+        "question": "A kitchen floor is 5 meters long and 4.5 meters wide. What is its area?",
+        "answer": "22.5 sq. meters",
+        "options": ["9.5 sq. meters", "19 sq. meters", "22.5 sq. meters", "25 sq. meters"]
+      },
+      {
+        "id": "16_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular flag has sides of 70cm, 90cm, and 110cm. What is its perimeter?",
+        "answer": "270 cm",
+        "options": ["200 cm", "250 cm", "270 cm", "300 cm"]
+      },
+      {
+        "id": "16_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 3m, 3m, 3m, 3m, 3m, 3m, 3m, 3m.",
+        "answer": "24 meters",
+        "options": ["20 meters", "22 meters", "24 meters", "26 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 17,
+    "questions": [
+      {
+        "id": "17_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular garden is 14 meters long and 8 meters wide. What is its perimeter?",
+        "answer": "44 meters",
+        "options": ["22 meters", "28 meters", "44 meters", "112 meters"]
+      },
+      {
+        "id": "17_2",
+        "type": "area_rectangle",
+        "question": "A rectangular table is 2 meters long and 1.1 meters wide. What is the area of the table?",
+        "answer": "2.2 sq. meters",
+        "options": ["3.1 sq. meters", "2.2 sq. meters", "1.1 sq. meters", "4.4 sq. meters"]
+      },
+      {
+        "id": "17_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of fabric has sides measuring 12cm, 13cm, and 15cm. What is the perimeter of the fabric?",
+        "answer": "40 cm",
+        "options": ["30 cm", "35 cm", "40 cm", "45 cm"]
+      },
+      {
+        "id": "17_4",
+        "type": "area_rectangle",
+        "question": "A rectangular window is 2 meters long and 1.5 meters wide. What is the area of the window?",
+        "answer": "3 sq. meters",
+        "options": ["3.5 sq. meters", "3 sq. meters", "2.5 sq. meters", "4 sq. meters"]
+      },
+      {
+        "id": "17_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 6cm, 6cm, 6cm, 6cm, 6cm.",
+        "answer": "30 cm",
+        "options": ["24 cm", "28 cm", "30 cm", "32 cm"]
+      },
+      {
+        "id": "17_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 50 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "50 sq. units",
+        "options": ["45 sq. units", "48 sq. units", "50 sq. units", "55 sq. units"]
+      },
+      {
+        "id": "17_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular blackboard is 3 meters long and 1.8 meters wide. What is its perimeter?",
+        "answer": "9.6 meters",
+        "options": ["4.8 meters", "6 meters", "9.6 meters", "5.4 meters"]
+      },
+      {
+        "id": "17_8",
+        "type": "area_rectangle",
+        "question": "A small painting is 60 cm long and 45 cm wide. What is its area?",
+        "answer": "2700 sq. cm",
+        "options": ["105 sq. cm", "210 sq. cm", "2700 sq. cm", "5400 sq. cm"]
+      },
+      {
+        "id": "17_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of wood has sides of 8 inches, 15 inches, and 17 inches. What is its perimeter?",
+        "answer": "40 inches",
+        "options": ["30 inches", "35 inches", "40 inches", "45 inches"]
+      },
+      {
+        "id": "17_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 5m, 6m, 7m, 8m.",
+        "answer": "26 meters",
+        "options": ["20 meters", "22 meters", "26 meters", "28 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 18,
+    "questions": [
+      {
+        "id": "18_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular park is 70 meters long and 50 meters wide. What is its perimeter?",
+        "answer": "240 meters",
+        "options": ["120 meters", "140 meters", "240 meters", "3500 meters"]
+      },
+      {
+        "id": "18_2",
+        "type": "area_rectangle",
+        "question": "A rectangular piece of land is 150 meters long and 70 meters wide. What is its area?",
+        "answer": "10500 sq. meters",
+        "options": ["220 sq. meters", "440 sq. meters", "10500 sq. meters", "21000 sq. meters"]
+      },
+      {
+        "id": "18_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular roof section has sides measuring 10m, 15m, and 20m. What is the perimeter of the roof section?",
+        "answer": "45 meters",
+        "options": ["30 meters", "35 meters", "45 meters", "50 meters"]
+      },
+      {
+        "id": "18_4",
+        "type": "area_rectangle",
+        "question": "A rectangular screen is 35 cm long and 20 cm wide. What is the area of the screen?",
+        "answer": "700 sq. cm",
+        "options": ["55 sq. cm", "110 sq. cm", "700 sq. cm", "1400 sq. cm"]
+      },
+      {
+        "id": "18_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 11cm, 11cm, 11cm, 11cm.",
+        "answer": "44 cm",
+        "options": ["33 cm", "38 cm", "44 cm", "48 cm"]
+      },
+      {
+        "id": "18_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 52 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "52 sq. units",
+        "options": ["48 sq. units", "50 sq. units", "52 sq. units", "55 sq. units"]
+      },
+      {
+        "id": "18_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular mirror is 2 meters long and 1.2 meters wide. What is its perimeter?",
+        "answer": "6.4 meters",
+        "options": ["3.2 meters", "4 meters", "6.4 meters", "2.4 meters"]
+      },
+      {
+        "id": "18_8",
+        "type": "area_rectangle",
+        "question": "A small picture is 25 cm long and 15 cm wide. What is its area?",
+        "answer": "375 sq. cm",
+        "options": ["40 sq. cm", "80 sq. cm", "375 sq. cm", "750 sq. cm"]
+      },
+      {
+        "id": "18_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of cardboard has sides of 25 inches, 30 inches, and 35 inches. What is its perimeter?",
+        "answer": "90 inches",
+        "options": ["70 inches", "80 inches", "90 inches", "100 inches"]
+      },
+      {
+        "id": "18_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 15m, 15m, 8m, 8m.",
+        "answer": "46 meters",
+        "options": ["30 meters", "38 meters", "46 meters", "50 meters"]
+      }
+    ]
+  },
+  {
+    "chapter": 19,
+    "questions": [
+      {
+        "id": "19_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular swimming pool is 35 meters long and 15 meters wide. What is its perimeter?",
+        "answer": "100 meters",
+        "options": ["50 meters", "70 meters", "100 meters", "525 meters"]
+      },
+      {
+        "id": "19_2",
+        "type": "area_rectangle",
+        "question": "A square piece of fabric has sides of 3 meters. What is the area of the fabric?",
+        "answer": "9 sq. meters",
+        "options": ["6 sq. meters", "9 sq. meters", "12 sq. meters", "18 sq. meters"]
+      },
+      {
+        "id": "19_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular garden has sides measuring 18m, 24m, and 30m. What is the perimeter of the garden?",
+        "answer": "72 meters",
+        "options": ["60 meters", "65 meters", "72 meters", "80 meters"]
+      },
+      {
+        "id": "19_4",
+        "type": "area_rectangle",
+        "question": "A classroom whiteboard is 5 meters long and 2 meters wide. What is the area of the whiteboard?",
+        "answer": "10 sq. meters",
+        "options": ["7 sq. meters", "10 sq. meters", "14 sq. meters", "20 sq. meters"]
+      },
+      {
+        "id": "19_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 8cm, 8cm, 8cm, 8cm, 8cm.",
+        "answer": "40 cm",
+        "options": ["32 cm", "35 cm", "40 cm", "45 cm"]
+      },
+      {
+        "id": "19_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 55 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "55 sq. units",
+        "options": ["50 sq. units", "52 sq. units", "55 sq. units", "60 sq. units"]
+      },
+      {
+        "id": "19_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular desk is 2 meters long and 0.9 meters wide. What is its perimeter?",
+        "answer": "5.8 meters",
+        "options": ["2.9 meters", "3.8 meters", "5.8 meters", "1.8 meters"]
+      },
+      {
+        "id": "19_8",
+        "type": "area_rectangle",
+        "question": "A small painting is 70 cm long and 50 cm wide. What is its area?",
+        "answer": "3500 sq. cm",
+        "options": ["120 sq. cm", "240 sq. cm", "3500 sq. cm", "7000 sq. cm"]
+      },
+      {
+        "id": "19_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of paper has sides of 12 inches, 16 inches, and 20 inches. What is its perimeter?",
+        "answer": "48 inches",
+        "options": ["36 inches", "40 inches", "48 inches", "50 inches"]
+      },
+      {
+        "id": "19_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 5cm, 5cm, 5cm, 5cm, 5cm, 5cm.",
+        "answer": "30 cm",
+        "options": ["25 cm", "28 cm", "30 cm", "32 cm"]
+      }
+    ]
+  },
+  {
+    "chapter": 20,
+    "questions": [
+      {
+        "id": "20_1",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular carpet is 8 meters long and 6 meters wide. What is its perimeter?",
+        "answer": "28 meters",
+        "options": ["14 meters", "16 meters", "28 meters", "48 meters"]
+      },
+      {
+        "id": "20_2",
+        "type": "area_rectangle",
+        "question": "A square window has sides of 0.6 meters. What is the area of the window?",
+        "answer": "0.36 sq. meters",
+        "options": ["1.2 sq. meters", "0.36 sq. meters", "0.6 sq. meters", "2.4 sq. meters"]
+      },
+      {
+        "id": "20_3",
+        "type": "perimeter_triangle",
+        "question": "A triangular piece of wood has sides measuring 13cm, 17cm, and 20cm. What is the perimeter of the wood?",
+        "answer": "50 cm",
+        "options": ["40 cm", "45 cm", "50 cm", "55 cm"]
+      },
+      {
+        "id": "20_4",
+        "type": "area_rectangle",
+        "question": "A rectangular garden is 25 meters long and 12 meters wide. What is the area of the garden?",
+        "answer": "300 sq. meters",
+        "options": ["37 sq. meters", "74 sq. meters", "300 sq. meters", "600 sq. meters"]
+      },
+      {
+        "id": "20_5",
+        "type": "perimeter_irregular",
+        "question": "Find the perimeter of a shape with sides 10m, 10m, 10m, 10m, 10m.",
+        "answer": "50 meters",
+        "options": ["40 meters", "45 meters", "50 meters", "55 meters"]
+      },
+      {
+        "id": "20_6",
+        "type": "area_grid",
+        "question": "A shape on a grid covers 58 squares. If each square is 1 sq. unit, what is the area of the shape?",
+        "answer": "58 sq. units",
+        "options": ["50 sq. units", "55 sq. units", "58 sq. units", "60 sq. units"]
+      },
+      {
+        "id": "20_7",
+        "type": "perimeter_rectangle",
+        "question": "A rectangular table is 2.8 meters long and 1.5 meters wide. What is its perimeter?",
+        "answer": "8.6 meters",
+        "options": ["4.3 meters", "5.6 meters", "8.6 meters", "4.2 meters"]
+      },
+      {
+        "id": "20_8",
+        "type": "area_rectangle",
+        "question": "A piece of paper is 35 cm long and 25 cm wide. What is its area?",
+        "answer": "875 sq. cm",
+        "options": ["60 sq. cm", "120 sq. cm", "875 sq. cm", "1750 sq. cm"]
+      },
+      {
+        "id": "20_9",
+        "type": "perimeter_triangle",
+        "question": "A triangular park has sides of 24m, 32m, and 40m. What is its perimeter?",
+        "answer": "96 meters",
+        "options": ["70 meters", "80 meters", "96 meters", "100 meters"]
+      },
+      {
+        "id": "20_10",
+        "type": "perimeter_irregular",
+        "question": "Calculate the perimeter of a shape with sides 7m, 7m, 7m, 7m.",
+        "answer": "28 meters",
+        "options": ["21 meters", "24 meters", "28 meters", "30 meters"]
+      }
+    ]
+  }
+];
+
+        // Math Quiz Application
+        class MathQuiz {
+            constructor() {
+                this.questions = QUESTIONS_DATA;
+                this.currentChapter = null;
+                this.currentQuestionIndex = 0;
+                this.userAnswers = [];
+                this.score = 0;
+                this.isQuizActive = false;
+                
+                this.initializeElements();
+                this.renderChapterSelection();
+            }
+
+            initializeElements() {
+                // Main containers
+                this.chapterSelection = document.getElementById('chapterSelection');
+                this.quizContainer = document.getElementById('quizContainer');
+                this.resultsContainer = document.getElementById('resultsContainer');
+                
+                // Quiz elements
+                this.quizTitle = document.getElementById('quizTitle');
+                this.questionCounter = document.getElementById('questionCounter');
+                this.progressFill = document.getElementById('progressFill');
+                this.questionText = document.getElementById('questionText');
+                this.optionsContainer = document.getElementById('optionsContainer');
+                
+                // Buttons
+                this.backBtn = document.getElementById('backBtn');
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.submitBtn = document.getElementById('submitBtn');
+                this.restartBtn = document.getElementById('restartBtn');
+                
+                // Results elements
+                this.scoreDisplay = document.getElementById('scoreDisplay');
+                this.scoreMessage = document.getElementById('scoreMessage');
+                
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                this.backBtn.addEventListener('click', () => this.showChapterSelection());
+                this.prevBtn.addEventListener('click', () => this.previousQuestion());
+                this.nextBtn.addEventListener('click', () => this.nextQuestion());
+                this.submitBtn.addEventListener('click', () => this.submitQuiz());
+                this.restartBtn.addEventListener('click', () => this.showChapterSelection());
+            }
+
+            renderChapterSelection() {
+                this.chapterSelection.innerHTML = '';
+                
+                this.questions.forEach((chapter, index) => {
+                    const chapterCard = document.createElement('div');
+                    chapterCard.className = 'chapter-card';
+                    chapterCard.innerHTML = `
+                        <h3>📚 Chapter ${chapter.chapter}</h3>
+                        <p>${this.getChapterDescription(chapter.chapter)}</p>
+                        <p><strong>10 Questions</strong></p>
+                    `;
+                    
+                    chapterCard.addEventListener('click', () => this.startChapter(index));
+                    this.chapterSelection.appendChild(chapterCard);
+                });
+            }
+
+            getChapterDescription(chapterNumber) {
+                const descriptions = [
+                    "Basic Rectangles & Triangles",
+                    "Garden & Floor Problems", 
+                    "Picture Frames & Windows",
+                    "Everyday Objects",
+                    "Kitchen & Home Items",
+                    "Doors & Mirrors",
+                    "Parks & Large Spaces",
+                    "School & Classroom",
+                    "Sports & Recreation",
+                    "Furniture & Tables",
+                    "Photos & Art",
+                    "Buildings & Rooms",
+                    "Large Areas & Fields",
+                    "Swimming Pools",
+                    "Mixed Shapes",
+                    "Advanced Problems",
+                    "Real World Applications",
+                    "Complex Calculations",
+                    "Challenge Problems",
+                    "Master Level"
+                ];
+                return descriptions[chapterNumber - 1] || "Math Problems";
+            }
+
+            startChapter(chapterIndex) {
+                this.currentChapter = this.questions[chapterIndex];
+                this.currentQuestionIndex = 0;
+                this.userAnswers = new Array(this.currentChapter.questions.length).fill(null);
+                this.score = 0;
+                this.isQuizActive = true;
+                
+                this.showQuizContainer();
+                this.renderQuestion();
+            }
+
+            showChapterSelection() {
+                this.chapterSelection.style.display = 'grid';
+                this.quizContainer.style.display = 'none';
+                this.resultsContainer.style.display = 'none';
+                this.isQuizActive = false;
+            }
+
+            showQuizContainer() {
+                this.chapterSelection.style.display = 'none';
+                this.quizContainer.style.display = 'block';
+                this.resultsContainer.style.display = 'none';
+            }
+
+            showResultsContainer() {
+                this.chapterSelection.style.display = 'none';
+                this.quizContainer.style.display = 'none';
+                this.resultsContainer.style.display = 'block';
+            }
+
+            renderQuestion() {
+                if (!this.currentChapter || !this.isQuizActive) return;
+                
+                const question = this.currentChapter.questions[this.currentQuestionIndex];
+                const totalQuestions = this.currentChapter.questions.length;
+                
+                // Update header
+                this.quizTitle.textContent = `Chapter ${this.currentChapter.chapter}`;
+                this.questionCounter.textContent = `Question ${this.currentQuestionIndex + 1} of ${totalQuestions}`;
+                
+                // Update progress bar
+                const progress = ((this.currentQuestionIndex + 1) / totalQuestions) * 100;
+                this.progressFill.style.width = `${progress}%`;
+                
+                // Update question
+                this.questionText.textContent = question.question;
+                
+                // Render options
+                this.optionsContainer.innerHTML = '';
+                question.options.forEach((option, index) => {
+                    const optionButton = document.createElement('button');
+                    optionButton.className = 'option-button';
+                    optionButton.textContent = option;
+                    optionButton.addEventListener('click', () => this.selectOption(index, optionButton));
+                    
+                    // Restore previous selection
+                    if (this.userAnswers[this.currentQuestionIndex] === index) {
+                        optionButton.classList.add('selected');
+                    }
+                    
+                    this.optionsContainer.appendChild(optionButton);
+                });
+                
+                // Update button states
+                this.updateButtonStates();
+            }
+
+            selectOption(optionIndex, buttonElement) {
+                // Remove previous selection
+                this.optionsContainer.querySelectorAll('.option-button').forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+                
+                // Add selection to clicked button
+                buttonElement.classList.add('selected');
+                
+                // Store answer
+                this.userAnswers[this.currentQuestionIndex] = optionIndex;
+                
+                // Update button states
+                this.updateButtonStates();
+            }
+
+            updateButtonStates() {
+                const totalQuestions = this.currentChapter.questions.length;
+                const isFirstQuestion = this.currentQuestionIndex === 0;
+                const isLastQuestion = this.currentQuestionIndex === totalQuestions - 1;
+                const hasAnswer = this.userAnswers[this.currentQuestionIndex] !== null;
+                
+                // Previous button
+                this.prevBtn.disabled = isFirstQuestion;
+                
+                // Next button
+                this.nextBtn.disabled = !hasAnswer;
+                
+                // Show/hide submit button
+                if (isLastQuestion && hasAnswer) {
+                    this.nextBtn.classList.add('hidden');
+                    this.submitBtn.classList.remove('hidden');
+                } else {
+                    this.nextBtn.classList.remove('hidden');
+                    this.submitBtn.classList.add('hidden');
+                }
+            }
+
+            previousQuestion() {
+                if (this.currentQuestionIndex > 0) {
+                    this.currentQuestionIndex--;
+                    this.renderQuestion();
+                }
+            }
+
+            nextQuestion() {
+                const totalQuestions = this.currentChapter.questions.length;
+                if (this.currentQuestionIndex < totalQuestions - 1) {
+                    this.currentQuestionIndex++;
+                    this.renderQuestion();
+                }
+            }
+
+            submitQuiz() {
+                this.calculateScore();
+                this.showResults();
+            }
+
+            calculateScore() {
+                this.score = 0;
+                
+                this.currentChapter.questions.forEach((question, index) => {
+                    const userAnswerIndex = this.userAnswers[index];
+                    const userAnswer = question.options[userAnswerIndex];
+                    
+                    if (userAnswer === question.answer) {
+                        this.score++;
+                    }
+                });
+            }
+
+            showResults() {
+                const totalQuestions = this.currentChapter.questions.length;
+                const percentage = Math.round((this.score / totalQuestions) * 100);
+                
+                // Display score
+                this.scoreDisplay.innerHTML = `
+                    <div class="celebration">🎉</div>
+                    ${this.score} / ${totalQuestions}
+                    <div>(${percentage}%)</div>
+                `;
+                
+                // Display message based on score
+                let message = '';
+                let emoji = '';
+                
+                if (percentage >= 90) {
+                    message = "Outstanding! You're a math superstar!";
+                    emoji = "🌟⭐🌟";
+                } else if (percentage >= 80) {
+                    message = "Excellent work! You really know your math!";
+                    emoji = "🎯🎉🎯";
+                } else if (percentage >= 70) {
+                    message = "Great job! You're getting better at math!";
+                    emoji = "👏😊👏";
+                } else if (percentage >= 60) {
+                    message = "Good effort! Keep practicing and you'll improve!";
+                    emoji = "💪📚💪";
+                } else {
+                    message = "Nice try! Practice makes perfect - try again!";
+                    emoji = "🌈📖🌈";
+                }
+                
+                this.scoreMessage.innerHTML = `
+                    <div class="emoji">${emoji}</div>
+                    <div>${message}</div>
+                `;
+                
+                this.showResultsContainer();
+                
+                // Add celebration animation
+                setTimeout(() => {
+                    this.scoreDisplay.classList.add('celebration');
+                }, 500);
+            }
+        }
+
+        // Initialize the quiz when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new MathQuiz();
+        });
+
+        // Add some fun interactions
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('option-button')) {
+                // Add a little animation when clicking options
+                e.target.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    e.target.style.transform = '';
+                }, 150);
+            }
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && document.querySelector('.option-button.selected')) {
+                const nextBtn = document.getElementById('nextBtn');
+                const submitBtn = document.getElementById('submitBtn');
+                
+                if (!nextBtn.classList.contains('hidden') && !nextBtn.disabled) {
+                    nextBtn.click();
+                } else if (!submitBtn.classList.contains('hidden')) {
+                    submitBtn.click();
+                }
+            }
+        });
+
+        // Add touch support for mobile devices
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartY - touchEndY;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe up - could trigger next question
+                    const nextBtn = document.getElementById('nextBtn');
+                    if (nextBtn && !nextBtn.disabled && !nextBtn.classList.contains('hidden')) {
+                        nextBtn.click();
+                    }
+                } else {
+                    // Swipe down - could trigger previous question
+                    const prevBtn = document.getElementById('prevBtn');
+                    if (prevBtn && !prevBtn.disabled) {
+                        prevBtn.click();
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
