@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Adventure for Grade 4</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: #FFD700;
+            background: #4A00E0;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #FFD700;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .chapters-panel {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .chapters-panel h2 {
+            text-align: center;
+            color: #4A00E0;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #FFD700;
+        }
+
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .chapter-card {
+            background: #f0f8ff;
+            border-radius: 15px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: #4A00E0;
+            background: #e6f7ff;
+        }
+
+        .chapter-card.active {
+            border-color: #4A00E0;
+            background: #d1e8ff;
+            transform: scale(1.05);
+        }
+
+        .chapter-card i {
+            font-size: 2.5rem;
+            color: #4A00E0;
+            margin-bottom: 10px;
+            transition: transform 0.3s;
+        }
+
+        .chapter-card:hover i {
+            transform: rotate(15deg);
+        }
+
+        .chapter-card h3 {
+            color: #4A00E0;
+            margin-bottom: 5px;
+        }
+
+        .chapter-card .progress {
+            height: 5px;
+            background: #e0e0ff;
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .chapter-card .progress-bar {
+            height: 100%;
+            background: #4A00E0;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .questions-panel {
+            flex: 2;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .questions-panel h2 {
+            text-align: center;
+            color: #4A00E0;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #FFD700;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            background: #f9f9ff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #4A00E0;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            background: #4A00E0;
+            color: white;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+        }
+
+        .difficulty {
+            background: #FFD700;
+            color: #4A00E0;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .diagram-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 2px dashed #e0e0ff;
+            position: relative;
+        }
+
+        .shape {
+            display: inline-block;
+            position: relative;
+            margin: 20px;
+        }
+
+        .rectangle {
+            width: 250px;
+            height: 150px;
+            border: 3px solid #4A00E0;
+            background: rgba(74, 0, 224, 0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .dimension {
+            position: absolute;
+            background: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #4A00E0;
+            font-weight: bold;
+        }
+
+        .length {
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .width {
+            top: 50%;
+            right: -45px;
+            transform: translateY(-50%);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid #e0e0ff;
+            text-align: center;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(74, 0, 224, 0.05);
+            z-index: 0;
+            transition: all 0.3s ease;
+            transform: scale(0);
+            border-radius: 8px;
+        }
+
+        .option:hover {
+            background: #e6f7ff;
+            border-color: #4A00E0;
+            transform: translateY(-3px);
+        }
+
+        .option:hover:before {
+            transform: scale(1);
+        }
+
+        .option.selected {
+            background: #d1e8ff;
+            border-color: #4A00E0;
+            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.2);
+            transform: scale(1.02);
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 500;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+
+        .incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            background: #4A00E0;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #3800b0;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .progress-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-container h2 {
+            color: #4A00E0;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 25px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4A00E0, #8E2DE2);
+            border-radius: 12px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .score-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4A00E0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .score-display i {
+            color: #FFD700;
+            font-size: 1.4rem;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        .bounce {
+            animation: bounce 1s;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+                <div>
+                    <h1>Math Adventure for Grade 4</h1>
+                    <p class="subtitle">Learn Perimeter, Area and Geometry with Fun Interactive Challenges!</p>
+                </div>
+                <i class="fas fa-shapes"></i>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="chapters-panel">
+                <h2>Math Chapters</h2>
+                <div class="chapter-grid" id="chapter-grid">
+                    <!-- Chapters will be dynamically loaded -->
+                </div>
+            </div>
+
+            <div class="questions-panel">
+                <h2 id="chapter-title">Perimeter Challenges <i class="fas fa-ruler-combined"></i></h2>
+                <div id="questions-container">
+                    <!-- Questions will be dynamically loaded -->
+                </div>
+                <div class="controls">
+                    <button id="prev-btn"><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <h2>Your Progress</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+                <div class="progress-text" id="progress-text">0%</div>
+            </div>
+            <div class="score-display">
+                <i class="fas fa-star"></i> Completed: <span id="completed-count">0</span> of <span id="total-count">100</span> questions <i class="fas fa-star"></i>
+            </div>
+        </div>
+
+        <footer>
+            <p>Math Adventure for Grade 4 | Interactive Learning Platform | © 2023 All Rights Reserved</p>
+        </footer>
+    </div>
+
+    <script>
+        // Data structure for the entire platform
+        const mathPlatform = {
+            chapters: [
+                {
+                    id: 1,
+                    title: "Perimeter",
+                    icon: "fas fa-ruler-combined",
+                    description: "Measure boundaries",
+                    questions: generatePerimeterQuestions()
+                },
+                {
+                    id: 2,
+                    title: "Area",
+                    icon: "fas fa-border-all",
+                    description: "Calculate space",
+                    questions: generateAreaQuestions()
+                },
+                {
+                    id: 3,
+                    title: "Shapes",
+                    icon: "fas fa-shapes",
+                    description: "Triangles & Circles",
+                    questions: generateShapeQuestions()
+                },
+                {
+                    id: 4,
+                    title: "3D Objects",
+                    icon: "fas fa-cube",
+                    description: "Volume & Surface",
+                    questions: generate3DQuestions()
+                },
+                {
+                    id: 5,
+                    title: "Patterns",
+                    icon: "fas fa-puzzle-piece",
+                    description: "Sequences & Logic",
+                    questions: generatePatternQuestions()
+                },
+                {
+                    id: 6,
+                    title: "Measurement",
+                    icon: "fas fa-balance-scale",
+                    description: "Units & Conversion",
+                    questions: generateMeasurementQuestions()
+                },
+                {
+                    id: 7,
+                    title: "Fractions",
+                    icon: "fas fa-chart-pie",
+                    description: "Parts of a whole",
+                    questions: generateFractionQuestions()
+                },
+                {
+                    id: 8,
+                    title: "Decimals",
+                    icon: "fas fa-sort-amount-up",
+                    description: "Working with points",
+                    questions: generateDecimalQuestions()
+                },
+                {
+                    id: 9,
+                    title: "Time & Money",
+                    icon: "fas fa-clock",
+                    description: "Practical math",
+                    questions: generateTimeMoneyQuestions()
+                },
+                {
+                    id: 10,
+                    title: "Word Problems",
+                    icon: "fas fa-brain",
+                    description: "Real-life challenges",
+                    questions: generateWordProblems()
+                }
+            ],
+            currentChapter: 1,
+            currentQuestion: 1,
+            completedQuestions: 0
+        };
+
+        // Question generators for each chapter
+        function generatePerimeterQuestions() {
+            const questions = [];
+            
+            for (let i = 1; i <= 10; i++) {
+                // Rectangle perimeter questions
+                if (i <= 4) {
+                    const length = Math.floor(Math.random() * 10) + 5;
+                    const width = Math.floor(Math.random() * 8) + 3;
+                    const perimeter = 2 * (length + width);
+                    
+                    questions.push({
+                        id: i,
+                        question: `A rectangle is ${length} m long and ${width} m wide. What is its perimeter?`,
+                        diagram: { type: "rectangle", length, width, unit: "m" },
+                        options: generateOptions(perimeter, [perimeter - 4, perimeter + 4, length * width]),
+                        explanation: `Perimeter = 2 × (Length + Width) = 2 × (${length} + ${width}) = ${perimeter} meters`,
+                        difficulty: i === 1 ? "★ Easy" : i < 4 ? "★★ Medium" : "★★★ Hard",
+                        completed: false
+                    });
+                }
+                // Square perimeter questions
+                else if (i <= 6) {
+                    const side = Math.floor(Math.random() * 8) + 4;
+                    const perimeter = 4 * side;
+                    
+                    questions.push({
+                        id: i,
+                        question: `A square has sides of ${side} cm each. What is its perimeter?`,
+                        diagram: { type: "square", side, unit: "cm" },
+                        options: generateOptions(perimeter, [perimeter - 4, perimeter + 4, 2 * side]),
+                        explanation: `Perimeter of square = 4 × side = 4 × ${side} = ${perimeter} cm`,
+                        difficulty: "★★ Medium",
+                        completed: false
+                    });
+                }
+                // Triangle perimeter questions
+                else if (i <= 8) {
+                    const side1 = Math.floor(Math.random() * 8) + 5;
+                    const side2 = Math.floor(Math.random() * 8) + 5;
+                    const side3 = Math.floor(Math.random() * 8) + 5;
+                    const perimeter = side1 + side2 + side3;
+                    
+                    questions.push({
+                        id: i,
+                        question: `A triangle has sides of ${side1} cm, ${side2} cm, and ${side3} cm. What is its perimeter?`,
+                        diagram: { type: "triangle", sides: [side1, side2, side3], unit: "cm" },
+                        options: generateOptions(perimeter, [perimeter - 3, perimeter + 3, side1 * 3]),
+                        explanation: `Perimeter of triangle = sum of all sides = ${side1} + ${side2} + ${side3} = ${perimeter} cm`,
+                        difficulty: "★★★ Hard",
+                        completed: false
+                    });
+                }
+                // Finding missing dimension
+                else {
+                    const length = Math.floor(Math.random() * 10) + 8;
+                    const perimeter = 2 * (length + 5) + Math.floor(Math.random() * 4) * 2;
+                    const width = (perimeter / 2) - length;
+                    
+                    questions.push({
+                        id: i,
+                        question: `A rectangle has a perimeter of ${perimeter} cm and a length of ${length} cm. What is its width?`,
+                        diagram: { type: "rectangle", length, width: "?", unit: "cm" },
+                        options: generateOptions(width, [width - 2, width + 2, perimeter - length]),
+                        explanation: `Perimeter = 2×(L+W) → ${perimeter} = 2×(${length}+W) → ${perimeter/2} = ${length}+W → W = ${width} cm`,
+                        difficulty: "★★★ Hard",
+                        completed: false
+                    });
+                }
+            }
+            
+            return questions;
+        }
+
+        function generateAreaQuestions() {
+            const questions = [];
+            
+            for (let i = 1; i <= 10; i++) {
+                // Rectangle area questions
+                if (i <= 4) {
+                    const length = Math.floor(Math.random() * 10) + 5;
+                    const width = Math.floor(Math.random() * 8) + 3;
+                    const area = length * width;
+                    
+                    questions.push({
+                        id: i,
+                        question: `A rectangle is ${length} m long and ${width} m wide. What is its area?`,
+                        diagram: { type: "rectangle", length, width, unit: "m" },
+                        options: generateOptions(area, [area - 5, area + 5, 2 * (length + width)]),
+                        explanation: `Area = Length × Width = ${length} × ${width} = ${area} sq. meters`,
+                        difficulty: i === 1 ? "★ Easy" : i < 4 ? "★★ Medium" : "★★★ Hard",
+                        completed: false
+                    });
+                }
+                // Square area questions
+                else if (i <= 6) {
+                    const side = Math.floor(Math.random() * 8) + 4;
+                    const area = side * side;
+                    
+                    questions.push({
+                        id: i,
+                        question: `A square has sides of ${side} cm each. What is its area?`,
+                        diagram: { type: "square", side, unit: "cm" },
+                        options: generateOptions(area, [area - 4, area + 4, 4 * side]),
+                        explanation: `Area of square = side × side = ${side} × ${side} = ${area} sq. cm`,
+                        difficulty: "★★ Medium",
+                        completed: false
+                    });
+                }
+                // Triangle area questions
+                else if (i <= 8) {
+                    const base = Math.floor(Math.random() * 10) + 6;
+                    const height = Math.floor(Math.random() * 8) + 4;
+                    const area = Math.round((base * height) / 2);
+                    
+                    questions.push({
+                        id: i,
+                        question: `A triangle has a base of ${base} cm and a height of ${height} cm. What is its area?`,
+                        diagram: { type: "triangle", base, height, unit: "cm" },
+                        options: generateOptions(area, [area - 5, area + 5, base * height]),
+                        explanation: `Area of triangle = (base × height) / 2 = (${base} × ${height}) / 2 = ${area} sq. cm`,
+                        difficulty: "★★★ Hard",
+                        completed: false
+                    });
+                }
+                // Finding missing dimension
+                else {
+                    const length = Math.floor(Math.random() * 10) + 8;
+                    const area = length * 6 + Math.floor(Math.random() * 4) * 2;
+                    const width = area / length;
+                    
+                    questions.push({
+                        id: i,
+                        question: `A rectangle has an area of ${area} sq. meters and a length of ${length} meters. What is its width?`,
+                        diagram: { type: "rectangle", length, width: "?", unit: "m" },
+                        options: generateOptions(width, [width - 1, width + 1, area - length]),
+                        explanation: `Area = Length × Width → ${area} = ${length} × W → W = ${width} meters`,
+                        difficulty: "★★★ Hard",
+                        completed: false
+                    });
+                }
+            }
+            
+            return questions;
+        }
+
+        // Placeholder generators for other chapters
+        function generateShapeQuestions() {
+            const questions = [];
+            for (let i = 1; i <= 10; i++) {
+                questions.push({
+                    id: i,
+                    question: `What is the name of a shape with ${3+i} sides?`,
+                    options: generateOptions('Polygon', ['Circle', 'Triangle', 'Square']),
+                    explanation: `A polygon is a shape with straight sides. A ${3+i}-sided shape is called a polygon.`,
+                    difficulty: "★★ Medium",
+                    completed: false
+                });
+            }
+            return questions;
+        }
+
+        function generate3DQuestions() {
+            const questions = [];
+            for (let i = 1; i <= 10; i++) {
+                questions.push({
+                    id: i,
+                    question: `How many faces does a cube have?`,
+                    options: generateOptions(6, [4, 8, 12]),
+                    explanation: "A cube has 6 faces, all of which are squares.",
+                    difficulty: "★★★ Hard",
+                    completed: false
+                });
+            }
+            return questions;
+        }
+
+        function generatePatternQuestions() {
+            const questions = [];
+            for (let i = 1; i <= 10; i++) {
+                questions.push({
+                    id: i,
+                    question: `What number comes next: 2, 4, 6, 8, ___?`,
+                    options: generateOptions(10, [9, 12, 14]),
+                    explanation: "This is a pattern of even numbers. The next even number after 8 is 10.",
+                    difficulty: "★★ Medium",
+                    completed: false
+                });
+            }
+            return questions;
+        }
+
+        function generateMeasurementQuestions() {
+            const questions = [];
+            for (let i = 1; i <= 10; i++) {
+                questions.push({
+                    id: i,
+                    question: `How many centimeters are in a meter?`,
+                    options: generateOptions(100, [10, 50, 1000]),
+                    explanation: "There are 100 centimeters in a meter.",
+                    difficulty: "★★★ Hard",
+                    completed: false
+                });
+            }
+            return questions;
+        }
+
+        function generateFractionQuestions() {
+            const questions = [];
+            for (let i = 1; i <= 10; i++) {
+                questions.push({
+                    id: i,
+                    question: `What fraction represents half of a whole?`,
+                    options: generateOptions('1/2', ['1/4', '2/2', '1/3']),
+                    explanation: "A fraction that represents half is 1/2.",
+                    difficulty: "★★ Medium",
+                    completed: false
+                });
+            }
+            return questions;
+        }
+
+        function generateDecimalQuestions() {
+            const questions = [];
+            for (let i = 1; i <= 10; i++) {
+                questions.push({
+                    id: i,
+                    question: `What is 0.5 as a fraction?`,
+                    options: generateOptions('1/2', ['1/4', '1/5', '5/10']),
+                    explanation: "The decimal 0.5 is equal to the fraction 1/2.",
+                    difficulty: "★★★ Hard",
+                    completed: false
+                });
+            }
+            return questions;
+        }
+
+        function generateTimeMoneyQuestions() {
+            const questions = [];
+            for (let i = 1; i <= 10; i++) {
+                questions.push({
+                    id: i,
+                    question: `How many minutes are in an hour?`,
+                    options: generateOptions(60, [30, 100, 24]),
+                    explanation: "There are 60 minutes in one hour.",
+                    difficulty: "★★ Medium",
+                    completed: false
+                });
+            }
+            return questions;
+        }
+
+        function generateWordProblems() {
+            const questions = [];
+            for (let i = 1; i <= 10; i++) {
+                questions.push({
+                    id: i,
+                    question: `If Sara has 5 apples and gives 2 to her friend, how many apples does she have left?`,
+                    options: generateOptions(3, [2, 4, 5]),
+                    explanation: "Sara started with 5 apples and gave away 2, so she has 5 - 2 = 3 apples left.",
+                    difficulty: "★★★ Hard",
+                    completed: false
+                });
+            }
+            return questions;
+        }
+
+        // Helper function to generate answer options
+        function generateOptions(correctValue, wrongValues) {
+            const options = [
+                { text: `${correctValue}`, value: correctValue, correct: true }
+            ];
+            
+            wrongValues.forEach(val => {
+                options.push({ text: `${val}`, value: val });
+            });
+            
+            // Shuffle options
+            for (let i = options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [options[i], options[j]] = [options[j], options[i]];
+            }
+            
+            return options;
+        }
+
+        // Initialize the platform
+        document.addEventListener('DOMContentLoaded', function() {
+            renderChapters();
+            renderQuestions(mathPlatform.currentChapter, mathPlatform.currentQuestion);
+            updateProgress();
+        });
+
+        // Render chapters panel
+        function renderChapters() {
+            const chapterGrid = document.getElementById('chapter-grid');
+            chapterGrid.innerHTML = '';
+            
+            mathPlatform.chapters.forEach(chapter => {
+                const completedCount = chapter.questions.filter(q => q.completed).length;
+                const progressPercent = Math.floor((completedCount / 10) * 100);
+                
+                const card = document.createElement('div');
+                card.className = `chapter-card ${chapter.id === mathPlatform.currentChapter ? 'active' : ''}`;
+                card.dataset.chapter = chapter.id;
+                card.innerHTML = `
+                    <i class="${chapter.icon}"></i>
+                    <h3>${chapter.title}</h3>
+                    <p>${chapter.description}</p>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: ${progressPercent}%"></div>
+                    </div>
+                `;
+                
+                card.addEventListener('click', () => {
+                    mathPlatform.currentChapter = chapter.id;
+                    mathPlatform.currentQuestion = 1;
+                    renderChapters();
+                    renderQuestions(mathPlatform.currentChapter, mathPlatform.currentQuestion);
+                });
+                
+                chapterGrid.appendChild(card);
+            });
+        }
+
+        // Render questions for a chapter
+        function renderQuestions(chapterId, questionId) {
+            const chapter = mathPlatform.chapters.find(c => c.id == chapterId);
+            const question = chapter.questions.find(q => q.id == questionId);
+            
+            if (!question) return;
+            
+            const questionsContainer = document.getElementById('questions-container');
+            const chapterTitle = document.getElementById('chapter-title');
+            chapterTitle.innerHTML = `${chapter.title} Challenges <i class="${chapter.icon}"></i>`;
+            
+            // Generate diagram HTML based on type
+            let diagramHTML = '';
+            if (question.diagram) {
+                switch(question.diagram.type) {
+                    case 'rectangle':
+                        diagramHTML = `
+                            <div class="shape">
+                                <div class="rectangle">
+                                    <div class="dimension length">${question.diagram.length} ${question.diagram.unit}</div>
+                                    <div class="dimension width">${question.diagram.width} ${question.diagram.unit}</div>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'square':
+                        diagramHTML = `
+                            <div class="shape">
+                                <div class="rectangle" style="width: 150px; height: 150px;">
+                                    <div class="dimension length" style="top: -30px; left: 50%; transform: translateX(-50%);">${question.diagram.side} ${question.diagram.unit}</div>
+                                    <div class="dimension width" style="top: 50%; right: -45px; transform: translateY(-50%);">${question.diagram.side} ${question.diagram.unit}</div>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'triangle':
+                        diagramHTML = `
+                            <div class="shape">
+                                <svg width="200" height="150" viewBox="0 0 200 150">
+                                    <polygon points="100,20 180,130 20,130" fill="rgba(74, 0, 224, 0.1)" stroke="#4A00E0" stroke-width="3"/>
+                                    <text x="100" y="15" text-anchor="middle" fill="#4A00E0" font-weight="bold">${question.diagram.height} ${question.diagram.unit}</text>
+                                    <text x="100" y="145" text-anchor="middle" fill="#4A00E0" font-weight="bold">${question.diagram.base} ${question.diagram.unit}</text>
+                                </svg>
+                            </div>
+                        `;
+                        break;
+                    default:
+                        diagramHTML = '';
+                }
+            }
+            
+            // Generate options HTML
+            let optionsHTML = '';
+            question.options.forEach(option => {
+                optionsHTML += `
+                    <div class="option" data-value="${option.value}">
+                        ${option.text}
+                    </div>
+                `;
+            });
+            
+            questionsContainer.innerHTML = `
+                <div class="question-container">
+                    <div class="question-header">
+                        <div class="question-number">Question ${question.id}</div>
+                        <div class="difficulty">${question.difficulty}</div>
+                    </div>
+                    <div class="question-text">
+                        ${question.question}
+                    </div>
+                    ${diagramHTML ? `<div class="diagram-container">${diagramHTML}</div>` : ''}
+                    <div class="options">
+                        ${optionsHTML}
+                    </div>
+                    <div class="feedback correct">
+                        <i class="fas fa-check-circle"></i> ${question.explanation}
+                    </div>
+                    <div class="feedback incorrect">
+                        <i class="fas fa-times-circle"></i> That's not quite right. Try again!
+                    </div>
+                    <button class="check-answer">Check Answer</button>
+                </div>
+            `;
+            
+            // Add event listeners
+            setupQuestionEvents();
+        }
+
+        // Set up event listeners for the current question
+        function setupQuestionEvents() {
+            // Option selection
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    this.parentElement.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                });
+            });
+
+            // Check answer button
+            const checkButton = document.querySelector('.check-answer');
+            if (checkButton) {
+                checkButton.addEventListener('click', function() {
+                    const container = this.closest('.question-container');
+                    const selectedOption = container.querySelector('.option.selected');
+                    
+                    if (!selectedOption) {
+                        alert('Please select an answer!');
+                        return;
+                    }
+                    
+                    const feedbacks = container.querySelectorAll('.feedback');
+                    feedbacks.forEach(fb => fb.style.display = 'none');
+                    
+                    // Get the current question
+                    const chapter = mathPlatform.chapters.find(c => c.id == mathPlatform.currentChapter);
+                    const question = chapter.questions.find(q => q.id == mathPlatform.currentQuestion);
+                    
+                    // Find the correct option
+                    const correctOption = question.options.find(opt => opt.correct);
+                    const isCorrect = selectedOption.dataset.value == correctOption.value;
+                    
+                    if (isCorrect) {
+                        container.querySelector('.feedback.correct').style.display = 'block';
+                        selectedOption.classList.add('correct-feedback');
+                        
+                        // Mark question as completed if not already
+                        if (!question.completed) {
+                            question.completed = true;
+                            mathPlatform.completedQuestions++;
+                            updateProgress();
+                        }
+                        
+                        // Create confetti effect
+                        createConfetti();
+                    } else {
+                        container.querySelector('.feedback.incorrect').style.display = 'block';
+                        selectedOption.classList.add('incorrect-feedback');
+                    }
+                });
+            }
+
+            // Navigation buttons
+            document.getElementById('prev-btn').addEventListener('click', function() {
+                if (mathPlatform.currentQuestion > 1) {
+                    mathPlatform.currentQuestion--;
+                    renderQuestions(mathPlatform.currentChapter, mathPlatform.currentQuestion);
+                } else {
+                    // Move to previous chapter if available
+                    if (mathPlatform.currentChapter > 1) {
+                        mathPlatform.currentChapter--;
+                        mathPlatform.currentQuestion = 1;
+                        renderChapters();
+                        renderQuestions(mathPlatform.currentChapter, mathPlatform.currentQuestion);
+                    }
+                }
+            });
+            
+            document.getElementById('next-btn').addEventListener('click', function() {
+                const chapter = mathPlatform.chapters.find(c => c.id == mathPlatform.currentChapter);
+                if (mathPlatform.currentQuestion < chapter.questions.length) {
+                    mathPlatform.currentQuestion++;
+                    renderQuestions(mathPlatform.currentChapter, mathPlatform.currentQuestion);
+                } else {
+                    // Move to next chapter if available
+                    if (mathPlatform.currentChapter < mathPlatform.chapters.length) {
+                        mathPlatform.currentChapter++;
+                        mathPlatform.currentQuestion = 1;
+                        renderChapters();
+                        renderQuestions(mathPlatform.currentChapter, mathPlatform.currentQuestion);
+                    }
+                }
+            });
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            const completedCount = document.getElementById('completed-count');
+            const totalCount = document.getElementById('total-count');
+            
+            const progressPercent = Math.floor((mathPlatform.completedQuestions / 100) * 100);
+            
+            progressFill.style.width = `${progressPercent}%`;
+            progressText.textContent = `${progressPercent}%`;
+            completedCount.textContent = mathPlatform.completedQuestions;
+            totalCount.textContent = 100;
+        }
+
+        // Create confetti effect for correct answers
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            const container = document.querySelector('.questions-panel');
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = '0';
+                confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                container.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
