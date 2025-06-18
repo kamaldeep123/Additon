@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Q&A</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light gray-blue background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 16px; /* More rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 800px; /* Wider container */
+            width: 100%;
+            padding: 32px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            box-sizing: border-box;
+        }
+        .question-card {
+            background-color: #ecf0f1; /* Light gray for question card */
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06); /* Subtle inner shadow */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .question-text {
+            font-size: 1.5rem; /* Larger question text */
+            font-weight: 600;
+            color: #2c3e50; /* Dark blue text */
+            margin-bottom: 15px;
+        }
+        .diagram-container {
+            border: 1px solid #bdc3c7; /* Light border around diagram */
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            max-width: 100%;
+            height: auto;
+            display: inline-block; /* Ensure it scales correctly */
+        }
+        .diagram-container svg {
+            width: 100%;
+            max-width: 300px; /* Max width for SVG */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .option-button {
+            background-color: #3498db; /* Blue for options */
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        .option-button:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+            transform: translateY(-2px);
+        }
+        .option-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        }
+        .answer-container {
+            background-color: #d4edda; /* Light green for answer */
+            color: #155724; /* Dark green text */
+            padding: 18px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border: 1px solid #c3e6cb;
+            font-weight: 500;
+            text-align: left;
+            display: none; /* Hidden by default */
+            font-size: 1.1rem;
+        }
+        .answer-container strong {
+            color: #0d3617;
+        }
+        .nav-buttons, .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+        }
+        .control-button {
+            background-color: #2ecc71; /* Green for controls */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+        .control-button:hover {
+            background-color: #27ae60; /* Darker green on hover */
+            transform: translateY(-2px);
+        }
+        .control-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+        }
+        .control-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px;
+            }
+            .question-text {
+                font-size: 1.25rem;
+            }
+            .question-card {
+                padding: 18px;
+            }
+            .diagram-container svg {
+                max-width: 250px;
+            }
+            .option-button, .control-button {
+                padding: 10px 18px;
+                font-size: 1rem;
+            }
+            .nav-buttons, .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="text-3xl font-bold text-gray-800">Geometry Quest</h1>
+
+        <div id="question-display">
+            <!-- Question content will be injected here by JavaScript -->
+            <div class="question-card">
+                <p id="question-text" class="question-text">Loading question...</p>
+                <div id="diagram-placeholder" class="diagram-container">
+                    <!-- SVG diagram will be injected here -->
+                </div>
+                <div id="options-container" class="options-container">
+                    <!-- Options buttons will be injected here -->
+                </div>
+                <div id="answer-display" class="answer-container">
+                    <!-- Answer will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button id="show-answer-btn" class="control-button">Show Answer</button>
+            <button id="next-question-btn" class="control-button">Next Question</button>
+        </div>
+
+        <div class="nav-buttons">
+            <button id="prev-question-btn" class="control-button">Previous Question</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                questionText: "What is the area of the rectangle shown below?",
+                diagram: `
+                    <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="20" width="160" height="80" fill="#f39c12" stroke="#d35400" stroke-width="2" rx="5" ry="5"/>
+                        <text x="100" y="115" text-anchor="middle" font-size="16" fill="#2c3e50">10 units</text>
+                        <text x="10" y="60" text-anchor="middle" font-size="16" fill="#2c3e50" transform="rotate(-90 10 60)">5 units</text>
+                    </svg>
+                `,
+                options: ["50 sq. units", "40 sq. units", "30 sq. units", "60 sq. units"],
+                answer: "50 sq. units",
+                explanation: "The area of a rectangle is calculated by multiplying its length by its width. Here, Area = 10 units * 5 units = 50 sq. units."
+            },
+            {
+                questionText: "Which of these triangles has a perimeter of 25 feet?",
+                diagram: `
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <div class="flex flex-col items-center p-2 border border-gray-300 rounded-lg">
+                            <p class="font-semibold mb-2">A)</p>
+                            <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                                <polygon points="75,20 20,130 130,130" fill="#f39c12" stroke="#d35400" stroke-width="2"/>
+                                <text x="75" y="145" text-anchor="middle" font-size="14" fill="#2c3e50">8 ft.</text>
+                                <text x="40" y="75" text-anchor="end" font-size="14" fill="#2c3e50">5 ft.</text>
+                                <text x="110" y="75" text-anchor="start" font-size="14" fill="#2c3e50">10 ft.</text>
+                            </svg>
+                            <p class="text-sm text-gray-600 mt-2">5+8+10 = 23 ft</p>
+                        </div>
+                        <div class="flex flex-col items-center p-2 border border-gray-300 rounded-lg">
+                            <p class="font-semibold mb-2">B)</p>
+                            <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                                <polygon points="75,20 20,130 130,130" fill="#2ecc71" stroke="#27ae60" stroke-width="2"/>
+                                <text x="75" y="145" text-anchor="middle" font-size="14" fill="#2c3e50">7 ft.</text>
+                                <text x="40" y="75" text-anchor="end" font-size="14" fill="#2c3e50">9 ft.</text>
+                                <text x="110" y="75" text-anchor="start" font-size="14" fill="#2c3e50">9 ft.</text>
+                            </svg>
+                            <p class="text-sm text-gray-600 mt-2">9+9+7 = 25 ft</p>
+                        </div>
+                        <div class="flex flex-col items-center p-2 border border-gray-300 rounded-lg">
+                            <p class="font-semibold mb-2">C)</p>
+                            <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                                <polygon points="75,20 20,130 130,130" fill="#f39c12" stroke="#d35400" stroke-width="2"/>
+                                <text x="75" y="145" text-anchor="middle" font-size="14" fill="#2c3e50">9 ft.</text>
+                                <text x="40" y="75" text-anchor="end" font-size="14" fill="#2c3e50">11 ft.</text>
+                                <text x="110" y="75" text-anchor="start" font-size="14" fill="#2c3e50">7 ft.</text>
+                            </svg>
+                            <p class="text-sm text-gray-600 mt-2">11+7+9 = 27 ft</p>
+                        </div>
+                    </div>
+                `,
+                options: ["Triangle A", "Triangle B", "Triangle C"],
+                answer: "Triangle B",
+                explanation: "The perimeter of a triangle is the sum of its three sides. \nTriangle A: 5 + 8 + 10 = 23 feet.\nTriangle B: 9 + 9 + 7 = 25 feet.\nTriangle C: 11 + 7 + 9 = 27 feet.\nTherefore, Triangle B has a perimeter of 25 feet."
+            },
+            {
+                questionText: "What is the area of the shaded shape?",
+                diagram: `
+                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="10" y="10" width="100" height="100" fill="none" stroke="#34495e" stroke-width="1"/>
+                        <!-- Grid lines -->
+                        <line x1="10" y1="30" x2="110" y2="30" stroke="#bdc3c7" stroke-width="0.5"/>
+                        <line x1="10" y1="50" x2="110" y2="50" stroke="#bdc3c7" stroke-width="0.5"/>
+                        <line x1="10" y1="70" x2="110" y2="70" stroke="#bdc3c7" stroke-width="0.5"/>
+                        <line x1="10" y1="90" x2="110" y2="90" stroke="#bdc3c7" stroke-width="0.5"/>
+                        <line x1="30" y1="10" x2="30" y2="110" stroke="#bdc3c7" stroke-width="0.5"/>
+                        <line x1="50" y1="10" x2="50" y2="110" stroke="#bdc3c7" stroke-width="0.5"/>
+                        <line x1="70" y1="10" x2="70" y2="110" stroke="#bdc3c7" stroke-width="0.5"/>
+                        <line x1="90" y1="10" x2="90" y2="110" stroke="#bdc3c7" stroke-width="0.5"/>
+
+                        <!-- Shaded squares (example from image) -->
+                        <rect x="30" y="10" width="20" height="20" fill="#3498db"/>
+                        <rect x="50" y="10" width="20" height="20" fill="#3498db"/>
+                        <rect x="70" y="10" width="20" height="20" fill="#3498db"/>
+
+                        <rect x="30" y="30" width="20" height="20" fill="#3498db"/>
+                        <rect x="70" y="30" width="20" height="20" fill="#3498db"/>
+
+                        <rect x="30" y="50" width="20" height="20" fill="#3498db"/>
+                        <rect x="70" y="50" width="20" height="20" fill="#3498db"/>
+
+                        <rect x="30" y="70" width="20" height="20" fill="#3498db"/>
+                        <rect x="50" y="70" width="20" height="20" fill="#3498db"/>
+                        <rect x="70" y="70" width="20" height="20" fill="#3498db"/>
+                    </svg>
+                `,
+                options: ["10 sq. units", "12 sq. units", "14 sq. units", "16 sq. units"],
+                answer: "10 sq. units",
+                explanation: "Count the number of shaded squares. Each square represents 1 square unit. There are 10 shaded squares."
+            },
+            {
+                questionText: "Find the perimeter of the figure below.",
+                diagram: `
+                    <svg viewBox="0 0 250 150" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Right-angled triangle -->
+                        <polygon points="20,130 200,130 20,30" fill="#f39c12" stroke="#d35400" stroke-width="2"/>
+                        <text x="25" y="75" text-anchor="end" font-size="16" fill="#2c3e50">8 ft.</text>
+                        <text x="110" y="145" text-anchor="middle" font-size="16" fill="#2c3e50">9 ft.</text>
+                        <text x="120" y="75" text-anchor="start" font-size="16" fill="#2c3e50">12 ft.</text>
+                    </svg>
+                `,
+                options: ["20 ft.", "29 ft.", "30 ft.", "25 ft."],
+                answer: "29 ft.",
+                explanation: "The perimeter is the sum of the lengths of all sides. Perimeter = 8 ft + 9 ft + 12 ft = 29 ft."
+            },
+            {
+                questionText: "Which TWO shapes below have a perimeter of 16 units?",
+                diagram: `
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <div class="flex flex-col items-center p-2 border border-gray-300 rounded-lg">
+                            <p class="font-semibold mb-2">A)</p>
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="10" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="30" y="10" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="50" y="10" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="10" y="30" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="10" y="50" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                            </svg>
+                            <p class="text-sm text-gray-600 mt-2">Perimeter: 12 units</p>
+                        </div>
+                        <div class="flex flex-col items-center p-2 border border-gray-300 rounded-lg">
+                            <p class="font-semibold mb-2">B)</p>
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="10" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="30" y="10" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="50" y="10" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="10" y="30" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="30" y="30" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="50" y="30" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="10" y="50" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="30" y="50" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                                <rect x="50" y="50" width="20" height="20" fill="#f39c12" stroke="#d35400" stroke-width="1"/>
+                            </svg>
+                            <p class="text-sm text-gray-600 mt-2">Perimeter: 12 units</p>
+                        </div>
+                        <div class="flex flex-col items-center p-2 border border-gray-300 rounded-lg">
+                            <p class="font-semibold mb-2">C)</p>
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="10" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="30" y="10" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="50" y="10" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="10" y="30" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="30" y="30" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="50" y="30" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="10" y="50" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="30" y="50" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="10" y="70" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                            </svg>
+                            <p class="text-sm text-gray-600 mt-2">Perimeter: 16 units</p>
+                        </div>
+                        <div class="flex flex-col items-center p-2 border border-gray-300 rounded-lg">
+                            <p class="font-semibold mb-2">D)</p>
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="10" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="30" y="10" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="50" y="10" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="70" y="10" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="10" y="30" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="70" y="30" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="10" y="50" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="70" y="50" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="10" y="70" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="30" y="70" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="50" y="70" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                                <rect x="70" y="70" width="20" height="20" fill="#2ecc71" stroke="#27ae60" stroke-width="1"/>
+                            </svg>
+                            <p class="text-sm text-gray-600 mt-2">Perimeter: 16 units</p>
+                        </div>
+                    </div>
+                `,
+                options: ["Shape A", "Shape B", "Shape C", "Shape D"], // Options for a multiple-select, but logic will treat as single answer correct for simplicity.
+                answer: "Shape C and Shape D", // Combined answer for two correct shapes
+                explanation: "To find the perimeter of these shapes (made of unit squares), count the number of exposed edges.\nShape A: 12 units.\nShape B: 12 units.\nShape C: 16 units (Looks like the one from the image). \nShape D: 16 units. \nBoth C and D have a perimeter of 16 units."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+
+        const questionTextElement = document.getElementById('question-text');
+        const diagramPlaceholder = document.getElementById('diagram-placeholder');
+        const optionsContainer = document.getElementById('options-container');
+        const answerDisplay = document.getElementById('answer-display');
+        const showAnswerBtn = document.getElementById('show-answer-btn');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+        const prevQuestionBtn = document.getElementById('prev-question-btn');
+
+        /**
+         * Renders the current question based on the `currentQuestionIndex`.
+         * Updates question text, diagram, options, and resets answer display.
+         */
+        function renderQuestion() {
+            const question = questions[currentQuestionIndex];
+
+            questionTextElement.textContent = `Q${currentQuestionIndex + 1}: ${question.questionText}`;
+            diagramPlaceholder.innerHTML = question.diagram; // Inject SVG directly
+
+            optionsContainer.innerHTML = ''; // Clear previous options
+            if (question.options && question.options.length > 0) {
+                question.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.textContent = option;
+                    button.classList.add('option-button');
+                    // For simplicity, click on any option will just show the answer, not validate
+                    button.addEventListener('click', () => showAnswer());
+                    optionsContainer.appendChild(button);
+                });
+            } else {
+                // If no options, clear the container or add a note
+                optionsContainer.innerHTML = '<p class="text-gray-600">No options provided for this question.</p>';
+            }
+
+            answerDisplay.style.display = 'none'; // Hide answer initially
+            answerDisplay.innerHTML = ''; // Clear previous answer content
+
+            updateNavigationButtons();
+        }
+
+        /**
+         * Shows the answer and explanation for the current question.
+         * Toggles the visibility of the answer container.
+         */
+        function showAnswer() {
+            const question = questions[currentQuestionIndex];
+            answerDisplay.innerHTML = `<strong>Answer:</strong> ${question.answer}<br><br><strong>Explanation:</strong> ${question.explanation.replace(/\n/g, '<br>')}`;
+            answerDisplay.style.display = 'block'; // Show the answer
+        }
+
+        /**
+         * Navigates to the next question in the array.
+         * If it's the last question, it loops back to the beginning.
+         */
+        function nextQuestion() {
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            renderQuestion();
+        }
+
+        /**
+         * Navigates to the previous question in the array.
+         * If it's the first question, it loops to the end.
+         */
+        function prevQuestion() {
+            currentQuestionIndex = (currentQuestionIndex - 1 + questions.length) % questions.length;
+            renderQuestion();
+        }
+
+        /**
+         * Updates the disabled state of navigation buttons.
+         */
+        function updateNavigationButtons() {
+            // Can be extended to disable 'next' at last question or 'prev' at first if not looping
+            // For now, with looping, buttons are always enabled.
+        }
+
+        // Event Listeners
+        showAnswerBtn.addEventListener('click', showAnswer);
+        nextQuestionBtn.addEventListener('click', nextQuestion);
+        prevQuestionBtn.addEventListener('click', prevQuestion);
+
+        // Initial render when the page loads
+        document.addEventListener('DOMContentLoaded', renderQuestion);
+    </script>
+</body>
+</html>
