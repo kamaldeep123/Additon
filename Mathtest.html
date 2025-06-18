@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Adventure for Grade 4</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: #FFD700;
+            background: #4A00E0;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #FFD700;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .chapters-panel {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .chapters-panel h2 {
+            text-align: center;
+            color: #4A00E0;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #FFD700;
+        }
+
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .chapter-card {
+            background: #f0f8ff;
+            border-radius: 15px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 3px solid transparent;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-color: #4A00E0;
+            background: #e6f7ff;
+        }
+
+        .chapter-card.active {
+            border-color: #4A00E0;
+            background: #d1e8ff;
+            transform: scale(1.05);
+        }
+
+        .chapter-card i {
+            font-size: 2.5rem;
+            color: #4A00E0;
+            margin-bottom: 10px;
+        }
+
+        .chapter-card h3 {
+            color: #4A00E0;
+            margin-bottom: 5px;
+        }
+
+        .questions-panel {
+            flex: 2;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .questions-panel h2 {
+            text-align: center;
+            color: #4A00E0;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #FFD700;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            background: #f9f9ff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #4A00E0;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            background: #4A00E0;
+            color: white;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .diagram-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 2px dashed #e0e0ff;
+        }
+
+        .shape {
+            display: inline-block;
+            position: relative;
+            margin: 20px;
+        }
+
+        .rectangle {
+            width: 250px;
+            height: 150px;
+            border: 3px solid #4A00E0;
+            background: rgba(74, 0, 224, 0.1);
+            position: relative;
+        }
+
+        .dimension {
+            position: absolute;
+            background: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #4A00E0;
+            font-weight: bold;
+        }
+
+        .length {
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .width {
+            top: 50%;
+            right: -45px;
+            transform: translateY(-50%);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid #e0e0ff;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            background: #e6f7ff;
+            border-color: #4A00E0;
+        }
+
+        .option.selected {
+            background: #d1e8ff;
+            border-color: #4A00E0;
+            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.2);
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+
+        .incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        button {
+            background: #4A00E0;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background: #3800b0;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .progress-container {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .progress-container h2 {
+            color: #4A00E0;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 25px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4A00E0, #8E2DE2);
+            border-radius: 12px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .score-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4A00E0;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        .bounce {
+            animation: bounce 1s;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+                <div>
+                    <h1>Math Adventure for Grade 4</h1>
+                    <p class="subtitle">Learn Perimeter, Area and Geometry with Fun Interactive Challenges!</p>
+                </div>
+                <i class="fas fa-shapes"></i>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="chapters-panel">
+                <h2>Math Chapters</h2>
+                <div class="chapter-grid">
+                    <div class="chapter-card active" data-chapter="1">
+                        <i class="fas fa-ruler-combined"></i>
+                        <h3>Perimeter</h3>
+                        <p>Measure boundaries</p>
+                    </div>
+                    <div class="chapter-card" data-chapter="2">
+                        <i class="fas fa-border-all"></i>
+                        <h3>Area</h3>
+                        <p>Calculate space</p>
+                    </div>
+                    <div class="chapter-card" data-chapter="3">
+                        <i class="fas fa-shapes"></i>
+                        <h3>Shapes</h3>
+                        <p>Triangles & Circles</p>
+                    </div>
+                    <div class="chapter-card" data-chapter="4">
+                        <i class="fas fa-cube"></i>
+                        <h3>3D Objects</h3>
+                        <p>Volume & Surface</p>
+                    </div>
+                    <div class="chapter-card" data-chapter="5">
+                        <i class="fas fa-puzzle-piece"></i>
+                        <h3>Patterns</h3>
+                        <p>Sequences & Logic</p>
+                    </div>
+                    <div class="chapter-card" data-chapter="6">
+                        <i class="fas fa-balance-scale"></i>
+                        <h3>Measurement</h3>
+                        <p>Units & Conversion</p>
+                    </div>
+                    <div class="chapter-card" data-chapter="7">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Fractions</h3>
+                        <p>Parts of a whole</p>
+                    </div>
+                    <div class="chapter-card" data-chapter="8">
+                        <i class="fas fa-sort-amount-up"></i>
+                        <h3>Decimals</h3>
+                        <p>Working with points</p>
+                    </div>
+                    <div class="chapter-card" data-chapter="9">
+                        <i class="fas fa-clock"></i>
+                        <h3>Time & Money</h3>
+                        <p>Practical math</p>
+                    </div>
+                    <div class="chapter-card" data-chapter="10">
+                        <i class="fas fa-brain"></i>
+                        <h3>Word Problems</h3>
+                        <p>Real-life challenges</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="questions-panel">
+                <h2>Perimeter Challenges <i class="fas fa-ruler-combined"></i></h2>
+                
+                <!-- Question 1 -->
+                <div class="question-container">
+                    <div class="question-header">
+                        <div class="question-number">Question 1</div>
+                        <div class="difficulty">★ Easy</div>
+                    </div>
+                    <div class="question-text">
+                        Liam wants to put a fence around his garden. The garden is 5 meters long and 3 meters wide. What is the perimeter of the garden?
+                    </div>
+                    <div class="diagram-container">
+                        <div class="shape">
+                            <div class="rectangle">
+                                <div class="dimension length">5 m</div>
+                                <div class="dimension width">3 m</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="options">
+                        <div class="option" data-value="16">16 meters</div>
+                        <div class="option" data-value="15">15 meters</div>
+                        <div class="option" data-value="8">8 meters</div>
+                        <div class="option" data-value="30">30 meters</div>
+                    </div>
+                    <div class="feedback correct">
+                        <i class="fas fa-check-circle"></i> Correct! Perimeter = 2 × (Length + Width) = 2 × (5 + 3) = 16 meters
+                    </div>
+                    <div class="feedback incorrect">
+                        <i class="fas fa-times-circle"></i> That's not quite right. Remember: Perimeter = 2 × (Length + Width)
+                    </div>
+                    <button class="check-answer">Check Answer</button>
+                </div>
+                
+                <!-- Question 2 -->
+                <div class="question-container">
+                    <div class="question-header">
+                        <div class="question-number">Question 2</div>
+                        <div class="difficulty">★★ Medium</div>
+                    </div>
+                    <div class="question-text">
+                        A rectangular playground is 12 meters long and 8 meters wide. What is the perimeter of the playground?
+                    </div>
+                    <div class="diagram-container">
+                        <div class="shape">
+                            <div class="rectangle">
+                                <div class="dimension length">12 m</div>
+                                <div class="dimension width">8 m</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="options">
+                        <div class="option" data-value="40">40 meters</div>
+                        <div class="option" data-value="96">96 meters</div>
+                        <div class="option" data-value="20">20 meters</div>
+                        <div class="option" data-value="48">48 meters</div>
+                    </div>
+                    <div class="feedback correct">
+                        <i class="fas fa-check-circle"></i> Great job! Perimeter = 2 × (12 + 8) = 2 × 20 = 40 meters
+                    </div>
+                    <div class="feedback incorrect">
+                        <i class="fas fa-times-circle"></i> Not quite. Remember to add both sides and multiply by 2!
+                    </div>
+                    <button class="check-answer">Check Answer</button>
+                </div>
+                
+                <!-- Question 3 -->
+                <div class="question-container">
+                    <div class="question-header">
+                        <div class="question-number">Question 3</div>
+                        <div class="difficulty">★ Easy</div>
+                    </div>
+                    <div class="question-text">
+                        A square has sides of 6 cm each. What is the perimeter of the square?
+                    </div>
+                    <div class="diagram-container">
+                        <div class="shape">
+                            <div class="rectangle" style="width: 150px; height: 150px;">
+                                <div class="dimension length" style="top: -30px; left: 50%; transform: translateX(-50%);">6 cm</div>
+                                <div class="dimension width" style="top: 50%; right: -45px; transform: translateY(-50%);">6 cm</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="options">
+                        <div class="option" data-value="24">24 cm</div>
+                        <div class="option" data-value="36">36 cm</div>
+                        <div class="option" data-value="12">12 cm</div>
+                        <div class="option" data-value="30">30 cm</div>
+                    </div>
+                    <div class="feedback correct">
+                        <i class="fas fa-check-circle"></i> Excellent! Perimeter of square = 4 × side = 4 × 6 = 24 cm
+                    </div>
+                    <div class="feedback incorrect">
+                        <i class="fas fa-times-circle"></i> Let's try again. A square has four equal sides!
+                    </div>
+                    <button class="check-answer">Check Answer</button>
+                </div>
+                
+                <!-- Question 4 -->
+                <div class="question-container">
+                    <div class="question-header">
+                        <div class="question-number">Question 4</div>
+                        <div class="difficulty">★★★ Hard</div>
+                    </div>
+                    <div class="question-text">
+                        Emma has a rectangular painting with a perimeter of 36 cm. If the painting is 10 cm long, how wide is it?
+                    </div>
+                    <div class="diagram-container">
+                        <div class="shape">
+                            <div class="rectangle">
+                                <div class="dimension length">10 cm</div>
+                                <div class="dimension width">? cm</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="options">
+                        <div class="option" data-value="8">8 cm</div>
+                        <div class="option" data-value="10">10 cm</div>
+                        <div class="option" data-value="6">6 cm</div>
+                        <div class="option" data-value="12">12 cm</div>
+                    </div>
+                    <div class="feedback correct">
+                        <i class="fas fa-check-circle"></i> Perfect! Perimeter = 2×(L+W) → 36 = 2×(10+W) → 18 = 10+W → W = 8 cm
+                    </div>
+                    <div class="feedback incorrect">
+                        <i class="fas fa-times-circle"></i> Almost! Use the formula: Perimeter = 2×(Length + Width)
+                    </div>
+                    <button class="check-answer">Check Answer</button>
+                </div>
+                
+                <div class="controls">
+                    <button id="prev-btn"><i class="fas fa-arrow-left"></i> Previous</button>
+                    <button id="next-btn">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <h2>Your Progress</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 20%"></div>
+            </div>
+            <div class="score-display">
+                <i class="fas fa-star"></i> Completed: 2 of 10 questions <i class="fas fa-star"></i>
+            </div>
+        </div>
+
+        <footer>
+            <p>Math Adventure for Grade 4 | Interactive Learning Platform | © 2023 All Rights Reserved</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chapter selection
+            const chapterCards = document.querySelectorAll('.chapter-card');
+            chapterCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    chapterCards.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    const chapter = this.getAttribute('data-chapter');
+                    // In a complete implementation, this would load the selected chapter
+                    document.querySelector('.questions-panel h2').innerHTML = 
+                        `${this.querySelector('h3').textContent} Challenges <i class="${this.querySelector('i').className}"></i>`;
+                });
+            });
+
+            // Option selection
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from siblings
+                    this.parentElement.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                });
+            });
+
+            // Check answer buttons
+            const checkButtons = document.querySelectorAll('.check-answer');
+            checkButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const container = this.closest('.question-container');
+                    const selectedOption = container.querySelector('.option.selected');
+                    
+                    if (!selectedOption) {
+                        alert('Please select an answer!');
+                        return;
+                    }
+                    
+                    const feedbacks = container.querySelectorAll('.feedback');
+                    feedbacks.forEach(fb => fb.style.display = 'none');
+                    
+                    // In a real app, we would check against the correct answer
+                    // For demo, we'll simulate correctness based on data-value
+                    const isCorrect = parseInt(selectedOption.getAttribute('data-value')) < 30;
+                    
+                    if (isCorrect) {
+                        container.querySelector('.feedback.correct').style.display = 'block';
+                        selectedOption.classList.add('correct-feedback');
+                    } else {
+                        container.querySelector('.feedback.incorrect').style.display = 'block';
+                        selectedOption.classList.add('incorrect-feedback');
+                    }
+                    
+                    // Update progress bar
+                    document.getElementById('progress-fill').style.width = '40%';
+                });
+            });
+
+            // Navigation buttons
+            document.getElementById('prev-btn').addEventListener('click', function() {
+                alert('Previous question would be shown here in a complete implementation.');
+            });
+            
+            document.getElementById('next-btn').addEventListener('click', function() {
+                alert('Next question would be shown here in a complete implementation.');
+            });
+
+            // Initial animation for options
+            setTimeout(() => {
+                document.querySelectorAll('.option').forEach((option, index) => {
+                    setTimeout(() => {
+                        option.classList.add('bounce');
+                    }, 200 * index);
+                });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
