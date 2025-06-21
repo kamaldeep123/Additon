@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 4 Math Practice - Area and Perimeter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .navigation {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .nav-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        .nav-btn.active {
+            background: #28a745;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .chapter-menu {
+            text-align: center;
+        }
+
+        .chapter-menu h2 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .chapter-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .chapter-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            border: none;
+            padding: 20px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+            min-width: 200px;
+        }
+
+        .chapter-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .question-container {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        .question-header {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .question-number {
+            color: #007bff;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .question-image {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .question-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+        }
+
+        .answer-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .answer-input {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .answer-input input {
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 200px;
+            text-align: center;
+        }
+
+        .answer-input input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+        }
+
+        .check-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .question-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .nav-question-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .nav-question-btn:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .nav-question-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .chapter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .chapter-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .question-navigation {
+                flex-direction: column;
+            }
+
+            .nav-question-btn {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Grade 4 Math Practice</h1>
+            <p>Area and Perimeter Questions with Visual Diagrams</p>
+        </div>
+
+        <div class="navigation">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showHome()">Home</button>
+                <button class="nav-btn" onclick="showChapter('perimeter')">Chapter 1: Perimeter</button>
+                <button class="nav-btn" onclick="showChapter('area')">Chapter 2: Area</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Home Screen -->
+            <div id="home" class="chapter-menu">
+                <h2>Choose a Chapter to Practice</h2>
+                <div class="chapter-buttons">
+                    <button class="chapter-btn" onclick="showChapter('perimeter')">
+                        Chapter 1: Perimeter<br>
+                        <small>10 Questions</small>
+                    </button>
+                    <button class="chapter-btn" onclick="showChapter('area')">
+                        Chapter 2: Area<br>
+                        <small>10 Questions</small>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Container -->
+            <div id="question-container" class="question-container">
+                <div class="question-header">
+                    <div class="question-number" id="question-number">Question 1 of 10</div>
+                    <div class="question-text" id="question-text"></div>
+                </div>
+
+                <div class="question-image">
+                    <img id="question-image" src="" alt="Question Diagram">
+                </div>
+
+                <div class="answer-section">
+                    <div class="answer-input">
+                        <input type="text" id="answer-input" placeholder="Enter your answer">
+                        <button class="check-btn" onclick="checkAnswer()">Check Answer</button>
+                    </div>
+                    <div id="feedback" class="feedback" style="display: none;"></div>
+                </div>
+
+                <div class="question-navigation">
+                    <button class="nav-question-btn" id="prev-btn" onclick="previousQuestion()" disabled>Previous</button>
+                    <button class="back-btn" onclick="showHome()">Back to Chapters</button>
+                    <button class="nav-question-btn" id="next-btn" onclick="nextQuestion()">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Question data
+        const questions = {
+            perimeter: [
+                {
+                    text: "A rectangular garden is 12 meters long and 8 meters wide. What is the perimeter of the garden?",
+                    image: "images/perimeter_rectangle_1.png",
+                    answer: "40",
+                    unit: "meters"
+                },
+                {
+                    text: "A square playground has sides that are 15 feet long. What is the perimeter of the playground?",
+                    image: "images/perimeter_square_1.png",
+                    answer: "60",
+                    unit: "feet"
+                },
+                {
+                    text: "A triangular park has sides measuring 10 meters, 12 meters, and 15 meters. What is the perimeter of the park?",
+                    image: "images/perimeter_triangle_1.png",
+                    answer: "37",
+                    unit: "meters"
+                },
+                {
+                    text: "A rectangular swimming pool is 20 feet long and 10 feet wide. What is the perimeter of the pool?",
+                    image: "images/perimeter_rectangle_2.png",
+                    answer: "60",
+                    unit: "feet"
+                },
+                {
+                    text: "A hexagonal table has sides that are all 50 cm long. What is the perimeter of the table?",
+                    image: "images/perimeter_hexagon_1.png",
+                    answer: "300",
+                    unit: "cm"
+                },
+                {
+                    text: "A picture frame is 25 cm long and 15 cm wide. What is the perimeter of the picture frame?",
+                    image: "images/perimeter_rectangle_3.png",
+                    answer: "80",
+                    unit: "cm"
+                },
+                {
+                    text: "A classroom blackboard is 3 meters long and 1 meter wide. What is the perimeter of the blackboard?",
+                    image: "images/perimeter_rectangle_4.png",
+                    answer: "8",
+                    unit: "meters"
+                },
+                {
+                    text: "A square-shaped window has a side length of 4 feet. What is the perimeter of the window?",
+                    image: "images/perimeter_square_2.png",
+                    answer: "16",
+                    unit: "feet"
+                },
+                {
+                    text: "An irregular shape has sides measuring 3cm, 4cm, 2cm, 5cm, 1cm, and 6cm. What is its perimeter?",
+                    image: "images/perimeter_irregular_1.png",
+                    answer: "21",
+                    unit: "cm"
+                },
+                {
+                    text: "A rectangular field is 50 meters long and 30 meters wide. What is the perimeter of the field?",
+                    image: "images/perimeter_rectangle_5.png",
+                    answer: "160",
+                    unit: "meters"
+                }
+            ],
+            area: [
+                {
+                    text: "A rectangular carpet is 9 meters long and 6 meters wide. What is the area of the carpet?",
+                    image: "images/area_rectangle_1.png",
+                    answer: "54",
+                    unit: "sq. meters"
+                },
+                {
+                    text: "A square tile has sides that are 10 cm long. What is the area of the tile?",
+                    image: "images/area_square_1.png",
+                    answer: "100",
+                    unit: "sq. cm"
+                },
+                {
+                    text: "A rectangular swimming pool is 25 feet long and 12 feet wide. What is the area of the pool?",
+                    image: "images/area_rectangle_2.png",
+                    answer: "300",
+                    unit: "sq. feet"
+                },
+                {
+                    text: "A classroom floor is 8 meters long and 7 meters wide. What is the area of the floor?",
+                    image: "images/area_rectangle_3.png",
+                    answer: "56",
+                    unit: "sq. meters"
+                },
+                {
+                    text: "A square garden has sides that are 18 feet long. What is the area of the garden?",
+                    image: "images/area_square_2.png",
+                    answer: "324",
+                    unit: "sq. feet"
+                },
+                {
+                    text: "A rectangular painting is 40 cm long and 20 cm wide. What is the area of the painting?",
+                    image: "images/area_rectangle_4.png",
+                    answer: "800",
+                    unit: "sq. cm"
+                },
+                {
+                    text: "A book cover is 30 cm long and 20 cm wide. What is the area of the book cover?",
+                    image: "images/area_rectangle_5.png",
+                    answer: "600",
+                    unit: "sq. cm"
+                },
+                {
+                    text: "A rectangular piece of paper is 11 inches long and 8 inches wide. What is the area of the paper?",
+                    image: "images/area_rectangle_6.png",
+                    answer: "88",
+                    unit: "sq. inches"
+                },
+                {
+                    text: "An irregular shape is made of 15 unit squares. What is its area?",
+                    image: "images/area_irregular_1.png",
+                    answer: "15",
+                    unit: "sq. units"
+                },
+                {
+                    text: "A rectangular table is 2 meters long and 1 meter wide. What is the area of the table?",
+                    image: "images/area_rectangle_7.png",
+                    answer: "2",
+                    unit: "sq. meters"
+                }
+            ]
+        };
+
+        let currentChapter = '';
+        let currentQuestionIndex = 0;
+        let answered = false;
+
+        function showHome() {
+            document.getElementById('home').style.display = 'block';
+            document.getElementById('question-container').style.display = 'none';
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.nav-btn').classList.add('active');
+        }
+
+        function showChapter(chapter) {
+            currentChapter = chapter;
+            currentQuestionIndex = 0;
+            answered = false;
+            
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('question-container').style.display = 'block';
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            if (chapter === 'perimeter') {
+                document.querySelectorAll('.nav-btn')[1].classList.add('active');
+            } else {
+                document.querySelectorAll('.nav-btn')[2].classList.add('active');
+            }
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const question = questions[currentChapter][currentQuestionIndex];
+            
+            document.getElementById('question-number').textContent = `Question ${currentQuestionIndex + 1} of 10`;
+            document.getElementById('question-text').textContent = question.text;
+            document.getElementById('question-image').src = question.image;
+            document.getElementById('answer-input').value = '';
+            document.getElementById('feedback').style.display = 'none';
+            
+            answered = false;
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-btn').disabled = currentQuestionIndex === questions[currentChapter].length - 1;
+        }
+
+        function checkAnswer() {
+            if (answered) return;
+            
+            const userAnswer = document.getElementById('answer-input').value.trim();
+            const correctAnswer = questions[currentChapter][currentQuestionIndex].answer;
+            const unit = questions[currentChapter][currentQuestionIndex].unit;
+            
+            const feedback = document.getElementById('feedback');
+            feedback.style.display = 'block';
+            
+            if (userAnswer === correctAnswer) {
+                feedback.textContent = `Correct! The answer is ${correctAnswer} ${unit}.`;
+                feedback.className = 'feedback correct';
+            } else {
+                feedback.textContent = `Incorrect. The correct answer is ${correctAnswer} ${unit}.`;
+                feedback.className = 'feedback incorrect';
+            }
+            
+            answered = true;
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions[currentChapter].length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        // Allow Enter key to check answer
+        document.getElementById('answer-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // Initialize the page
+        showHome();
+    </script>
+</body>
+</html>
+
