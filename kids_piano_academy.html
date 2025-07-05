@@ -353,6 +353,41 @@
             }
         }
 
+        .audio-init-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .audio-init-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.5em;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .audio-init-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -386,6 +421,12 @@
     </style>
 </head>
 <body>
+    <div class="audio-init-overlay" id="audioInitOverlay">
+        <h2>🎹 Welcome to Kids Piano Academy!</h2>
+        <p>Tap the button below to enable sound and start your musical journey!</p>
+        <button class="audio-init-btn" onclick="initializeAudio()">🎵 Enable Sound & Play!</button>
+    </div>
+    
     <div class="floating-notes" id="floatingNotes"></div>
     
     <div class="container">
@@ -489,12 +530,44 @@
         let score = 0;
         let totalNotes = 0;
         let correctNotes = 0;
+        let audioInitialized = false;
 
-        // Initialize audio context
+        // Initialize audio context with mobile support
         function initAudioContext() {
             if (!audioContext) {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
             }
+            
+            // Resume audio context if suspended (required for mobile)
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }
+
+        // Initialize audio for mobile devices
+        function initializeAudio() {
+            initAudioContext();
+            
+            // Test audio by playing a silent note
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.001, audioContext.currentTime);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+            
+            audioInitialized = true;
+            
+            // Hide overlay
+            document.getElementById('audioInitOverlay').style.display = 'none';
+            
+            // Show welcome message
+            document.getElementById('feedbackArea').innerHTML = '<p>🎵 Audio enabled! Ready to play piano!</p>';
         }
 
         // Generate piano keyboard
@@ -533,7 +606,18 @@
 
         // Play note with Web Audio API
         function playNote(note) {
+            // Check if audio is initialized (required for mobile)
+            if (!audioInitialized) {
+                document.getElementById('feedbackArea').innerHTML = '<p>🎵 Please tap "Enable Sound" first!</p>';
+                return;
+            }
+            
             initAudioContext();
+            
+            // Double-check audio context state
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
             
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
@@ -759,6 +843,15 @@
 
         // Initialize the piano
         generateKeyboard();
+        
+        // Auto-hide overlay on desktop (where audio typically works without user interaction)
+        if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            setTimeout(() => {
+                if (!audioInitialized) {
+                    initializeAudio();
+                }
+            }, 1000);
+        }
     </script>
 </body>
 </html>
