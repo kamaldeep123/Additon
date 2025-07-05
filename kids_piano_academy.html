@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Piano Academy - Learn Piano the Fun Way!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #f0f0f0;
+            margin-bottom: 20px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .piano-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: fadeInRight 1s ease-out;
+        }
+
+        .piano-keyboard {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            user-select: none;
+        }
+
+        .piano-key {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            font-weight: bold;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            padding-bottom: 10px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .white-key {
+            width: 50px;
+            height: 200px;
+            background: linear-gradient(to bottom, #fff 0%, #f0f0f0 100%);
+            border: 2px solid #ccc;
+            border-radius: 0 0 8px 8px;
+            margin: 0 1px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .black-key {
+            width: 35px;
+            height: 130px;
+            background: linear-gradient(to bottom, #333 0%, #000 100%);
+            border-radius: 0 0 6px 6px;
+            position: absolute;
+            z-index: 2;
+            color: white;
+            font-size: 0.8em;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .piano-key:hover {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .piano-key.active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .white-key.active {
+            background: linear-gradient(to bottom, #e0e0e0 0%, #d0d0d0 100%);
+        }
+
+        .black-key.active {
+            background: linear-gradient(to bottom, #555 0%, #333 100%);
+        }
+
+        .lessons-panel {
+            margin-bottom: 30px;
+        }
+
+        .lessons-panel h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .lesson-card {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .lesson-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .lesson-card p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .practice-mode {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .practice-mode h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .practice-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4299e1 0%, #2b6cb0 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .note-display {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 3px solid #e2e8f0;
+        }
+
+        .current-note {
+            font-size: 3em;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .note-name {
+            font-size: 1.5em;
+            color: #4a5568;
+        }
+
+        .feedback-area {
+            background: #f0fff4;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feedback-correct {
+            background: #f0fff4;
+            color: #22543d;
+            border: 2px solid #68d391;
+        }
+
+        .feedback-incorrect {
+            background: #fff5f5;
+            color: #742a2a;
+            border: 2px solid #fc8181;
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .star {
+            width: 30px;
+            height: 30px;
+            background: #e2e8f0;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            transition: all 0.3s ease;
+        }
+
+        .star.filled {
+            background: #ffd700;
+            animation: starPulse 0.5s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes starPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .floating-notes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .floating-note {
+            position: absolute;
+            font-size: 2em;
+            color: rgba(255, 255, 255, 0.7);
+            animation: floatUp 3s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .piano-keyboard {
+                overflow-x: auto;
+                justify-content: flex-start;
+            }
+            
+            .white-key {
+                width: 40px;
+                height: 160px;
+            }
+            
+            .black-key {
+                width: 28px;
+                height: 100px;
+            }
+            
+            .practice-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-notes" id="floatingNotes"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🎹 Kids Piano Academy</h1>
+            <p>Learn piano the fun way with interactive lessons and practice!</p>
+        </div>
+
+        <div class="main-content">
+            <div class="piano-section">
+                <div class="note-display">
+                    <div class="current-note" id="currentNote">♪</div>
+                    <div class="note-name" id="noteName">Press a key to start!</div>
+                </div>
+
+                <div class="piano-keyboard" id="pianoKeyboard">
+                    <!-- Piano keys will be generated by JavaScript -->
+                </div>
+
+                <div class="practice-mode">
+                    <h3>🎯 Practice Mode</h3>
+                    <p>Press the highlighted key to practice!</p>
+                    <div class="practice-controls">
+                        <button class="btn btn-primary" onclick="startPractice()">Start Practice</button>
+                        <button class="btn btn-secondary" onclick="stopPractice()">Stop</button>
+                    </div>
+                </div>
+
+                <div class="feedback-area" id="feedbackArea">
+                    <p>🎵 Ready to play? Choose a lesson or start practicing!</p>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div class="stars" id="starsContainer">
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                    <div class="star"></div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="lessons-panel">
+                    <h2>🎓 Lessons</h2>
+                    
+                    <div class="lesson-card" onclick="startLesson(1)">
+                        <h3>🌟 Basic Notes</h3>
+                        <p>Learn the white keys: C, D, E, F, G, A, B</p>
+                    </div>
+                    
+                    <div class="lesson-card" onclick="startLesson(2)">
+                        <h3>🎵 Simple Melodies</h3>
+                        <p>Play "Mary Had a Little Lamb" and "Twinkle Twinkle"</p>
+                    </div>
+                    
+                    <div class="lesson-card" onclick="startLesson(3)">
+                        <h3>🎶 Rhythm Training</h3>
+                        <p>Learn to play with proper timing</p>
+                    </div>
+                    
+                    <div class="lesson-card" onclick="startLesson(4)">
+                        <h3>🎹 Both Hands</h3>
+                        <p>Coordinate left and right hand playing</p>
+                    </div>
+                    
+                    <div class="lesson-card" onclick="startLesson(5)">
+                        <h3>🌈 Advanced Songs</h3>
+                        <p>Play complete songs with both hands</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Piano keyboard setup
+        const notes = [
+            { note: 'C', type: 'white', frequency: 261.63 },
+            { note: 'C#', type: 'black', frequency: 277.18 },
+            { note: 'D', type: 'white', frequency: 293.66 },
+            { note: 'D#', type: 'black', frequency: 311.13 },
+            { note: 'E', type: 'white', frequency: 329.63 },
+            { note: 'F', type: 'white', frequency: 349.23 },
+            { note: 'F#', type: 'black', frequency: 369.99 },
+            { note: 'G', type: 'white', frequency: 392.00 },
+            { note: 'G#', type: 'black', frequency: 415.30 },
+            { note: 'A', type: 'white', frequency: 440.00 },
+            { note: 'A#', type: 'black', frequency: 466.16 },
+            { note: 'B', type: 'white', frequency: 493.88 },
+            { note: 'C2', type: 'white', frequency: 523.25 }
+        ];
+
+        let audioContext = null;
+        let currentLesson = null;
+        let practiceMode = false;
+        let currentPracticeNote = null;
+        let score = 0;
+        let totalNotes = 0;
+        let correctNotes = 0;
+
+        // Initialize audio context
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Generate piano keyboard
+        function generateKeyboard() {
+            const keyboard = document.getElementById('pianoKeyboard');
+            keyboard.innerHTML = '';
+            
+            const whiteKeys = notes.filter(note => note.type === 'white');
+            const blackKeys = notes.filter(note => note.type === 'black');
+            
+            whiteKeys.forEach((note, index) => {
+                const key = document.createElement('div');
+                key.className = 'piano-key white-key';
+                key.dataset.note = note.note;
+                key.dataset.frequency = note.frequency;
+                key.textContent = note.note;
+                key.addEventListener('click', () => playNote(note));
+                keyboard.appendChild(key);
+                
+                // Add black keys
+                if (index < blackKeys.length && (index === 0 || index === 1 || index === 3 || index === 4 || index === 5)) {
+                    const blackKeyIndex = [0, 1, 3, 4, 5][index];
+                    if (blackKeys[blackKeyIndex]) {
+                        const blackKey = document.createElement('div');
+                        blackKey.className = 'piano-key black-key';
+                        blackKey.dataset.note = blackKeys[blackKeyIndex].note;
+                        blackKey.dataset.frequency = blackKeys[blackKeyIndex].frequency;
+                        blackKey.textContent = blackKeys[blackKeyIndex].note;
+                        blackKey.addEventListener('click', () => playNote(blackKeys[blackKeyIndex]));
+                        blackKey.style.left = (index * 52 + 35) + 'px';
+                        keyboard.appendChild(blackKey);
+                    }
+                }
+            });
+        }
+
+        // Play note with Web Audio API
+        function playNote(note) {
+            initAudioContext();
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(note.frequency, audioContext.currentTime);
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 1);
+            
+            // Visual feedback
+            const key = document.querySelector(`[data-note="${note.note}"]`);
+            if (key) {
+                key.classList.add('active');
+                setTimeout(() => key.classList.remove('active'), 150);
+            }
+            
+            // Update display
+            updateNoteDisplay(note);
+            
+            // Check if in practice mode
+            if (practiceMode && currentPracticeNote) {
+                checkPracticeNote(note);
+            }
+            
+            // Create floating note animation
+            createFloatingNote(note.note);
+        }
+
+        // Update note display
+        function updateNoteDisplay(note) {
+            document.getElementById('currentNote').textContent = '♪';
+            document.getElementById('noteName').textContent = note.note;
+        }
+
+        // Create floating note animation
+        function createFloatingNote(noteName) {
+            const floatingNote = document.createElement('div');
+            floatingNote.className = 'floating-note';
+            floatingNote.textContent = '♪';
+            floatingNote.style.left = Math.random() * window.innerWidth + 'px';
+            floatingNote.style.top = window.innerHeight + 'px';
+            
+            document.getElementById('floatingNotes').appendChild(floatingNote);
+            
+            setTimeout(() => {
+                floatingNote.remove();
+            }, 3000);
+        }
+
+        // Start practice mode
+        function startPractice() {
+            practiceMode = true;
+            score = 0;
+            totalNotes = 0;
+            correctNotes = 0;
+            updateProgress();
+            nextPracticeNote();
+            
+            document.getElementById('feedbackArea').innerHTML = '<p>🎯 Great! Press the highlighted key!</p>';
+            document.getElementById('feedbackArea').className = 'feedback-area';
+        }
+
+        // Stop practice mode
+        function stopPractice() {
+            practiceMode = false;
+            currentPracticeNote = null;
+            
+            // Remove highlights
+            document.querySelectorAll('.piano-key').forEach(key => {
+                key.style.boxShadow = '';
+                key.style.background = '';
+            });
+            
+            document.getElementById('feedbackArea').innerHTML = '<p>🎵 Practice stopped. Great job!</p>';
+            document.getElementById('feedbackArea').className = 'feedback-area';
+        }
+
+        // Generate next practice note
+        function nextPracticeNote() {
+            if (!practiceMode) return;
+            
+            const whiteNotes = notes.filter(note => note.type === 'white');
+            currentPracticeNote = whiteNotes[Math.floor(Math.random() * whiteNotes.length)];
+            
+            // Highlight the key
+            document.querySelectorAll('.piano-key').forEach(key => {
+                key.style.boxShadow = '';
+                key.style.background = '';
+            });
+            
+            const targetKey = document.querySelector(`[data-note="${currentPracticeNote.note}"]`);
+            if (targetKey) {
+                targetKey.style.boxShadow = '0 0 20px #ffd700';
+                if (targetKey.classList.contains('white-key')) {
+                    targetKey.style.background = 'linear-gradient(to bottom, #fff9c4 0%, #f0e68c 100%)';
+                }
+            }
+            
+            totalNotes++;
+        }
+
+        // Check practice note
+        function checkPracticeNote(playedNote) {
+            const feedbackArea = document.getElementById('feedbackArea');
+            
+            if (playedNote.note === currentPracticeNote.note) {
+                correctNotes++;
+                score += 10;
+                feedbackArea.innerHTML = '<p>🎉 Correct! Well done!</p>';
+                feedbackArea.className = 'feedback-area feedback-correct';
+                
+                // Add star
+                addStar();
+                
+                setTimeout(() => {
+                    nextPracticeNote();
+                    feedbackArea.innerHTML = '<p>🎯 Next note! You can do it!</p>';
+                    feedbackArea.className = 'feedback-area';
+                }, 1500);
+            } else {
+                feedbackArea.innerHTML = '<p>🤔 Try again! Look for the highlighted key.</p>';
+                feedbackArea.className = 'feedback-area feedback-incorrect';
+                
+                setTimeout(() => {
+                    feedbackArea.innerHTML = '<p>🎯 You got this! Try the highlighted key.</p>';
+                    feedbackArea.className = 'feedback-area';
+                }, 1500);
+            }
+            
+            updateProgress();
+        }
+
+        // Update progress
+        function updateProgress() {
+            const progress = totalNotes > 0 ? (correctNotes / totalNotes) * 100 : 0;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Add star
+        function addStar() {
+            const stars = document.querySelectorAll('.star');
+            const emptyStars = Array.from(stars).filter(star => !star.classList.contains('filled'));
+            
+            if (emptyStars.length > 0) {
+                emptyStars[0].classList.add('filled');
+            }
+        }
+
+        // Start lesson
+        function startLesson(lessonNumber) {
+            currentLesson = lessonNumber;
+            const feedbackArea = document.getElementById('feedbackArea');
+            
+            const lessons = {
+                1: {
+                    title: "Basic Notes",
+                    description: "Let's learn the white keys! Try pressing C, D, E, F, G, A, B",
+                    notes: ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+                },
+                2: {
+                    title: "Simple Melodies",
+                    description: "Play along with simple songs! Try: E-D-C-D-E-E-E (Mary Had a Little Lamb)",
+                    notes: ['E', 'D', 'C', 'D', 'E', 'E', 'E']
+                },
+                3: {
+                    title: "Rhythm Training",
+                    description: "Focus on timing! Play each note with steady rhythm.",
+                    notes: ['C', 'C', 'G', 'G', 'A', 'A', 'G']
+                },
+                4: {
+                    title: "Both Hands",
+                    description: "Try using both hands! Left hand: C, Right hand: G",
+                    notes: ['C', 'G', 'C', 'G', 'C', 'G']
+                },
+                5: {
+                    title: "Advanced Songs",
+                    description: "Play complete songs! Try 'Twinkle Twinkle Little Star'",
+                    notes: ['C', 'C', 'G', 'G', 'A', 'A', 'G', 'F', 'F', 'E', 'E', 'D', 'D', 'C']
+                }
+            };
+            
+            const lesson = lessons[lessonNumber];
+            if (lesson) {
+                feedbackArea.innerHTML = `<h3>🎓 ${lesson.title}</h3><p>${lesson.description}</p>`;
+                feedbackArea.className = 'feedback-area';
+                
+                // Reset stars for new lesson
+                document.querySelectorAll('.star').forEach(star => {
+                    star.classList.remove('filled');
+                });
+                
+                // Start practice with lesson notes
+                practiceMode = true;
+                score = 0;
+                totalNotes = 0;
+                correctNotes = 0;
+                updateProgress();
+            }
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', (event) => {
+            const keyMap = {
+                'a': 'C', 's': 'D', 'd': 'E', 'f': 'F', 'g': 'G', 'h': 'A', 'j': 'B', 'k': 'C2',
+                'w': 'C#', 'e': 'D#', 't': 'F#', 'y': 'G#', 'u': 'A#'
+            };
+            
+            const noteName = keyMap[event.key.toLowerCase()];
+            if (noteName) {
+                const note = notes.find(n => n.note === noteName);
+                if (note) {
+                    playNote(note);
+                }
+            }
+        });
+
+        // Initialize the piano
+        generateKeyboard();
+    </script>
+</body>
+</html>
