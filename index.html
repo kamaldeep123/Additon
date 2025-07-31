@@ -555,6 +555,24 @@
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 3rem;
             margin-top: 4rem;
+            justify-items: center;
+        }
+        
+        /* Ensure beautiful layout for 10 videos */
+        @media (min-width: 1200px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 1400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        @media (min-width: 768px) and (max-width: 1199px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2.5rem;
+            }
         }
 
         .portfolio-item {
@@ -1176,8 +1194,7 @@
             <div class="section-eyebrow">Acting Portfolio</div>
             <h2 class="section-title">Performance Showcase</h2>
             <p class="section-description">
-                Explore my range of performances showcasing versatility, emotional depth, and professional craftsmanship 
-                across dramatic short films, character work, and intensive training sessions.
+                Explore my comprehensive performance showcase featuring 10 carefully curated videos demonstrating versatility, emotional depth, and professional craftsmanship across dramatic short films, character development, and intensive training sessions.
             </p>
             
             <div class="portfolio-grid">
@@ -1219,20 +1236,6 @@
                         <p>Powerful solo performance highlighting emotional authenticity and commanding screen presence with dynamic vocal range.</p>
                         <div class="portfolio-meta">
                             <span class="portfolio-tag">Monologue</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="My Movie 19.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Scene Work</h3>
-                        <p>Dynamic scene work showcasing chemistry, timing, and professional collaboration skills with seamless partner interaction.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Ensemble</span>
                         </div>
                     </div>
                 </div>
