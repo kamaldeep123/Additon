@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - Kamal Actor Portfolio</title>
+    <meta name="description" content="Thank you for contacting Kamal. Your message has been received and will be responded to promptly.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gold: #d4af37;
+            --secondary-gold: #b8941f;
+            --accent-gold: #f4d03f;
+            --luxury-gold: #ffd700;
+            --dark-charcoal: #0a0a0a;
+            --medium-charcoal: #1a1a1a;
+            --light-charcoal: #2a2a2a;
+            --pure-white: #ffffff;
+            --off-white: #fafafa;
+            --light-gray: #e8e8e8;
+            --medium-gray: #666666;
+            --dark-gray: #333333;
+            --gradient-primary: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%);
+            --gradient-luxury: linear-gradient(135deg, var(--luxury-gold) 0%, var(--primary-gold) 50%, var(--accent-gold) 100%);
+            --gradient-dark: linear-gradient(135deg, var(--dark-charcoal) 0%, var(--medium-charcoal) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: var(--dark-gray);
+            background: var(--gradient-dark);
+            overflow-x: hidden;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thank-you-container {
+            text-align: center;
+            max-width: 800px;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .thank-you-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 70%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(5deg) scale(1.1); }
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: var(--gradient-luxury);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 20px 60px rgba(212, 175, 55, 0.3),
+                0 0 40px rgba(255, 215, 0, 0.2);
+            animation: successPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(1); box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3), 0 0 40px rgba(255, 215, 0, 0.2); }
+            100% { transform: scale(1.05); box-shadow: 0 25px 80px rgba(212, 175, 55, 0.4), 0 0 60px rgba(255, 215, 0, 0.3); }
+        }
+
+        .success-icon i {
+            font-size: 3rem;
+            color: var(--dark-charcoal);
+        }
+
+        .thank-you-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: var(--pure-white);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(45deg, var(--pure-white) 30%, var(--luxury-gold) 50%, var(--pure-white) 70%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmerText 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmerText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .thank-you-message {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .thank-you-details {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .thank-you-details h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-gold);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .thank-you-details p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.75rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.2rem 3rem;
+            background: var(--gradient-luxury);
+            color: var(--dark-charcoal);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            border-radius: 60px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 8px 32px rgba(212, 175, 55, 0.4),
+                0 0 20px rgba(255, 215, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 
+                0 15px 50px rgba(212, 175, 55, 0.5),
+                0 0 40px rgba(255, 215, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--pure-white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: none;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-gold);
+            color: var(--primary-gold);
+            box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
+        }
+
+        .countdown {
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .countdown span {
+            color: var(--primary-gold);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .thank-you-container {
+                padding: 2rem 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .success-icon {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .success-icon i {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="thank-you-container">
+        <div class="success-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        
+        <h1 class="thank-you-title">Thank You!</h1>
+        
+        <p class="thank-you-message">
+            Your message has been successfully sent. I appreciate your interest in working together 
+            and will respond to your inquiry within 24 hours.
+        </p>
+        
+        <div class="thank-you-details">
+            <h3>What Happens Next?</h3>
+            <p><i class="fas fa-envelope" style="color: var(--primary-gold); margin-right: 0.5rem;"></i>I'll review your project details and casting requirements</p>
+            <p><i class="fas fa-clock" style="color: var(--primary-gold); margin-right: 0.5rem;"></i>You'll receive a personal response within 24 hours</p>
+            <p><i class="fas fa-handshake" style="color: var(--primary-gold); margin-right: 0.5rem;"></i>We'll discuss how I can bring your vision to life</p>
+        </div>
+        
+        <div class="cta-buttons">
+            <a href="index.html" class="cta-button">
+                <i class="fas fa-home"></i>
+                Back to Portfolio
+            </a>
+            <a href="mailto:walkandreallytalk@gmail.com" class="cta-button cta-secondary">
+                <i class="fas fa-envelope"></i>
+                Direct Email
+            </a>
+        </div>
+        
+        <div class="countdown">
+            Redirecting to portfolio in <span id="countdown">10</span> seconds...
+        </div>
+    </div>
+
+    <script>
+        // Countdown timer and auto-redirect
+        let seconds = 10;
+        const countdownElement = document.getElementById('countdown');
+        
+        const timer = setInterval(() => {
+            seconds--;
+            countdownElement.textContent = seconds;
+            
+            if (seconds <= 0) {
+                clearInterval(timer);
+                window.location.href = 'index.html';
+            }
+        }, 1000);
+        
+        // Allow user to cancel auto-redirect on any interaction
+        document.addEventListener('click', () => {
+            clearInterval(timer);
+            document.querySelector('.countdown').style.display = 'none';
+        });
+        
+        document.addEventListener('keydown', () => {
+            clearInterval(timer);
+            document.querySelector('.countdown').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
