@@ -1380,8 +1380,10 @@
                     </div>
                 </div>
 
-                <form class="contact-form" name="contact" method="POST" data-netlify="true" action="/thank-you.html">
-                    <input type="hidden" name="form-name" value="contact">
+                <form class="contact-form" action="https://formspree.io/f/mwpednog" method="POST">
+                    <input type="hidden" name="_next" value="https://kamaldeep123.github.io/Additon/thank-you.html">
+                    <input type="hidden" name="_subject" value="New Casting Inquiry - Kamal Actor Portfolio">
+                    <input type="hidden" name="_captcha" value="false">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Full Name *</label>
@@ -1472,14 +1474,12 @@
             const submitBtn = document.querySelector('.submit-btn');
             const originalHTML = submitBtn.innerHTML;
             
+            // Show loading state
             submitBtn.innerHTML = '<span class="loading"></span> Sending Message...';
             submitBtn.disabled = true;
             
-            // Re-enable after timeout
-            setTimeout(() => {
-                submitBtn.innerHTML = originalHTML;
-                submitBtn.disabled = false;
-            }, 3000);
+            // Don't prevent default - let the form submit naturally
+            // Form will redirect to thank-you page on success
         });
 
         // Enhanced video lazy loading with intersection observer
