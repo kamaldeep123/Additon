@@ -10,8 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- EmailJS SDK -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <style>
         :root {
             --primary-gold: #d4af37;
@@ -1382,7 +1380,11 @@
                     </div>
                 </div>
 
-                <form class="contact-form" id="contact-form">
+                <form class="contact-form" action="https://formsubmit.co/walkandreallytalk@gmail.com" method="POST">
+                    <input type="hidden" name="_next" value="https://kamaldeep123.github.io/Additon/thank-you.html">
+                    <input type="hidden" name="_subject" value="New Casting Inquiry - Kamal Actor Portfolio">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Full Name *</label>
@@ -1468,13 +1470,8 @@
             lastScrollY = currentScrollY;
         });
 
-        // Initialize EmailJS with working public key
-        emailjs.init("xOJiZ8cLn8xsG0p3C");
-        
-        // Form submission with EmailJS
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
+        // Simple form submission with loading state - FormSubmit.co
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
             const submitBtn = document.querySelector('.submit-btn');
             const originalHTML = submitBtn.innerHTML;
             
@@ -1482,47 +1479,8 @@
             submitBtn.innerHTML = '<span class="loading"></span> Sending Message...';
             submitBtn.disabled = true;
             
-            // Get form data
-            const formData = {
-                from_name: document.getElementById('name').value,
-                from_email: document.getElementById('email').value,
-                company: document.getElementById('company').value || 'Not specified',
-                project_type: document.getElementById('role').value || 'Not specified',
-                message: document.getElementById('message').value,
-                to_email: 'walkandreallytalk@gmail.com'
-            };
-            
-            // Send email using EmailJS with working service
-            emailjs.send('service_0lznqq7', 'template_vkh2bze', formData)
-                .then(function(response) {
-                    console.log('SUCCESS!', response.status, response.text);
-                    
-                    // Show success message
-                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent Successfully!';
-                    submitBtn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
-                    
-                    // Reset form
-                    document.getElementById('contact-form').reset();
-                    
-                    // Redirect to thank you page after 2 seconds
-                    setTimeout(() => {
-                        window.location.href = 'thank-you.html';
-                    }, 2000);
-                    
-                }, function(error) {
-                    console.log('FAILED...', error);
-                    
-                    // Show error message
-                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Failed to Send - Try Again';
-                    submitBtn.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
-                    
-                    // Re-enable button after 3 seconds
-                    setTimeout(() => {
-                        submitBtn.innerHTML = originalHTML;
-                        submitBtn.style.background = '';
-                        submitBtn.disabled = false;
-                    }, 3000);
-                });
+            // Let form submit naturally to FormSubmit.co
+            // FormSubmit will handle the redirect to thank-you page
         });
 
         // Enhanced video lazy loading with intersection observer
