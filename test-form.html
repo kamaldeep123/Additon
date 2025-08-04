@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Contact Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Test Contact Form</h1>
+        <p>This form will send directly to walkandreallytalk@gmail.com</p>
+        
+        <form action="https://formsubmit.co/walkandreallytalk@gmail.com" method="POST" id="test-form">
+            <!-- FormSubmit.co configuration -->
+            <input type="hidden" name="_next" value="https://kamaldeep123.github.io/Additon/thank-you.html">
+            <input type="hidden" name="_subject" value="TEST - Contact Form from Kamal's Website">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_template" value="table">
+            
+            <div class="form-group">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="company">Company/Production</label>
+                <input type="text" id="company" name="company" placeholder="Your company or production house">
+            </div>
+            
+            <div class="form-group">
+                <label for="project">Project Type</label>
+                <select id="project" name="project">
+                    <option value="">Select Project Type</option>
+                    <option value="feature-film">Feature Film</option>
+                    <option value="tv-series">TV Series</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="independent">Independent Film</option>
+                    <option value="theater">Theater</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea id="message" name="message" required placeholder="Tell us about your project and how we can help..."></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+                Send Test Message
+            </button>
+            
+            <div id="status-message" class="status-message" style="display: none;"></div>
+        </form>
+    </div>
+
+    <script>
+        // Form submission handler
+        document.getElementById('test-form').addEventListener('submit', function(e) {
+            const submitBtn = document.querySelector('.submit-btn');
+            const statusMessage = document.getElementById('status-message');
+            
+            // Show loading state
+            submitBtn.innerHTML = '<span class="loading"></span> Sending Message...';
+            submitBtn.disabled = true;
+            
+            // Hide any previous status messages
+            statusMessage.style.display = 'none';
+            
+            // Let the form submit naturally to FormSubmit.co
+            // FormSubmit.co will handle the email sending and redirect
+        });
+    </script>
+</body>
+</html>
