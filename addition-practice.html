@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 5 Five-Digit Addition Practice</title>
+    <meta name="description" content="Practice adding five-digit numbers with this fun Grade 5 worksheet generator. Get six new questions every time you refresh and check your answers instantly.">
+    <style>
+        :root {
+            --sky-blue: #4f9cf9;
+            --deep-blue: #1f3c88;
+            --sunshine: #ffd166;
+            --mint: #5dd39e;
+            --peach: #ff8e72;
+            --card-bg: #ffffff;
+            --page-bg: linear-gradient(135deg, #eef6ff 0%, #fef6ff 100%);
+            --text-primary: #1f2933;
+            --text-secondary: #334155;
+            --shadow-soft: 0 10px 25px rgba(31, 60, 136, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', 'Segoe UI', Verdana, sans-serif;
+            color: var(--text-primary);
+            background: var(--page-bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2.5rem 1.5rem;
+        }
+
+        main {
+            width: min(1100px, 100%);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            margin-bottom: 0.5rem;
+            color: var(--deep-blue);
+        }
+
+        header p {
+            font-size: 1.05rem;
+            max-width: 720px;
+            margin: 0 auto;
+            color: var(--text-secondary);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        button {
+            border: none;
+            border-radius: 999px;
+            padding: 0.85rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            color: #fff;
+            background: var(--deep-blue);
+            box-shadow: 0 12px 18px rgba(31, 60, 136, 0.2);
+        }
+
+        button:hover,
+        button:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 22px rgba(31, 60, 136, 0.28);
+            outline: none;
+        }
+
+        #refresh-button {
+            background: var(--sky-blue);
+        }
+
+        #check-button {
+            background: var(--mint);
+            color: #0f5132;
+        }
+
+        #questions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            border: 3px solid transparent;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+            position: relative;
+        }
+
+        .question-card.correct {
+            border-color: var(--mint);
+        }
+
+        .question-card.incorrect {
+            border-color: var(--peach);
+        }
+
+        .question-card.unanswered {
+            border-color: var(--sunshine);
+        }
+
+        .question-title {
+            font-size: 1.15rem;
+            margin: 0 0 0.75rem;
+            color: var(--deep-blue);
+        }
+
+        .number-display {
+            background: rgba(79, 156, 249, 0.08);
+            border-radius: 18px;
+            padding: 0.75rem 1rem 1.1rem;
+            margin-bottom: 1.25rem;
+            font-family: 'Fira Mono', 'Courier New', monospace;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .number-display span {
+            display: block;
+            font-size: 1.35rem;
+            text-align: right;
+            letter-spacing: 0.05em;
+        }
+
+        .number-display .line {
+            height: 3px;
+            background: var(--sky-blue);
+            border-radius: 999px;
+            margin-top: 0.65rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            color: var(--text-secondary);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border-radius: 14px;
+            border: 2px solid rgba(31, 60, 136, 0.18);
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            font-family: 'Fira Mono', 'Courier New', monospace;
+            font-variant-numeric: tabular-nums;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--sky-blue);
+            box-shadow: 0 0 0 4px rgba(79, 156, 249, 0.2);
+        }
+
+        .feedback {
+            min-height: 1.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .question-card.correct .feedback {
+            color: #1b6b47;
+        }
+
+        .question-card.incorrect .feedback {
+            color: #c0362c;
+        }
+
+        .question-card.unanswered .feedback {
+            color: #a66a00;
+        }
+
+        .actions {
+            text-align: center;
+        }
+
+        .score-message {
+            text-align: center;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--deep-blue);
+            margin-top: -0.5rem;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1.75rem 1rem 2.5rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .question-card {
+                padding: 1.25rem;
+            }
+
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .controls {
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Five-Digit Addition Practice</h1>
+            <p>Solve each problem by adding the two five-digit numbers. When you're finished, tap <strong>Check Answers</strong> to see how you did. Want a brand-new set? Tap <strong>Refresh Questions</strong> for six new challenges!</p>
+        </header>
+
+        <div class="controls">
+            <button type="button" id="refresh-button">🔄 Refresh Questions</button>
+        </div>
+
+        <section aria-label="Addition practice problems">
+            <div id="questions" role="list" aria-live="polite"></div>
+
+            <div class="actions">
+                <button type="button" id="check-button">✅ Check Answers</button>
+            </div>
+            <p class="score-message" id="score-message" role="status" aria-live="polite"></p>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const PROBLEM_COUNT = 6;
+            const MIN_VALUE = 10000;
+            const MAX_VALUE = 99999;
+
+            const questionContainer = document.getElementById('questions');
+            const refreshButton = document.getElementById('refresh-button');
+            const checkButton = document.getElementById('check-button');
+            const scoreMessage = document.getElementById('score-message');
+
+            function randomFiveDigit() {
+                return Math.floor(Math.random() * (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE;
+            }
+
+            function createQuestionCard(index, topNumber, bottomNumber) {
+                const answer = topNumber + bottomNumber;
+                const card = document.createElement('article');
+                const questionTitleId = `question-title-${index}`;
+                const answerId = `answer-${index}`;
+                const feedbackId = `feedback-${index}`;
+
+                card.className = 'question-card';
+                card.setAttribute('role', 'listitem');
+                card.setAttribute('aria-labelledby', questionTitleId);
+                card.dataset.answer = answer.toString();
+
+                card.innerHTML = `
+                    <h2 class="question-title" id="${questionTitleId}">Question ${index + 1}</h2>
+                    <p class="sr-only">What is ${topNumber.toLocaleString()} plus ${bottomNumber.toLocaleString()}?</p>
+                    <div class="number-display" aria-hidden="true">
+                        <span>${topNumber.toLocaleString()}</span>
+                        <span>+ ${bottomNumber.toLocaleString()}</span>
+                        <span class="line"></span>
+                    </div>
+                    <label for="${answerId}">Your answer</label>
+                    <input type="text" id="${answerId}" inputmode="numeric" pattern="\\d*" maxlength="6" autocomplete="off" aria-describedby="${feedbackId}">
+                    <p class="feedback" id="${feedbackId}" aria-live="polite"></p>
+                `;
+
+                return card;
+            }
+
+            function generateProblems() {
+                questionContainer.innerHTML = '';
+
+                for (let i = 0; i < PROBLEM_COUNT; i += 1) {
+                    const topNumber = randomFiveDigit();
+                    const bottomNumber = randomFiveDigit();
+                    const card = createQuestionCard(i, topNumber, bottomNumber);
+                    questionContainer.appendChild(card);
+                }
+
+                scoreMessage.textContent = 'New questions are ready. Solve each one and then press "Check Answers"!';
+
+                const firstInput = questionContainer.querySelector('input');
+                if (firstInput) {
+                    firstInput.focus();
+                }
+            }
+
+            function formatNumber(value) {
+                return Number(value).toLocaleString();
+            }
+
+            function checkAnswers() {
+                const cards = questionContainer.querySelectorAll('.question-card');
+                let correctCount = 0;
+                let unansweredCount = 0;
+
+                cards.forEach((card) => {
+                    const input = card.querySelector('input');
+                    const feedback = card.querySelector('.feedback');
+                    const correctAnswer = Number(card.dataset.answer);
+                    const rawValue = input.value.trim();
+                    const normalizedValue = rawValue.replace(/,/g, '');
+
+                    card.classList.remove('correct', 'incorrect', 'unanswered');
+
+                    if (!normalizedValue) {
+                        unansweredCount += 1;
+                        card.classList.add('unanswered');
+                        feedback.textContent = 'Whoops! Try adding these numbers and type your answer above.';
+                        return;
+                    }
+
+                    if (!/^\d+$/.test(normalizedValue)) {
+                        unansweredCount += 1;
+                        card.classList.add('unanswered');
+                        feedback.textContent = 'Use digits only—no symbols or letters.';
+                        return;
+                    }
+
+                    const studentAnswer = Number(normalizedValue);
+
+                    if (studentAnswer === correctAnswer) {
+                        correctCount += 1;
+                        card.classList.add('correct');
+                        feedback.textContent = 'Great job! That answer is correct.';
+                    } else {
+                        card.classList.add('incorrect');
+                        feedback.textContent = `Keep practicing! The correct answer is ${formatNumber(correctAnswer)}.`;
+                    }
+                });
+
+                if (cards.length === 0) {
+                    scoreMessage.textContent = '';
+                    return;
+                }
+
+                if (correctCount === PROBLEM_COUNT && unansweredCount === 0) {
+                    scoreMessage.textContent = 'Amazing! You solved all six problems correctly! 🎉';
+                } else if (unansweredCount > 0) {
+                    const answered = PROBLEM_COUNT - unansweredCount;
+                    scoreMessage.textContent = `You checked ${answered} out of ${PROBLEM_COUNT}. Fill in the rest and try again!`;
+                } else {
+                    scoreMessage.textContent = `You got ${correctCount} out of ${PROBLEM_COUNT} correct. Review the tips and give it another go!`;
+                }
+            }
+
+            refreshButton.addEventListener('click', generateProblems);
+            checkButton.addEventListener('click', checkAnswers);
+
+            generateProblems();
+        });
+    </script>
+</body>
+</html>
