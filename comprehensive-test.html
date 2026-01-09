@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ralph Wiggum Comprehensive System Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #f0f8ff;
+        }
+        .test-section { 
+            margin: 20px 0; 
+            padding: 15px; 
+            border: 2px solid #4CAF50; 
+            border-radius: 8px;
+            background: white;
+        }
+        .pass { color: #4CAF50; font-weight: bold; }
+        .fail { color: #f44336; font-weight: bold; }
+        .info { color: #2196F3; font-weight: bold; }
+        #results { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .success { background: #d4edda; border: 2px solid #28a745; }
+        .error { background: #f8d7da; border: 2px solid #dc3545; }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover { background: #45a049; }
+        .category-test {
+            background: #e8f5e8;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧠 Ralph Wiggum System Validation</h1>
+    <p class="info">Testing all 800 questions across 8 categories with Ralph's iteration model...</p>
+    
+    <div class="test-section">
+        <h2>🔧 System Tests</h2>
+        <button onclick="runComprehensiveTest()">Run All Tests</button>
+        <button onclick="testNavigation()">Test Navigation</button>
+        <button onclick="testRandomQuestions()">Test Random Questions</button>
+        <div id="results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Live Category Testing</h2>
+        <div id="category-tests"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎮 Quick Navigation Test</h2>
+        <p>Test the actual website functionality:</p>
+        <button onclick="window.open('index.html', '_blank')">Open Main Website</button>
+        <button onclick="testAllCategories()">Auto-Test All Categories</button>
+    </div>
+
+    <!-- Load the same scripts as main website -->
+    <script src="questionDatabase.js"></script>
+    <script src="working.js"></script>
+    <script src="ralph-test.js"></script>
+    
+    <script>
+        function runComprehensiveTest() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p class="info">🧠 Ralph is testing everything... Please wait!</p>';
+            
+            setTimeout(() => {
+                const testPassed = ralphIterationTest();
+                
+                if (testPassed) {
+                    results.className = 'success';
+                    results.innerHTML = `
+                        <h3 class="pass">🎉 ALL TESTS PASSED!</h3>
+                        <p><strong>Ralph says:</strong> "Everything works perfect! Like my brain on a good day!"</p>
+                        <p>✅ All 8 categories loaded</p>
+                        <p>✅ All 80 sets available</p>
+                        <p>✅ All 800 questions validated</p>
+                        <p>✅ Navigation system working</p>
+                        <p>✅ Ralph's hints ready</p>
+                        <p><strong>🚀 Website is ready for kids!</strong></p>
+                    `;
+                } else {
+                    results.className = 'error';
+                    results.innerHTML = `
+                        <h3 class="fail">❌ TESTS FAILED!</h3>
+                        <p><strong>Ralph says:</strong> "Uh oh! Something's not right! Check the console!"</p>
+                        <p>Please check the browser console for detailed error information.</p>
+                    `;
+                }
+            }, 1000);
+        }
+
+        function testNavigation() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p class="info">🧪 Testing navigation functions...</p>';
+            
+            let navTests = [];
+            const functions = ['selectCategory', 'showCategorySelection', 'selectAnswer', 'submitAnswer'];
+            
+            functions.forEach(func => {
+                if (typeof window[func] === 'function') {
+                    navTests.push(`✅ ${func} - Available`);
+                } else {
+                    navTests.push(`❌ ${func} - Missing`);
+                }
+            });
+            
+            results.innerHTML = `
+                <h4>Navigation Function Tests:</h4>
+                ${navTests.map(test => `<p>${test}</p>`).join('')}
+            `;
+        }
+
+        function testRandomQuestions() {
+            const results = document.getElementById('results');
+            
+            if (typeof QuestionDatabase === 'undefined') {
+                results.innerHTML = '<p class="fail">❌ Question Database not loaded!</p>';
+                return;
+            }
+            
+            let randomTests = [];
+            const categories = ['numbers', 'additionSubtraction', 'fractions', 'shapes'];
+            
+            categories.forEach(category => {
+                if (QuestionDatabase[category] && QuestionDatabase[category].length > 0) {
+                    const set = QuestionDatabase[category][0];
+                    const question = set.questions[0];
+                    randomTests.push(`✅ ${category}: "${question.question}"`);
+                } else {
+                    randomTests.push(`❌ ${category}: No questions found`);
+                }
+            });
+            
+            results.innerHTML = `
+                <h4>Random Question Sample:</h4>
+                ${randomTests.map(test => `<p style="font-size: 14px;">${test}</p>`).join('')}
+            `;
+        }
+
+        function testAllCategories() {
+            const categoryTests = document.getElementById('category-tests');
+            categoryTests.innerHTML = '<p class="info">🔄 Testing all categories...</p>';
+            
+            const categories = [
+                {key: 'numbers', name: 'Numbers to 1000'},
+                {key: 'additionSubtraction', name: 'Addition & Subtraction'},
+                {key: 'fractions', name: 'Fractions'},
+                {key: 'shapes', name: 'Shapes & Geometry'},
+                {key: 'measurement', name: 'Measurement'},
+                {key: 'patterns', name: 'Patterns'},
+                {key: 'time', name: 'Time & Duration'},
+                {key: 'statistics', name: 'Data & Graphs'}
+            ];
+            
+            let categoryHTML = '';
+            let totalQuestions = 0;
+            
+            categories.forEach(category => {
+                if (QuestionDatabase[category.key]) {
+                    const sets = QuestionDatabase[category.key];
+                    const questionCount = sets.reduce((sum, set) => sum + (set.questions?.length || 0), 0);
+                    totalQuestions += questionCount;
+                    
+                    categoryHTML += `
+                        <div class="category-test">
+                            <strong>✅ ${category.name}</strong>
+                            <br>📊 ${sets.length} sets, ${questionCount} questions
+                            <br>🎯 Sample: "${sets[0]?.questions[0]?.question || 'No questions'}"
+                        </div>
+                    `;
+                } else {
+                    categoryHTML += `
+                        <div class="category-test" style="background: #ffeaa7;">
+                            <strong>❌ ${category.name}</strong>
+                            <br>Category not found or empty
+                        </div>
+                    `;
+                }
+            });
+            
+            categoryHTML += `
+                <div style="margin-top: 15px; padding: 10px; background: #74b9ff; color: white; border-radius: 5px;">
+                    <strong>📈 TOTAL: ${totalQuestions} questions across ${categories.length} categories</strong>
+                </div>
+            `;
+            
+            categoryTests.innerHTML = categoryHTML;
+        }
+
+        // Auto-run basic test on page load
+        window.addEventListener('load', function() {
+            console.log('🧠 Ralph: Page loaded, running basic validation...');
+            testAllCategories();
+        });
+    </script>
+</body>
+</html>

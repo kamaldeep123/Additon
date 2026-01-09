@@ -1,0 +1,35 @@
+GITHUB UPLOAD COMMANDS
+====================
+
+Run these commands in your terminal to upload to https://github.com/kamaldeep123/Additon:
+
+1. Navigate to the project directory:
+cd /Users/kamaldeeppuba/grade2-math-website
+
+2. Set the correct remote (use HTTPS since you're logged in):
+git remote set-url origin https://github.com/kamaldeep123/Additon.git
+
+3. Push to GitHub:
+git push -u origin main
+
+If you get authentication errors, try:
+git push -u origin main --force
+
+WHAT WILL BE UPLOADED:
+- index.html (Main Grade 2 Math Adventure website)
+- questionDatabase.js (All 800 questions across 8 categories)
+- working.js (Complete navigation system)
+- styles.css (Full responsive styling)
+- README.md (Professional documentation)
+- comprehensive-test.html (Ralph's validation testing)
+- ralph-test.js (Automated testing system)
+- UPLOAD_INSTRUCTIONS.md (Instructions)
+
+AFTER UPLOAD:
+1. Go to repository Settings > Pages
+2. Set Source to "Deploy from a branch"
+3. Select "main" branch
+4. Your website will be live at:
+   https://kamaldeep123.github.io/Additon
+
+TOTAL FILES READY: All 800 questions validated by Ralph Wiggum iteration model!

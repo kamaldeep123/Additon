@@ -3,1657 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kamal - Professional Actor Portfolio | Hollywood & Bollywood</title>
-    <meta name="description" content="Kamal - Professional Actor trained in Meisner Technique. Available for Hollywood and Bollywood film projects. View acting reel and contact for casting opportunities.">
-    <meta name="keywords" content="actor, Hollywood, Bollywood, Meisner technique, casting, film, professional actor, acting portfolio, Kamal actor">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-gold: #d4af37;
-            --secondary-gold: #b8941f;
-            --accent-gold: #f4d03f;
-            --luxury-gold: #ffd700;
-            --dark-charcoal: #0a0a0a;
-            --medium-charcoal: #1a1a1a;
-            --light-charcoal: #2a2a2a;
-            --pure-white: #ffffff;
-            --off-white: #fafafa;
-            --light-gray: #e8e8e8;
-            --medium-gray: #666666;
-            --dark-gray: #333333;
-            --shadow-light: rgba(212, 175, 55, 0.1);
-            --shadow-medium: rgba(212, 175, 55, 0.2);
-            --shadow-heavy: rgba(0, 0, 0, 0.3);
-            --shadow-luxury: rgba(255, 215, 0, 0.4);
-            --gradient-primary: linear-gradient(135deg, var(--primary-gold) 0%, var(--accent-gold) 100%);
-            --gradient-luxury: linear-gradient(135deg, var(--luxury-gold) 0%, var(--primary-gold) 50%, var(--accent-gold) 100%);
-            --gradient-dark: linear-gradient(135deg, var(--dark-charcoal) 0%, var(--medium-charcoal) 100%);
-            --gradient-overlay: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
-            --gradient-hero: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.05) 50%, transparent 100%);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.7;
-            color: var(--dark-gray);
-            background: var(--dark-charcoal);
-            overflow-x: hidden;
-            font-weight: 400;
-            letter-spacing: -0.02em;
-            cursor: none;
-        }
-
-        /* Custom Cursor */
-        .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--primary-gold);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: all 0.1s ease;
-            backdrop-filter: blur(2px);
-        }
-
-        .cursor-follower {
-            width: 8px;
-            height: 8px;
-            background: var(--primary-gold);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-            transition: all 0.15s ease;
-        }
-
-        @media (hover: none) {
-            body { cursor: auto; }
-            .cursor, .cursor-follower { display: none; }
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* Enhanced Typography */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 600;
-            line-height: 1.2;
-            letter-spacing: -0.03em;
-        }
-
-        .section-eyebrow {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--primary-gold);
-            margin-bottom: 1rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-eyebrow::after {
-            content: '';
-            position: absolute;
-            bottom: -0.5rem;
-            left: 0;
-            width: 3rem;
-            height: 2px;
-            background: var(--gradient-primary);
-            border-radius: 1px;
-        }
-
-        /* Advanced Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(10, 10, 26, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-            z-index: 1000;
-            padding: 1.5rem 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        nav.scrolled {
-            padding: 1rem 0;
-            background: rgba(10, 10, 26, 0.98);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        nav .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--pure-white);
-            text-decoration: none;
-            letter-spacing: 0.05em;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -0.25rem;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-primary);
-            transition: width 0.3s ease;
-        }
-
-        .logo:hover::after {
-            width: 100%;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--pure-white);
-            text-decoration: none;
-            font-weight: 400;
-            font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            position: relative;
-            padding: 0.5rem 0;
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-primary);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-gold);
-            transform: translateY(-1px);
-        }
-
-        .nav-links a:hover::before {
-            width: 100%;
-        }
-
-        /* Cinematic Hero Section */
-        .hero {
-            height: 100vh;
-            background: var(--gradient-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
-            animation: cinematicLight 12s ease-in-out infinite alternate;
-            pointer-events: none;
-        }
-
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                linear-gradient(45deg, transparent 30%, rgba(255, 215, 0, 0.05) 50%, transparent 70%),
-                linear-gradient(-45deg, transparent 30%, rgba(212, 175, 55, 0.03) 50%, transparent 70%);
-            animation: luxuryShimmer 20s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        @keyframes luxuryShimmer {
-            0%, 100% { 
-                transform: translateX(-100%) translateY(-100%) rotate(0deg);
-                opacity: 0.3;
-            }
-            50% { 
-                transform: translateX(100%) translateY(100%) rotate(180deg);
-                opacity: 0.7;
-            }
-        }
-
-        @keyframes cinematicLight {
-            0% { 
-                transform: scale(1) rotate(0deg);
-                opacity: 0.8;
-            }
-            100% { 
-                transform: scale(1.1) rotate(2deg);
-                opacity: 1;
-            }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 900px;
-        }
-
-        .hero-eyebrow {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.875rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: var(--primary-gold);
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-        }
-
-        .hero h1 {
-            font-size: clamp(3.5rem, 8vw, 6.5rem);
-            color: var(--pure-white);
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            text-shadow: 
-                0 4px 20px rgba(0, 0, 0, 0.5),
-                0 0 40px rgba(255, 215, 0, 0.3);
-            animation: fadeInUp 1s ease-out 0.4s both;
-            line-height: 0.9;
-            background: linear-gradient(45deg, var(--pure-white) 30%, var(--luxury-gold) 50%, var(--pure-white) 70%);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: fadeInUp 1s ease-out 0.4s both, shimmerText 3s ease-in-out infinite;
-        }
-
-        @keyframes shimmerText {
-            0%, 100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-
-        .hero .subtitle {
-            font-family: 'Crimson Text', serif;
-            font-size: clamp(1.5rem, 3vw, 2.25rem);
-            color: var(--light-gray);
-            margin-bottom: 2.5rem;
-            font-weight: 400;
-            font-style: italic;
-            letter-spacing: 0.02em;
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
-
-        .hero .description {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.8);
-            max-width: 700px;
-            margin: 0 auto 3.5rem;
-            line-height: 1.8;
-            font-weight: 300;
-            animation: fadeInUp 1s ease-out 0.8s both;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 1s ease-out 1s both;
-        }
-
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1.2rem 3rem;
-            background: var(--gradient-luxury);
-            color: var(--dark-charcoal);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            border-radius: 60px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 8px 32px rgba(212, 175, 55, 0.4),
-                0 0 20px rgba(255, 215, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .cta-button:hover::before {
-            left: 100%;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 
-                0 15px 50px rgba(212, 175, 55, 0.5),
-                0 0 40px rgba(255, 215, 0, 0.6),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            background: var(--gradient-primary);
-        }
-
-        .cta-secondary {
-            background: transparent;
-            color: var(--pure-white);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: none;
-        }
-
-        .cta-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--primary-gold);
-            color: var(--primary-gold);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Premium About Section */
-        .about {
-            padding: 8rem 0;
-            background: var(--pure-white);
-            position: relative;
-        }
-
-        .about::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--gradient-primary);
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
-            align-items: center;
-            margin-top: 4rem;
-        }
-
-        .about-text h2 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            color: var(--dark-charcoal);
-            margin-bottom: 2rem;
-            line-height: 1.1;
-        }
-
-        .about-text p {
-            font-size: 1.125rem;
-            line-height: 1.8;
-            margin-bottom: 1.75rem;
-            color: var(--medium-gray);
-            font-weight: 300;
-        }
-
-        .about-text p:first-of-type {
-            font-size: 1.25rem;
-            color: var(--dark-gray);
-            font-weight: 400;
-        }
-
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2.5rem;
-        }
-
-        .skill-tag {
-            background: var(--gradient-primary);
-            color: var(--dark-charcoal);
-            padding: 0.75rem 1.5rem;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 0.875rem;
-            letter-spacing: 0.05em;
-            transition: all 0.3s ease;
-            cursor: default;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
-        }
-
-        .skill-tag:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
-        }
-
-        .about-image {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-        }
-
-        .about-image::before {
-            content: '';
-            position: absolute;
-            top: -2rem;
-            left: -2rem;
-            right: 2rem;
-            bottom: 2rem;
-            background: var(--gradient-primary);
-            z-index: -1;
-            border-radius: 20px;
-            opacity: 0.1;
-        }
-
-        .about-image img {
-            width: 100%;
-            height: 500px;
-            object-fit: contain;
-            border-radius: 20px;
-            transition: transform 0.6s ease;
-        }
-
-        .about-image:hover img {
-            transform: scale(1.02);
-        }
-
-        /* Enhanced Portfolio Section */
-        .portfolio {
-            padding: 8rem 0;
-            background: var(--off-white);
-            position: relative;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            color: var(--dark-charcoal);
-            margin-bottom: 1rem;
-            line-height: 1.1;
-        }
-
-        .section-description {
-            text-align: center;
-            font-size: 1.25rem;
-            color: var(--medium-gray);
-            max-width: 700px;
-            margin: 0 auto 4rem;
-            line-height: 1.7;
-            font-weight: 300;
-        }
-
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
-            justify-items: center;
-        }
-        
-        /* Ensure beautiful layout for 10 videos */
-        @media (min-width: 1200px) {
-            .portfolio-grid {
-                grid-template-columns: repeat(3, 1fr);
-                max-width: 1400px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-        }
-        
-        @media (min-width: 768px) and (max-width: 1199px) {
-            .portfolio-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 2.5rem;
-            }
-        }
-
-        .portfolio-item {
-            background: var(--pure-white);
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 
-                0 10px 40px rgba(0, 0, 0, 0.08),
-                0 0 0 1px rgba(212, 175, 55, 0.1);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            opacity: 0;
-            animation: slideInUp 0.8s ease forwards;
-        }
-
-        .portfolio-item:nth-child(even) {
-            animation-delay: 0.2s;
-        }
-
-        .portfolio-item:nth-child(3n) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(60px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .portfolio-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--gradient-luxury);
-            opacity: 0;
-            transition: all 0.4s ease;
-            z-index: 1;
-            pointer-events: none;
-            mix-blend-mode: overlay;
-        }
-
-        .portfolio-item::after {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: var(--gradient-luxury);
-            border-radius: 26px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .portfolio-item:hover::before {
-            opacity: 0.1;
-        }
-
-        .portfolio-item:hover::after {
-            opacity: 0.6;
-        }
-
-        .portfolio-item:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 
-                0 30px 80px rgba(0, 0, 0, 0.2),
-                0 0 60px rgba(255, 215, 0, 0.3);
-        }
-
-        .portfolio-item video {
-            width: 100%;
-            height: 320px;
-            object-fit: cover;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: brightness(0.9) contrast(1.1);
-        }
-
-        .portfolio-item:hover video {
-            transform: scale(1.08);
-            filter: brightness(1) contrast(1.2) saturate(1.1);
-        }
-
-        .portfolio-content {
-            padding: 2.5rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .portfolio-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--dark-charcoal);
-            font-weight: 600;
-        }
-
-        .portfolio-content p {
-            color: var(--medium-gray);
-            line-height: 1.7;
-            font-size: 1rem;
-            font-weight: 300;
-        }
-
-        .portfolio-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--light-gray);
-        }
-
-        .portfolio-tag {
-            background: rgba(212, 175, 55, 0.1);
-            color: var(--secondary-gold);
-            padding: 0.5rem 1rem;
-            border-radius: 15px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Sophisticated Contact Section */
-        .contact {
-            padding: 8rem 0;
-            background: var(--gradient-dark);
-            color: var(--pure-white);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 70% 30%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .contact .section-title {
-            color: var(--pure-white);
-        }
-
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
-            margin-top: 4rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .contact-info h3 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--primary-gold);
-            line-height: 1.2;
-        }
-
-        .contact-info p {
-            font-size: 1.125rem;
-            line-height: 1.8;
-            margin-bottom: 1.75rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 300;
-        }
-
-        .contact-details {
-            margin-top: 3rem;
-        }
-
-        .contact-detail {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            font-size: 1.125rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .contact-detail i {
-            color: var(--primary-gold);
-            font-size: 1.25rem;
-            width: 1.5rem;
-        }
-
-        .contact-form {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 3rem;
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 2rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.75rem;
-            color: var(--primary-gold);
-            font-weight: 500;
-            font-size: 0.95rem;
-            letter-spacing: 0.05em;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            color: var(--pure-white);
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-gold);
-            background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .form-group textarea {
-            height: 140px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            background: var(--gradient-primary);
-            color: var(--dark-charcoal);
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 100%;
-            box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s ease;
-        }
-
-        .submit-btn:hover::before {
-            left: 100%;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(212, 175, 55, 0.4);
-        }
-
-        /* Enhanced Footer */
-        footer {
-            background: var(--dark-charcoal);
-            color: rgba(255, 255, 255, 0.7);
-            text-align: center;
-            padding: 3rem 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        footer p {
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        footer p:last-child {
-            color: var(--primary-gold);
-            font-weight: 500;
-        }
-
-        /* Advanced Responsive Design */
-        @media (max-width: 1024px) {
-            .container {
-                padding: 0 1.5rem;
-            }
-            
-            .about-content,
-            .contact-content {
-                gap: 4rem;
-            }
-            
-            .portfolio-grid {
-                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-                gap: 2rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .about-content,
-            .contact-content {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-            
-            .portfolio-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .cta-group {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .about,
-            .portfolio,
-            .contact {
-                padding: 5rem 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 1rem;
-            }
-            
-            .contact-form {
-                padding: 2rem;
-            }
-        }
-
-        /* Performance Optimizations */
-        .portfolio-item video {
-            will-change: transform;
-        }
-        
-        .cta-button,
-        .skill-tag,
-        .portfolio-item {
-            will-change: transform;
-        }
-
-        /* Loading States */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: var(--pure-white);
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Accessibility Enhancements */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Luxury Floating Particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--primary-gold);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: float 20s infinite linear;
-        }
-
-        .particle:nth-child(2n) {
-            background: var(--luxury-gold);
-            animation-duration: 25s;
-            width: 3px;
-            height: 3px;
-        }
-
-        .particle:nth-child(3n) {
-            background: var(--accent-gold);
-            animation-duration: 30s;
-            width: 2px;
-            height: 2px;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-10vh) translateX(100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Enhanced Scroll Animations */
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .reveal-on-scroll.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Luxury Loading Animation */
-        .luxury-loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--dark-charcoal);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s ease;
-        }
-
-        .luxury-loader.fade-out {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loader-ring {
-            width: 80px;
-            height: 80px;
-            border: 3px solid rgba(212, 175, 55, 0.2);
-            border-top: 3px solid var(--primary-gold);
-            border-radius: 50%;
-            animation: spin 1.5s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Print Styles */
-        @media print {
-            .hero {
-                height: auto;
-                padding: 2rem 0;
-            }
-            
-            nav,
-            .contact-form,
-            footer,
-            .particles,
-            .cursor,
-            .cursor-follower {
-                display: none;
-            }
-        }
-    </style>
+    <title>Grade 2 Math Adventure with Ralph Wiggum - 800 Questions!</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Luxury Loader -->
-    <div class="luxury-loader" id="loader">
-        <div class="loader-ring"></div>
-    </div>
-
-    <!-- Custom Cursor -->
-    <div class="cursor" id="cursor"></div>
-    <div class="cursor-follower" id="cursor-follower"></div>
-
-    <!-- Floating Particles -->
-    <div class="particles" id="particles"></div>
-    <!-- Navigation -->
-    <nav id="navbar">
+    <header>
         <div class="container">
-            <a href="#home" class="logo">KAMAL</a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#contact">Contact</a></li>
+            <h1>🎓 Grade 2 Math Adventure 🎓</h1>
+            <div class="ralph-intro">
+                <img src="images/ralph-wave.png" alt="Ralph Wiggum" class="ralph-avatar" onerror="this.style.display='none'">
+                <div class="speech-bubble">
+                    <p>"Hi! I'm Ralph! I made 800 math questions for you! That's like... counting to 800! Let's learn together and use my iteration model!"</p>
+                </div>
+            </div>
+            <div class="progress-tracker">
+                <h3>Your Learning Progress</h3>
+                <div id="overall-progress" class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                    <span class="progress-text">0 / 800 Questions Completed</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Selection Screen -->
+    <nav class="main-nav" id="category-selection">
+        <div class="container">
+            <h2>Choose Your Math Adventure! 🚀</h2>
+            <p class="instruction">Each category has 100 questions in 10 exciting sets!</p>
+            <ul class="nav-grid">
+                <li><button onclick="selectCategory('numbers')" class="nav-card category-btn" data-category="numbers">
+                    <span class="icon">🔢</span>
+                    <h3>Numbers to 1000</h3>
+                    <p>100 questions in 10 sets</p>
+                    <div class="category-progress">
+                        <span id="numbers-progress">0/100 completed</span>
+                        <div class="mini-progress"><div class="mini-fill" style="width: 0%"></div></div>
+                    </div>
+                </button></li>
+                
+                <li><button onclick="selectCategory('additionSubtraction')" class="nav-card category-btn" data-category="additionSubtraction">
+                    <span class="icon">➕➖</span>
+                    <h3>Addition & Subtraction</h3>
+                    <p>100 questions in 10 sets</p>
+                    <div class="category-progress">
+                        <span id="additionSubtraction-progress">0/100 completed</span>
+                        <div class="mini-progress"><div class="mini-fill" style="width: 0%"></div></div>
+                    </div>
+                </button></li>
+                
+                <li><button onclick="selectCategory('fractions')" class="nav-card category-btn" data-category="fractions">
+                    <span class="icon">🍕</span>
+                    <h3>Fractions</h3>
+                    <p>100 questions in 10 sets</p>
+                    <div class="category-progress">
+                        <span id="fractions-progress">0/100 completed</span>
+                        <div class="mini-progress"><div class="mini-fill" style="width: 0%"></div></div>
+                    </div>
+                </button></li>
+                
+                <li><button onclick="selectCategory('shapes')" class="nav-card category-btn" data-category="shapes">
+                    <span class="icon">🔷</span>
+                    <h3>Shapes & Geometry</h3>
+                    <p>100 questions in 10 sets</p>
+                    <div class="category-progress">
+                        <span id="shapes-progress">0/100 completed</span>
+                        <div class="mini-progress"><div class="mini-fill" style="width: 0%"></div></div>
+                    </div>
+                </button></li>
+                
+                <li><button onclick="selectCategory('measurement')" class="nav-card category-btn" data-category="measurement">
+                    <span class="icon">📏</span>
+                    <h3>Measurement</h3>
+                    <p>100 questions in 10 sets</p>
+                    <div class="category-progress">
+                        <span id="measurement-progress">0/100 completed</span>
+                        <div class="mini-progress"><div class="mini-fill" style="width: 0%"></div></div>
+                    </div>
+                </button></li>
+                
+                <li><button onclick="selectCategory('patterns')" class="nav-card category-btn" data-category="patterns">
+                    <span class="icon">🔄</span>
+                    <h3>Patterns</h3>
+                    <p>100 questions in 10 sets</p>
+                    <div class="category-progress">
+                        <span id="patterns-progress">0/100 completed</span>
+                        <div class="mini-progress"><div class="mini-fill" style="width: 0%"></div></div>
+                    </div>
+                </button></li>
+                
+                <li><button onclick="selectCategory('time')" class="nav-card category-btn" data-category="time">
+                    <span class="icon">⏰</span>
+                    <h3>Time & Duration</h3>
+                    <p>100 questions in 10 sets</p>
+                    <div class="category-progress">
+                        <span id="time-progress">0/100 completed</span>
+                        <div class="mini-progress"><div class="mini-fill" style="width: 0%"></div></div>
+                    </div>
+                </button></li>
+                
+                <li><button onclick="selectCategory('statistics')" class="nav-card category-btn" data-category="statistics">
+                    <span class="icon">📊</span>
+                    <h3>Data & Graphs</h3>
+                    <p>100 questions in 10 sets</p>
+                    <div class="category-progress">
+                        <span id="statistics-progress">0/100 completed</span>
+                        <div class="mini-progress"><div class="mini-fill" style="width: 0%"></div></div>
+                    </div>
+                </button></li>
             </ul>
+            
+            <div class="ralph-motivation">
+                <div class="ralph-comment">
+                    <img src="images/ralph-excited.png" alt="Ralph excited" class="ralph-small" onerror="this.style.display='none'">
+                    <p id="ralph-motivation-text">"Pick any category! Each one teaches your brain new tricks! I tested all 800 questions myself!"</p>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="hero-eyebrow">Professional Actor</div>
-            <h1>KAMAL</h1>
-            <div class="subtitle">Meisner Technique Specialist</div>
-            <p class="description">
-                Bringing authentic emotion and compelling performances to Hollywood and Bollywood productions. 
-                Trained in the prestigious Meisner Technique with a passion for storytelling that transcends cultural boundaries.
-            </p>
-            <div class="cta-group">
-                <a href="#portfolio" class="cta-button">
-                    <i class="fas fa-play"></i>
-                    View My Reel
-                </a>
-                <a href="#contact" class="cta-button cta-secondary">
-                    <i class="fas fa-envelope"></i>
-                    Get In Touch
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="about">
+    <!-- Set Selection Screen -->
+    <section class="set-selection hidden" id="set-selection">
         <div class="container">
-            <div class="section-eyebrow">About the Artist</div>
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>Crafting Authentic Performances</h2>
-                    <p>
-                        With rigorous training in the renowned Meisner Technique, I have developed a deep understanding of truthful, 
-                        moment-to-moment acting that creates authentic connections with audiences worldwide.
-                    </p>
-                    <p>
-                        My passion lies in bringing complex characters to life, whether in the fast-paced world of Hollywood blockbusters 
-                        or the rich, culturally diverse landscape of Bollywood cinema. I believe in the power of storytelling to bridge 
-                        cultures and touch hearts across the globe.
-                    </p>
-                    <p>
-                        Ready to collaborate with visionary directors, producers, and casting directors who are seeking a dedicated, 
-                        professional actor committed to excellence in every performance.
-                    </p>
-                    <div class="skills">
-                        <span class="skill-tag">Meisner Technique</span>
-                        <span class="skill-tag">Method Acting</span>
-                        <span class="skill-tag">Screen Acting</span>
-                        <span class="skill-tag">Character Development</span>
-                        <span class="skill-tag">Emotional Range</span>
-                        <span class="skill-tag">Multilingual</span>
-                        <span class="skill-tag">Improvisation</span>
-                        <span class="skill-tag">Voice & Speech</span>
-                    </div>
-                </div>
-                <div class="about-image">
-                    <img src="head shot1.jpeg" alt="Kamal - Professional Actor Headshot">
-                </div>
+            <div class="breadcrumb">
+                <button onclick="showCategorySelection()" class="breadcrumb-btn">📚 All Categories</button>
+                <span class="separator">></span>
+                <span id="current-category-name" class="current-location">Numbers to 1000</span>
             </div>
-        </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio">
-        <div class="container">
-            <div class="section-eyebrow">Acting Portfolio</div>
-            <h2 class="section-title">Performance Showcase</h2>
-            <p class="section-description">
-                Explore my comprehensive performance showcase featuring 10 carefully curated videos demonstrating versatility, emotional depth, and professional craftsmanship across dramatic short films, character development, and intensive training sessions.
-            </p>
             
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="My Movie 16.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Dramatic Performance</h3>
-                        <p>Emotional dramatic scene showcasing range and Meisner technique application in a contemporary setting, demonstrating authentic character connection.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Drama</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="My Movie 17.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Character Study</h3>
-                        <p>Complex character portrayal demonstrating versatility and depth in dramatic interpretation with nuanced emotional layering.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Character</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="My Movie 18.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Dramatic Monologue</h3>
-                        <p>Powerful solo performance highlighting emotional authenticity and commanding screen presence with dynamic vocal range.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Monologue</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="My Movie 20.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Acting Showcase</h3>
-                        <p>Comprehensive demonstration of acting abilities across different genres and emotional territories with professional versatility.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Showcase</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="MPEG-4 movie.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Acting Training Session</h3>
-                        <p>Professional training demonstration showcasing technique development and skill refinement in controlled practice environment.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Training</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="VIDEO-2023-10-09-10-01-17.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Practice Session Oct 9</h3>
-                        <p>Intensive practice session focusing on emotional authenticity and character development techniques.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Training</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="VIDEO-2023-10-19-11-54-10.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Workshop Session Oct 19</h3>
-                        <p>Advanced workshop session demonstrating growth in technique application and performance consistency.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Training</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="VIDEO-2023-10-27-05-32-22.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Morning Training Oct 27</h3>
-                        <p>Early morning practice session showcasing dedication to craft and continuous skill development.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Training</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="VIDEO-2023-11-02-17-14-52.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Advanced Session Nov 2</h3>
-                        <p>Advanced training demonstration featuring complex emotional work and professional technique mastery.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Training</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="portfolio-item">
-                    <video controls poster="" preload="metadata">
-                        <source src="VIDEO-2023-11-15-15-55-11.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="portfolio-content">
-                        <h3>Master Class Nov 15</h3>
-                        <p>Master class performance showcasing refined technique and professional readiness for industry projects.</p>
-                        <div class="portfolio-meta">
-                            <span class="portfolio-tag">Training</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-eyebrow">Get In Touch</div>
-            <h2 class="section-title">Let's Create Something Extraordinary</h2>
+            <h2 id="category-title">Numbers to 1000 - Question Sets</h2>
             
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Ready for Your Next Project</h3>
-                    <p>
-                        I'm actively seeking opportunities in both Hollywood and Bollywood productions. 
-                        Whether you're casting for a lead role, supporting character, or ensemble piece, 
-                        I bring professionalism, dedication, and authentic performance to every project.
-                    </p>
-                    <p>
-                        Available for feature films, television series, commercials, and independent projects. 
-                        Let's discuss how I can bring your vision to life with compelling, truthful performances.
-                    </p>
-                    
-                    <div class="contact-details">
-                        <div class="contact-detail">
-                            <i class="fas fa-envelope"></i>
-                            <span>walkandreallytalk@gmail.com</span>
-                        </div>
-                        <div class="contact-detail">
-                            <i class="fas fa-clock"></i>
-                            <span>Available Immediately</span>
-                        </div>
-                        <div class="contact-detail">
-                            <i class="fas fa-globe"></i>
-                            <span>Available for Travel Worldwide</span>
-                        </div>
-                        <div class="contact-detail">
-                            <i class="fas fa-award"></i>
-                            <span>Meisner Technique Certified</span>
-                        </div>
-                    </div>
+            <div class="sets-grid" id="sets-grid">
+                <!-- Sets will be dynamically populated -->
+            </div>
+            
+            <div class="category-stats">
+                <div class="stat-card">
+                    <h4>Category Progress</h4>
+                    <div class="stat-value" id="category-completion">0%</div>
                 </div>
-
-                <form class="contact-form" action="https://formsubmit.co/walkandreallytalk@gmail.com" method="POST">
-                    <input type="hidden" name="_next" value="https://kamaldeep123.github.io/Additon/thank-you.html">
-                    <input type="hidden" name="_subject" value="New Casting Inquiry - Kamal Actor Portfolio">
-                    <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_template" value="table">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Full Name *</label>
-                            <input type="text" id="name" name="name" required placeholder="Your Name">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required placeholder="your.email@example.com">
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="company">Company/Production</label>
-                            <input type="text" id="company" name="company" placeholder="Production Company">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="role">Project Type</label>
-                            <select id="role" name="role">
-                                <option value="">Select Project Type</option>
-                                <option value="feature-film">Feature Film</option>
-                                <option value="tv-series">TV Series</option>
-                                <option value="commercial">Commercial</option>
-                                <option value="independent">Independent Film</option>
-                                <option value="theater">Theater</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message">Project Details *</label>
-                        <textarea id="message" name="message" required placeholder="Tell me about the role, character, project timeline, and any other relevant details. I'd love to hear about your vision and how I can contribute to bringing it to life."></textarea>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-paper-plane"></i>
-                        Send Message
-                    </button>
-                </form>
+                <div class="stat-card">
+                    <h4>Questions Completed</h4>
+                    <div class="stat-value" id="questions-completed">0 / 100</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Accuracy</h4>
+                    <div class="stat-value" id="category-accuracy">--</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Question Interface -->
+    <main class="question-interface hidden" id="question-interface">
+        <div class="container">
+            <!-- Question Navigation -->
+            <div class="question-header">
+                <div class="breadcrumb">
+                    <button onclick="showCategorySelection()" class="breadcrumb-btn">📚 Categories</button>
+                    <span class="separator">></span>
+                    <button onclick="showSetSelection()" class="breadcrumb-btn" id="category-breadcrumb">Numbers</button>
+                    <span class="separator">></span>
+                    <span class="current-location" id="set-breadcrumb">Set 1</span>
+                </div>
+                
+                <div class="question-progress">
+                    <div class="progress-info">
+                        <span id="question-counter">Question 1 of 10</span>
+                        <span id="set-progress">Set 1 of 10</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="question-progress-fill" style="width: 10%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ralph's Guidance -->
+            <div class="ralph-guidance">
+                <div class="ralph-comment">
+                    <img src="images/ralph-think.png" alt="Ralph thinking" class="ralph-small" onerror="this.style.display='none'">
+                    <p id="ralph-question-hint">"Take your time! Think it through! Your brain is amazing!"</p>
+                </div>
+            </div>
+
+            <!-- Question Display -->
+            <div class="question-container">
+                <div class="question-card">
+                    <div class="question-type-badge" id="question-type">Place Value</div>
+                    
+                    <div class="question-text">
+                        <h3 id="question-title">What digit is in the hundreds place in 247?</h3>
+                    </div>
+                    
+                    <!-- Visual Aid Area -->
+                    <div class="visual-aid" id="visual-aid">
+                        <!-- Dynamic visual content based on question type -->
+                    </div>
+                    
+                    <!-- Answer Options -->
+                    <div class="answer-options" id="answer-options">
+                        <button class="answer-btn" onclick="selectAnswer(0)" id="option-0">A) 2</button>
+                        <button class="answer-btn" onclick="selectAnswer(1)" id="option-1">B) 4</button>
+                        <button class="answer-btn" onclick="selectAnswer(2)" id="option-2">C) 7</button>
+                        <button class="answer-btn" onclick="selectAnswer(3)" id="option-3">D) 0</button>
+                    </div>
+                    
+                    <!-- Submit and Controls -->
+                    <div class="question-controls">
+                        <button class="btn-secondary" onclick="showHint()" id="hint-btn">💡 Ralph's Hint</button>
+                        <button class="btn-primary" onclick="submitAnswer()" id="submit-btn" disabled>Submit Answer</button>
+                    </div>
+                    
+                    <!-- Result Display -->
+                    <div class="question-result hidden" id="question-result">
+                        <!-- Result content populated dynamically -->
+                    </div>
+                    
+                    <!-- Learning Objective -->
+                    <div class="learning-objective">
+                        <h4>🎯 Learning Goal:</h4>
+                        <p id="learning-objective-text">Understand the value of digits in different positions</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Navigation Controls -->
+            <div class="navigation-controls">
+                <button class="nav-btn" onclick="previousQuestion()" id="prev-btn" disabled>⬅️ Previous</button>
+                <button class="nav-btn" onclick="showQuestionSummary()" id="summary-btn">📊 Set Summary</button>
+                <button class="nav-btn primary" onclick="nextQuestion()" id="next-btn" disabled>Next ➡️</button>
+            </div>
+            
+            <!-- Ralph's Study Tips -->
+            <div class="study-tips">
+                <div class="ralph-comment">
+                    <img src="images/ralph-study.png" alt="Ralph studying" class="ralph-small" onerror="this.style.display='none'">
+                    <p id="ralph-study-tip">"Remember: numbers live in houses! Hundreds house, tens house, ones house!"</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Question Set Summary -->
+    <section class="set-summary hidden" id="set-summary">
+        <div class="container">
+            <div class="summary-header">
+                <h2>🎉 Set Complete!</h2>
+                <div class="ralph-celebration">
+                    <img src="images/ralph-happy.png" alt="Ralph celebrating" class="ralph-avatar" onerror="this.style.display='none'">
+                    <div class="speech-bubble">
+                        <p id="ralph-celebration-message">"Great job! You finished a whole set! My brain is proud of you!"</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="summary-stats">
+                <div class="stat-card big">
+                    <h3>Your Score</h3>
+                    <div class="score-display">
+                        <span class="score-value" id="set-score">8</span>
+                        <span class="score-total">/ 10</span>
+                    </div>
+                    <div class="score-percentage" id="set-percentage">80%</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h4>Questions Correct</h4>
+                    <div class="stat-value" id="correct-count">8</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h4>Time Spent</h4>
+                    <div class="stat-value" id="time-spent">5:32</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h4>Hints Used</h4>
+                    <div class="stat-value" id="hints-used">2</div>
+                </div>
+            </div>
+            
+            <!-- Question Review -->
+            <div class="question-review">
+                <h3>📋 Question Review</h3>
+                <div class="review-list" id="review-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+            
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <h3>What's Next?</h3>
+                <div class="next-actions">
+                    <button class="btn-primary" onclick="continueToNextSet()" id="next-set-btn">Continue to Set 2 ➡️</button>
+                    <button class="btn-secondary" onclick="retryCurrentSet()" id="retry-set-btn">🔄 Retry This Set</button>
+                    <button class="btn-secondary" onclick="showSetSelection()">📚 Choose Different Set</button>
+                </div>
+            </div>
+            
+            <!-- Ralph's Encouragement -->
+            <div class="ralph-encouragement">
+                <div class="ralph-comment">
+                    <img src="images/ralph-proud.png" alt="Ralph proud" class="ralph-small" onerror="this.style.display='none'">
+                    <p id="ralph-encouragement-text">"You're getting smarter! Keep going and you'll know ALL the math!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Achievement System -->
+    <section class="achievements hidden" id="achievements">
+        <div class="container">
+            <h2>🏆 Your Achievements</h2>
+            <div class="achievement-grid" id="achievement-grid">
+                <!-- Achievements populated dynamically -->
+            </div>
+        </div>
+    </section>
+
     <footer>
         <div class="container">
-            <p>&copy; 2024 Kamal - Professional Actor. All rights reserved.</p>
-            <p>Trained in Meisner Technique | Available for Hollywood & Bollywood Productions</p>
+            <div class="ralph-goodbye">
+                <img src="images/ralph-wave.png" alt="Ralph waving" class="ralph-avatar" onerror="this.style.display='none'">
+                <div class="speech-bubble">
+                    <p>"You're doing amazing! 800 questions is a lot, but your brain can handle it! Keep learning and remember: math is everywhere, even in my sandwich!"</p>
+                </div>
+            </div>
+            <div class="footer-stats">
+                <div class="stat">
+                    <span class="stat-number">800</span>
+                    <span class="stat-label">Total Questions</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">80</span>
+                    <span class="stat-label">Question Sets</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Learning Fun</span>
+                </div>
+            </div>
+            <p>&copy; 2025 Grade 2 Math Adventure with Ralph Wiggum. Made with ❤️ for learning! Featuring Ralph's Iteration Model for accuracy!</p>
         </div>
     </footer>
 
-    <script>
-        // Enhanced smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Enhanced navbar scroll effect
-        const navbar = document.getElementById('navbar');
-        let lastScrollY = window.scrollY;
-
-        window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-            
-            if (currentScrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-            
-            lastScrollY = currentScrollY;
-        });
-
-        // Simple form submission with loading state - FormSubmit.co
-        document.querySelector('.contact-form').addEventListener('submit', function(e) {
-            const submitBtn = document.querySelector('.submit-btn');
-            const originalHTML = submitBtn.innerHTML;
-            
-            // Show loading state
-            submitBtn.innerHTML = '<span class="loading"></span> Sending Message...';
-            submitBtn.disabled = true;
-            
-            // Let form submit naturally to FormSubmit.co
-            // FormSubmit will handle the redirect to thank-you page
-        });
-
-        // Enhanced video lazy loading with intersection observer
-        const videos = document.querySelectorAll('video');
-        const videoObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const video = entry.target;
-                    video.load();
-                    
-                    // Add play on hover for better UX
-                    video.addEventListener('mouseenter', () => {
-                        if (video.paused) {
-                            video.play().catch(() => {
-                                // Handle autoplay restrictions gracefully
-                            });
-                        }
-                    });
-                    
-                    video.addEventListener('mouseleave', () => {
-                        if (!video.paused) {
-                            video.pause();
-                        }
-                    });
-                    
-                    videoObserver.unobserve(video);
-                }
-            });
-        }, {
-            rootMargin: '50px'
-        });
-
-        videos.forEach(video => {
-            videoObserver.observe(video);
-        });
-
-        // Parallax effect for hero section
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero');
-            if (hero) {
-                const rate = scrolled * -0.5;
-                hero.style.transform = `translateY(${rate}px)`;
-            }
-        });
-
-        // Enhanced animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe elements for animation
-        document.querySelectorAll('.portfolio-item, .about-text, .contact-info').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
-
-        // Performance optimization: Debounce scroll events
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // Apply debouncing to scroll events
-        const debouncedScrollHandler = debounce(() => {
-            // Handle scroll events here if needed
-        }, 10);
-
-        window.addEventListener('scroll', debouncedScrollHandler);
-
-        // Luxury Loading Animation
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('loader');
-            setTimeout(() => {
-                loader.classList.add('fade-out');
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 500);
-            }, 1000);
-        });
-
-        // Custom Cursor
-        const cursor = document.getElementById('cursor');
-        const cursorFollower = document.getElementById('cursor-follower');
-        let mouseX = 0, mouseY = 0;
-        let followerX = 0, followerY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            cursor.style.left = mouseX - 10 + 'px';
-            cursor.style.top = mouseY - 10 + 'px';
-        });
-
-        // Smooth cursor follower
-        function updateCursorFollower() {
-            followerX += (mouseX - followerX) * 0.1;
-            followerY += (mouseY - followerY) * 0.1;
-            cursorFollower.style.left = followerX - 4 + 'px';
-            cursorFollower.style.top = followerY - 4 + 'px';
-            requestAnimationFrame(updateCursorFollower);
-        }
-        updateCursorFollower();
-
-        // Create floating particles
-        const particlesContainer = document.getElementById('particles');
-        const particleCount = 20;
-
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 20 + 's';
-            particle.style.animationDuration = (20 + Math.random() * 10) + 's';
-            particlesContainer.appendChild(particle);
-        }
-
-        // Enhanced reveal on scroll
-        const revealElements = document.querySelectorAll('.portfolio-item, .about-text, .contact-info');
-        
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
-                }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
-
-        revealElements.forEach(el => {
-            el.classList.add('reveal-on-scroll');
-            revealObserver.observe(el);
-        });
-
-        // Cursor interactions
-        const interactiveElements = document.querySelectorAll('a, button, .portfolio-item, .cta-button');
-        
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursor.style.transform = 'scale(1.5)';
-                cursor.style.borderColor = 'var(--luxury-gold)';
-                cursorFollower.style.transform = 'scale(2)';
-                cursorFollower.style.background = 'rgba(255, 215, 0, 0.3)';
-            });
-            
-            el.addEventListener('mouseleave', () => {
-                cursor.style.transform = 'scale(1)';
-                cursor.style.borderColor = 'var(--primary-gold)';
-                cursorFollower.style.transform = 'scale(1)';
-                cursorFollower.style.background = 'var(--primary-gold)';
-            });
-        });
-    </script>
+    <!-- Load Scripts -->
+    <script src="questionDatabase.js"></script>
+    <script src="working.js"></script>
 </body>
 </html>

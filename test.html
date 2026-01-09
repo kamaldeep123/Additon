@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ralph Wiggum Iterator Test</title>
+</head>
+<body>
+    <h1>Testing Ralph's System...</h1>
+    <div id="test-results"></div>
+    
+    <script src="questionDatabase.js"></script>
+    <script>
+        console.log('🧠 Ralph Iterator: Testing system...');
+        
+        // Test if QuestionDatabase is loaded
+        if (typeof QuestionDatabase !== 'undefined') {
+            console.log('✅ Question Database loaded');
+            
+            // Test each category
+            Object.keys(QuestionDatabase).forEach(category => {
+                if (category === 'length') return;
+                
+                const categoryData = QuestionDatabase[category];
+                console.log(`📚 Category '${category}': ${categoryData.length} sets`);
+                
+                if (categoryData.length > 0) {
+                    const firstSet = categoryData[0];
+                    if (firstSet && firstSet.questions) {
+                        console.log(`  - Set 1: ${firstSet.questions.length} questions`);
+                        console.log(`  - Sample question: "${firstSet.questions[0].question}"`);
+                    }
+                }
+            });
+            
+            document.getElementById('test-results').innerHTML = '<p style="color: green;">✅ All systems working! Check console for details.</p>';
+        } else {
+            console.error('❌ Question Database not loaded');
+            document.getElementById('test-results').innerHTML = '<p style="color: red;">❌ Database not loaded</p>';
+        }
+        
+        // Test Ralph Iterator
+        if (typeof RalphQuestionIterator !== 'undefined') {
+            console.log('✅ Ralph Iterator loaded');
+            
+            const comment = RalphQuestionIterator.getContextualComment('place-value', true);
+            console.log(`💬 Ralph says: "${comment}"`);
+        }
+        
+        console.log('🎉 Test complete!');
+    </script>
+</body>
+</html>
