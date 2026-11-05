@@ -28,6 +28,18 @@
 .page-shell.text #annotationCanvas{cursor:text}
 .page-shell.replace #annotationCanvas{cursor:text}
 @media(max-width:810px){.inline-editor{box-shadow:0 8px 22px #13283d44}.inline-bar span{font-size:9px}.quick-guide{font-size:11px}}
+/* Precision placement: on phones, the keyboard box sits away from the page
+   while the actual PDF-size text is previewed at the tapped position. */
+.inline-adjustments{display:none;align-items:center;gap:3px}
+.inline-adjustments button{min-width:34px;min-height:34px;padding:5px 7px;background:#fff;color:#12786f;border:1px solid #9ad7cc;font-size:19px}
+@media(max-width:810px){
+  .inline-editor{position:fixed!important;z-index:80;left:10px!important;right:10px!important;top:135px!important;bottom:auto!important;width:auto!important;min-width:0!important;box-shadow:0 8px 32px #13283d50}
+  .inline-editor textarea{font-size:16px!important;min-height:42px;max-height:112px;overflow-y:auto;padding:8px 10px}
+  .inline-bar{flex-wrap:wrap;padding:7px;gap:6px}
+  .inline-bar span{flex:1 0 100%;font-size:11px}
+  .inline-adjustments{display:flex}
+  .inline-bar #inlineDone{margin-left:auto;min-height:35px}
+}
 </style>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
@@ -105,7 +117,7 @@
           <canvas id="annotationCanvas" aria-label="PDF editing canvas"></canvas>
           <div class="inline-editor" id="inlineEditor" hidden>
             <textarea id="inlineText" rows="1" aria-label="Type directly on PDF" placeholder="Type here…" spellcheck="true"></textarea>
-            <div class="inline-bar"><span>Type directly on the page</span><button id="inlineDone" type="button">✓ Done</button></div>
+            <div class="inline-bar"><span>Live PDF text: arrows move, A adjusts size:</span><div class="inline-adjustments" aria-label="Move text to fit a PDF cell"><button type="button" data-nudge-x="-2" data-nudge-y="0" aria-label="Move text left">←</button><button type="button" data-nudge-x="0" data-nudge-y="-2" aria-label="Move text up">↑</button><button type="button" data-nudge-x="0" data-nudge-y="2" aria-label="Move text down">↓</button><button type="button" data-nudge-x="2" data-nudge-y="0" aria-label="Move text right">→</button><button type="button" data-size-delta="-2" aria-label="Smaller text">A−</button><button type="button" data-size-delta="2" aria-label="Larger text">A+</button></div><button id="inlineDone" type="button">✓ Done</button></div>
           </div>
         </div>
         <div id="loading" class="loading" hidden><div class="spinner"></div><span>Loading page…</span></div>
@@ -427,12 +439,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return {x: annotation.x, y: annotation.y, w: annotation.w, h: annotation.h};
   }
-  function hitTest(point) {
+  function hitTest(point, visibleTextOnly = false) {
     const annotations = activePage()?.annotations || [];
     for (let i = annotations.length - 1; i >= 0; i--) {
       const ann = annotations[i];
-      const r = annotationBounds(ann);
-      if (point.x >= r.x - .018 && point.x <= r.x + r.w + .018 && point.y >= r.y - .018 && point.y <= r.y + r.h + .018) return ann;
+      let r = annotationBounds(ann);
+      let toleranceX = .018, toleranceY = .018;
+      // An editor text box may span several PDF form cells. When the Text tool
+      // is used, don't treat its empty width as a tap on existing lettering.
+      if (visibleTextOnly && ['text', 'signature'].includes(ann.type)) {
+        if (!ann.text?.trim() || !state.pageViewport) continue;
+        const ctx = elements.overlay.getContext('2d');
+        const pixelSize = ann.fontSize * state.zoom;
+        ctx.save();
+        ctx.font = ann.type === 'signature' ? `italic ${pixelSize}px "Brush Script MT", "Segoe Script", cursive` : `${pixelSize}px Arial, sans-serif`;
+        const lines = wrapTextLines(ctx, ann.text, Math.max(20, ann.w * state.pageViewport.width - 2));
+        const visibleWidth = Math.max(1, ...lines.map(line => ctx.measureText(line).width));
+        ctx.restore();
+        r = {x:ann.x, y:ann.y,
+             w:Math.min(ann.w, (visibleWidth+2)/state.pageViewport.width),
+             h:Math.min(ann.h, (lines.length*pixelSize*1.24+2)/state.pageViewport.height)};
+        toleranceX = 3/state.pageViewport.width;
+        toleranceY = 3/state.pageViewport.height;
+      }
+      if (point.x >= r.x-toleranceX && point.x <= r.x+r.w+toleranceX && point.y >= r.y-toleranceY && point.y <= r.y+r.h+toleranceY) return ann;
     }
     return null;
   }
@@ -471,16 +501,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const ann = activePage()?.annotations.find(a=>a.id===editing.id);
     if (!ann) {finishInlineEdit();return;}
     const editor = $('inlineEditor'), input = $('inlineText'), view = state.pageViewport;
-    const x = Math.round(ann.x * view.width), y = Math.round(ann.y * view.height);
-    const maxWidth = Math.max(105, view.width - x - 2);
-    const width = Math.min(Math.max(115,ann.w*view.width),maxWidth);
-    editor.style.left = `${x}px`;editor.style.top = `${y}px`;editor.style.width = `${width}px`;
+    const mobile = window.innerWidth <= 810;
+    if (mobile) {
+      // A readable 16px iPhone input must not masquerade as the final PDF font.
+      // Keep this input fixed and show exact-size text at its page coordinates.
+      editor.style.position = 'fixed'; editor.style.left = '10px';
+      editor.style.top = '135px'; editor.style.width = 'calc(100vw - 20px)';
+    } else {
+      const x = Math.round(ann.x * view.width), y = Math.round(ann.y * view.height);
+      const maxWidth = Math.max(45, view.width - x - 2);
+      const width = Math.min(Math.max(115, ann.w*view.width), maxWidth);
+      editor.style.position = 'absolute';editor.style.left = `${x}px`;
+      editor.style.top = `${y}px`;editor.style.width = `${width}px`;
+    }
     input.style.fontFamily = ann.type==='signature'?'"Brush Script MT", "Segoe Script", cursive':'Arial, sans-serif';
     input.style.fontStyle = ann.type==='signature'?'italic':'normal';
-    input.style.fontSize = `${Math.max(16, ann.fontSize * state.zoom)}px`;
+    input.style.fontSize = mobile ? '16px' : `${Math.max(16, ann.fontSize * state.zoom)}px`;
     input.style.color = ann.color || DEFAULT_COLOR;
     input.style.height='auto';
-    input.style.height = `${Math.max(38, input.scrollHeight+2)}px`;
+    input.style.height = `${mobile ? Math.min(112,Math.max(42,input.scrollHeight+2)) : Math.max(38,input.scrollHeight+2)}px`;
   }
   function beginInlineEdit(ann, newlyCreated = false) {
     if (!ann || !['text','signature'].includes(ann.type)) return;
@@ -512,7 +551,7 @@ document.addEventListener("DOMContentLoaded", () => {
       fontSize: state.fontSize, lineWidth: state.strokeSize, text: state.typedText};
     if (type === 'text') {
       common.text = '';
-      common.w = clamp(.36, .12, Math.max(.12, 1 - pt.x));
+      common.w = Math.min(.36, Math.max(.005, 1 - pt.x));
       common.h = Math.max(.035, state.fontSize * state.zoom / (state.pageViewport?.height || 800) * 1.25);
     } else if (type === 'signature') {
       common.w = Math.min(.4, Math.max(.13, 1 - pt.x)); common.h = .085;
@@ -601,7 +640,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (state.tool === 'image' && !state.imageData) {elements.image.click();return;}
     // Tapping a text object in Text mode edits it instead of stacking duplicates.
     if (state.tool === 'text' || state.tool === 'signature') {
-      const existing = hitTest(pt);
+      const existing = hitTest(pt, true);
       if (existing && ['text','signature'].includes(existing.type)) {beginInlineEdit(existing);return;}
     }
     const ann = newAnnotation(state.tool, pt);
@@ -677,7 +716,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   async function drawMarks(ctx, annotations, width, height, scale, {includeSelection = true} = {}) {
     for (const ann of annotations) {
-      if (includeSelection && state.inlineEditing?.id === ann.id && ['text','signature'].includes(ann.type)) continue;
+      if (includeSelection && state.inlineEditing?.id === ann.id && ['text','signature'].includes(ann.type) && window.innerWidth > 810) continue;
       const x = ann.x * width, y = ann.y * height, w = ann.w * width, h = ann.h * height;
       ctx.save();
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -705,6 +744,12 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.stroke();
       }
       ctx.restore();
+      if (includeSelection && state.inlineEditing?.id === ann.id && window.innerWidth <= 810) {
+        // The crosshair marks the exact top-left of the PDF text, not the input box.
+        ctx.save();ctx.strokeStyle='#009b8b';ctx.lineWidth=1.3;
+        ctx.beginPath();ctx.moveTo(x-6,y);ctx.lineTo(x+8,y);
+        ctx.moveTo(x,y-6);ctx.lineTo(x,y+8);ctx.stroke();ctx.restore();
+      }
       if (includeSelection && state.selected === ann.id && state.inlineEditing?.id !== ann.id) {
         const r = annotationBounds(ann);
         ctx.save();ctx.strokeStyle = '#009a90';ctx.lineWidth = 1.5;
@@ -971,6 +1016,21 @@ document.addEventListener("DOMContentLoaded", () => {
     elements.input.addEventListener('change', async (event) => {await openFile(event.target.files?.[0]);elements.input.value='';});
     $('saveBtn').addEventListener('click', () => exportPdf());
     $('inlineDone').addEventListener('click',()=>finishInlineEdit());
+    document.querySelectorAll('[data-nudge-x]').forEach(button=>button.addEventListener('click',()=>{
+      const ann = activePage()?.annotations.find(a=>a.id===state.inlineEditing?.id);
+      if (!ann || !state.pageViewport) return;
+      if (!state.inlineEditing.nudged) {remember();state.inlineEditing.nudged=true;}
+      ann.x = clamp(ann.x + Number(button.dataset.nudgeX)/state.pageViewport.width, 0, Math.max(0,1-ann.w));
+      ann.y = clamp(ann.y + Number(button.dataset.nudgeY)/state.pageViewport.height, 0, Math.max(0,1-ann.h));
+      positionInlineEditor();redrawOverlay();
+    }));
+    document.querySelectorAll('[data-size-delta]').forEach(button=>button.addEventListener('click',()=>{
+      const ann = activePage()?.annotations.find(a=>a.id===state.inlineEditing?.id);
+      if (!ann) return;
+      if (!state.inlineEditing.resized) {remember();state.inlineEditing.resized=true;}
+      ann.fontSize=clamp(ann.fontSize+Number(button.dataset.sizeDelta),9,70);
+      recalculateTextHeight(ann);updateInspector();positionInlineEditor();redrawOverlay();
+    }));
     $('editSelectedBtn').addEventListener('click',()=>beginInlineEdit(activeAnnotation()));
     $('inlineText').addEventListener('input',()=>{
       const ann=activeAnnotation();if(!ann || !state.inlineEditing)return;
@@ -1070,7 +1130,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('load',()=>{if(!libraryReady())notify('Connect to the internet to enable PDF editing.',true);},{once:true});
   }
   // Diagnostics for local automated smoke tests, not an external API.
-  window.mypdf = {version:'1.1.0', getState:()=>({pages:state.pages.length,current:state.current,tool:state.tool,dirty:state.dirty}), openFile, produceEditedPdf};
+  window.mypdf = {version:'1.2.0', getState:()=>({pages:state.pages.length,current:state.current,tool:state.tool,dirty:state.dirty}), openFile, produceEditedPdf};
 })();
 
 });
