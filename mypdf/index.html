@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111c2b">
+  <meta name="description" content="mypdf — a private PDF reader and editor that runs in your browser.">
+  <title>mypdf — PDF reader & editor</title>
+  
+  
+  <style>
+:root{--navy:#111c2b;--navy2:#1e324a;--ink:#23364c;--muted:#7e8a9a;--teal:#15a995;--teal-dark:#008978;--line:#e3e9ef;--panel:#fff;--soft:#f4f6fa;--shadow:0 12px 32px rgba(26,40,63,.13);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;font-synthesis:none}*{box-sizing:border-box}html,body{margin:0;min-height:100%;width:100%;overflow-x:hidden}body{color:var(--ink);background:var(--soft);font-size:14px}button,input,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.37}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #3fb9a666;outline-offset:2px}[hidden]{display:none!important}.topbar{height:68px;background:var(--navy);color:#fff;display:flex;align-items:center;gap:20px;padding:0 25px;border-bottom:1px solid #ffffff16;position:relative;z-index:30}.brand{display:flex;align-items:center;gap:9px;font-size:23px;font-weight:780;letter-spacing:-1.1px;white-space:nowrap}.brand-icon{color:#fff;background:#20aa9a;display:grid;place-items:center;width:35px;height:35px;border-radius:9px}.brand-icon svg{width:24px}.brand-emphasis{color:#43cfb6}.brand-tag{font-size:9px;letter-spacing:1.3px;font-weight:800;border:1px solid #587087;padding:5px 7px;border-radius:5px;color:#afc8d6;margin-left:8px}.file-area{flex:1;text-align:center;color:#becbdb;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}.top-actions{display:flex;gap:8px;align-items:center}.btn{border:0;border-radius:9px;padding:10px 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:680;white-space:nowrap;transition:background .15s,transform .15s}.btn:hover:not(:disabled){transform:translateY(-1px)}.btn-primary{background:var(--teal);color:white}.btn-primary:hover:not(:disabled){background:var(--teal-dark)}.btn-quiet{background:#25364a;color:#e6f0f6}.btn-quiet:hover:not(:disabled){background:#354b63}.glyph{font-size:19px;font-weight:400;line-height:1}.welcome{min-height:calc(100dvh - 68px);display:grid;place-items:center;position:relative;overflow:hidden;background:linear-gradient(145deg,#f8fafc 0%,#edf5f5 100%)}.welcome-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 17% 85%,#b0f0e244 0%,transparent 30%),radial-gradient(circle at 80% 15%,#cce6fd77 0%,transparent 36%)}.welcome-content{text-align:center;position:relative;max-width:800px;padding:35px 20px 55px}.intro-pill{border-radius:50px;color:#07877a;background:#e3f7f2;display:inline-flex;gap:10px;align-items:center;padding:9px 15px;font-size:12px;font-weight:680;margin-bottom:16px}.live-dot{height:8px;width:8px;border-radius:50%;background:#16a58c}.welcome-icon{width:108px;height:122px;margin:0 auto 12px;background:linear-gradient(150deg,#1cbdac,#007d78);border-radius:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 18px 38px #00948538;transform:rotate(-5deg);color:white;position:relative;font-weight:900;font-size:26px;letter-spacing:3px}.welcome-icon:after{content:"";position:absolute;top:0;right:0;width:31px;height:31px;border-radius:0 13px 0 12px;background:#b3f0e3}.welcome-pencil{position:absolute;color:white;background:#ef9465;right:-17px;bottom:11px;border-radius:12px;font-size:38px;display:grid;place-items:center;width:51px;height:53px;box-shadow:0 4px 15px #cf745466}.welcome h1{font-size:clamp(36px,5.2vw,63px);line-height:1.11;letter-spacing:-2.2px;color:#142c41;margin:20px 0 14px}.welcome h1 span{color:#08a18f}.subtitle{font-size:17px;color:#728496;line-height:1.6;margin:0 auto 26px;max-width:540px}.btn-big{font-size:16px;padding:15px 29px;border-radius:12px;box-shadow:0 7px 20px #009f8e3c}.dropzone{margin:13px auto 0;font-size:13px;color:#8290a2;border:2px dashed transparent;padding:14px;max-width:380px;border-radius:12px;cursor:pointer}.dropzone.dragging{border-color:#19ac9e;background:#ddf5f0}.features{display:flex;flex-wrap:wrap;gap:17px;justify-content:center;margin-top:35px;color:#718497;font-size:12px;font-weight:650}.workspace{height:calc(100dvh - 68px);display:grid;grid-template-columns:220px minmax(0,1fr) 265px;overflow:hidden}.sidebar{background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0}.sidebar-title{display:flex;justify-content:space-between;font-size:11px;letter-spacing:1.1px;color:#728194;font-weight:780;margin:0;padding:22px 18px 14px}.sidebar-title span:last-child{border-radius:20px;background:#eaf4f3;color:#039786;padding:2px 9px}.sidebar-actions{display:flex;gap:7px;margin:0 11px 14px}.sidebar-actions button{flex:1;background:#f2f7f8;border:1px solid #e1e8ec;border-radius:7px;padding:9px 4px;color:#486174;font-size:11px;font-weight:760}.sidebar-actions button:hover{background:#e6f4f0}.thumbs{flex:1;overflow-y:auto;padding:2px 13px 20px;scrollbar-width:thin}.thumbnail{display:flex;align-items:center;gap:11px;width:100%;padding:10px 9px;margin:0 0 9px;border:2px solid transparent;background:transparent;border-radius:10px;text-align:left}.thumbnail.active{border-color:#15aa98;background:#e7f8f5}.thumbnail:hover:not(.active){background:#f3f6fa}.thumbnail-preview{width:75px;height:98px;display:flex;align-items:center;justify-content:center;border:1px solid #dce2e8;background:#fff;box-shadow:0 2px 7px #13243c14;flex-shrink:0;overflow:hidden}.thumbnail-preview canvas{max-width:75px;max-height:98px}.thumbnail-preview.blank{background:#fff}.thumbnail-label{font-size:12px;font-weight:650;color:#486073}.page-ops{display:flex;gap:4px;border-top:1px solid var(--line);padding:12px 8px;background:#fff}.page-ops button{border:1px solid #e5ebef;background:#f7f9fb;color:#718093;border-radius:7px;font-size:19px;flex:1;min-width:0;height:36px}.page-ops button:hover{background:#e9f5f2;color:#0b907e}.page-ops .danger:hover{background:#ffeded;color:#d03c3c}.reader{display:flex;flex-direction:column;overflow:hidden;min-width:0}.toolbar{min-height:77px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 18px;z-index:2}.tool-groups{display:flex;align-items:center;gap:5px;overflow-x:auto;scrollbar-width:thin}.tool{height:59px;min-width:58px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:5px 7px;border:1px solid transparent;background:transparent;border-radius:8px;color:#607185}.tool span{font-family:Georgia,"Times New Roman",serif;font-size:25px;line-height:1}.tool small{font-size:10px;font-weight:700}.tool.active{background:#e7f8f4;color:#028c7a;border-color:#b9e9de}.tool:hover{background:#eff5f7}.tool.active:hover{background:#d8f3ec}.history-actions{display:flex;gap:4px;border-left:1px solid var(--line);padding-left:12px}.history-actions button{font-size:23px;border:0;background:transparent;border-radius:7px;color:#617289;width:33px;height:38px}.history-actions button:hover:not(:disabled){background:#eef4f6}.findbar{height:50px;background:#fafbfd;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px;padding:6px 20px}.findbar input{min-width:0;flex:1;border:1px solid #d8e2eb;border-radius:7px;padding:7px 9px;background:#fff}.findbar span{font-size:11px;color:#677d91;white-space:nowrap}.findbar button{background:#edf3f6;border:0;border-radius:6px;height:30px;min-width:30px}.page-stage{flex:1;min-height:0;overflow:auto;display:flex;justify-content:flex-start;align-items:flex-start;padding:35px;position:relative;background-color:#f2f4f8;background-image:radial-gradient(#dce3ea 1px,transparent 1px);background-size:20px 20px}.page-shell{position:relative;margin:auto;flex:none;background:#fff;box-shadow:var(--shadow);touch-action:none}.page-shell canvas{display:block}.page-shell #annotationCanvas{position:absolute;inset:0;z-index:1;touch-action:none;cursor:crosshair}.page-shell.select #annotationCanvas{cursor:default}.page-shell.pen #annotationCanvas{cursor:crosshair}.loading{position:absolute;top:20px;left:50%;transform:translateX(-50%);display:flex;gap:11px;align-items:center;background:#17283be7;color:#fff;border-radius:10px;padding:13px 19px;box-shadow:0 6px 20px #0002;font-size:13px;z-index:4}.spinner{width:16px;height:16px;border:2px solid #ffffff50;border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.reader-bottom{height:54px;display:flex;align-items:center;justify-content:space-between;background:#fff;border-top:1px solid var(--line);padding:0 18px;flex-shrink:0}.reader-bottom button{border:0;background:transparent;border-radius:6px;color:#5b7185;height:32px;min-width:31px;font-size:19px}.reader-bottom button:hover{background:#ecf3f7}.bottom-icon{font-size:20px!important}.bottom-label{font-size:11px}.page-nav,.bottom-right{display:flex;align-items:center;gap:7px}.page-nav input{width:48px;text-align:center;border:1px solid #dce3ec;border-radius:6px;padding:5px 4px;color:#30445a}.page-nav span,.bottom-right span{color:#7b8b9b;font-size:12px;font-weight:600}.vertical-rule{height:21px;width:1px;background:#e2e8ee;margin:0 5px}.bottom-right #zoomValue{min-width:43px;text-align:center;color:#455f73}.bottom-right #fitWidth{font-size:11px;font-weight:700}.inspector{background:#fff;border-left:1px solid var(--line);min-width:0;display:flex;flex-direction:column}.inspector-header{padding:23px 20px 19px;border-bottom:1px solid #eef1f4}.inspector h2{margin:0 0 5px;font-size:16px;letter-spacing:-.3px;color:#223d54}.inspector-header p{margin:0;color:#8b98a7;line-height:1.45;font-size:11px}.inspector-body{overflow-y:auto;padding:21px 20px;scrollbar-width:thin}.field-label{display:flex;justify-content:space-between;color:#546a7d;font-size:11px;font-weight:770;margin:0 0 10px}.field-label span{color:#0a9183}textarea{background:#fbfcff;border:1px solid #dfe5ed;border-radius:8px;resize:vertical;width:100%;padding:12px;color:#22384f;line-height:1.5;margin-bottom:23px}input[type=range]{width:100%;accent-color:var(--teal);margin:0 0 24px;cursor:pointer}.color-row{display:flex;align-items:center;gap:8px;margin-bottom:25px;flex-wrap:wrap}.color-row input[type=color]{width:33px;height:32px;border:0;border-radius:7px;background:transparent;padding:0;cursor:pointer}.swatch{height:25px;width:25px;border-radius:50%;background:var(--swatch);border:2px solid #fff;box-shadow:0 0 0 1px #dce3eb}.swatch:hover{transform:scale(1.15)}.field-divider{height:1px;background:#e8eef2;margin:3px 0 18px}.outline{background:#fff;border:1px solid #dee5ec;border-radius:8px;padding:10px 13px;font-weight:650}.full{width:100%}.danger-text{color:#b64c4c}.danger-text:not(:disabled):hover{background:#fff2f2}.tip{margin-top:23px;background:#e9f7f4;padding:13px 14px;border-radius:9px;border:1px solid #d0efe7;color:#467c73;font-size:11px;line-height:1.55}.tip strong{font-size:12px;color:#078674}.tip p{margin:4px 0 0}.tip.neutral{margin-top:14px;background:#f3f7fb;border-color:#e6edf3;color:#728295}.tip.neutral strong{color:#52697d}.tip.warning{margin-top:14px;background:#fff8ed;border-color:#f3e4cb;color:#887151}.tip.warning strong{color:#a16c25}.toast{position:fixed;bottom:75px;left:50%;transform:translate(-50%,20px);z-index:100;border-radius:10px;background:#152b40;color:#fff;padding:12px 19px;min-width:130px;text-align:center;box-shadow:0 9px 30px #14273842;opacity:0;pointer-events:none;transition:.25s}.toast.visible{opacity:1;transform:translate(-50%,0)}.toast.error{background:#a3363c}.dialog-backdrop,.fallback{position:fixed;inset:0;background:#121b2ab0;z-index:1000;display:grid;place-items:center;padding:20px}.dialog{background:#fff;padding:28px;border-radius:15px;max-width:440px;width:100%;box-shadow:0 18px 70px #0004}.dialog h2{font-size:20px;color:#1b3347;margin:0 0 10px}.dialog p{line-height:1.6;color:#5b6b7d;margin:0 0 24px}.dialog-buttons{display:flex;gap:10px;justify-content:flex-end}.dialog .btn-quiet{background:#eef2f7;color:#40576d}.fallback-content{background:#fff;border-radius:14px;padding:20px;max-width:960px;width:98%;height:90%;display:flex;flex-direction:column}.fallback-content h2{margin:0 0 6px}.fallback-content p{color:#6d7d90}.fallback iframe{width:100%;flex:1;border:1px solid #dce5ea;border-radius:5px}.fallback button{align-self:center;margin-top:13px}.workspace.sidebar-collapsed{grid-template-columns:0 minmax(0,1fr) 265px}.workspace.sidebar-collapsed .sidebar{overflow:hidden;border:0}
+@media(max-width:1130px){.workspace{grid-template-columns:165px minmax(0,1fr) 210px}.workspace.sidebar-collapsed{grid-template-columns:0 minmax(0,1fr) 210px}.sidebar-title{padding:19px 12px 12px}.thumbnail{gap:6px;padding:7px 4px}.thumbnail-preview{width:60px;height:78px}.thumbnail-preview canvas{max-width:60px;max-height:78px}.toolbar{padding:6px 10px}.tool{min-width:49px;padding:5px}.inspector-body{padding:16px 14px}.inspector-header{padding:20px 14px}.page-stage{padding:20px}.brand-tag{display:none}}
+@media(max-width:810px){.topbar{height:62px;padding:0 10px;gap:10px}.brand{font-size:20px}.brand-icon{width:30px;height:30px}.brand-icon svg{width:22px}.file-area{font-size:11px}.top-actions{gap:5px}.top-actions .btn{padding:9px 10px}.top-actions .glyph{font-size:17px}.workspace{height:calc(100dvh - 62px);grid-template-columns:minmax(0,1fr)}.workspace.sidebar-collapsed{grid-template-columns:minmax(0,1fr)}.sidebar{overflow:hidden}.inspector{position:fixed;right:0;top:62px;bottom:54px;width:225px;z-index:15;box-shadow:-3px 0 12px #1b354015;transform:translateX(100%);transition:transform .2s}.workspace.inspector-open .inspector{transform:translateX(0)}.toolbar{padding:6px 6px 6px 9px;min-height:68px}.tool{min-width:50px;height:51px}.tool span{font-size:23px}.history-actions{padding-left:4px;gap:0}.page-stage{padding:14px}.reader-bottom{height:54px;padding:0 8px}.bottom-right{gap:1px}.bottom-label{display:none}.reader-bottom button{min-width:27px}.workspace .sidebar{position:fixed;left:0;top:62px;bottom:54px;width:175px;z-index:15;box-shadow:3px 0 12px #1b354020;transform:translateX(-100%);transition:transform .2s}.workspace:not(.sidebar-collapsed) .sidebar{transform:translateX(0)}.welcome h1{letter-spacing:-1px}.features{gap:12px}.welcome-content{padding-top:35px}}
+@media(max-width:475px){.file-area{display:none}.brand{flex:1}.btn-label{display:none}.top-actions .btn{min-width:38px}.tool{min-width:46px}.toolbar{min-height:64px}.page-stage{padding:12px}.findbar{padding:6px}.page-nav{gap:2px}.bottom-right{gap:0}.bottom-right #zoomValue{min-width:36px;font-size:11px}.reader-bottom{padding:0 5px}.welcome-icon{transform:scale(.8) rotate(-5deg);margin-bottom:0}.welcome-content{padding-bottom:30px}.features{font-size:11px}}
+
+@media(min-width:811px){.property-toggle{display:none!important}}
+
+</style>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  
+</head>
+<body>
+  <input id="fileInput" type="file" accept="application/pdf,.pdf" hidden>
+  <input id="mergeInput" type="file" accept="application/pdf,.pdf" multiple hidden>
+  <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+  <header class="topbar">
+    <div class="brand"><span class="brand-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2.5h7L20 8v12.5c0 .6-.4 1-1 1H7c-1 0-1-.4-1-1v-17c0-.6.4-1 1-1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 2.5V8h6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 12h8M9 15.5h8M9 19h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>my<span class="brand-emphasis">pdf</span></span><span class="brand-tag">READER + EDITOR</span></div>
+    <div class="file-area" id="fileArea" title="Current PDF">No PDF open</div>
+    <div class="top-actions">
+      <button id="openBtn" class="btn btn-quiet" type="button" title="Open PDF"><span class="glyph">↗</span><span class="btn-label">Open</span></button>
+      <button id="printBtn" class="btn btn-quiet" type="button" disabled title="Open edited PDF for printing"><span class="glyph">⎙</span><span class="btn-label">Print</span></button>
+      <button id="saveBtn" class="btn btn-primary" type="button" disabled title="Save the edited PDF"><span class="glyph">↓</span><span class="btn-label">Save PDF</span></button>
+    </div>
+  </header>
+  <main id="welcome" class="welcome">
+    <div class="welcome-bg" aria-hidden="true"></div>
+    <div class="welcome-content">
+      <div class="intro-pill"><span class="live-dot"></span> Your documents stay on your device</div>
+      <div class="welcome-icon"><span>PDF</span><span class="welcome-pencil">✎</span></div>
+      <h1>Read it. Edit it.<br><span>Make it yours.</span></h1>
+      <p class="subtitle">A clean, simple workspace to open, annotate, organize, and save PDF documents.</p>
+      <button id="welcomeOpen" class="btn btn-primary btn-big" type="button"><span>↗</span> Open a PDF</button>
+      <div id="dropZone" class="dropzone" role="button" tabindex="0">or drag and drop a PDF here</div>
+      <div class="features"><span>✎ Add text & signatures</span><span>▤ Highlight & draw</span><span>▧ Organize pages</span><span>↓ Export edits</span></div>
+    </div>
+  </main>
+  <main id="workspace" class="workspace" hidden>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-title"><span>PAGES</span><span id="pageCount">0</span></div>
+      <div class="sidebar-actions">
+        <button id="addPageBtn" title="Add a blank page" type="button">＋ Blank</button>
+        <button id="mergeBtn" title="Append pages from another PDF" type="button">⤓ Merge</button>
+      </div>
+      <div id="thumbs" class="thumbs" aria-label="Page thumbnails"></div>
+      <div class="page-ops">
+        <button id="moveUpBtn" title="Move this page earlier" type="button">↑</button>
+        <button id="moveDownBtn" title="Move this page later" type="button">↓</button>
+        <button id="rotateBtn" title="Rotate page clockwise" type="button">⟳</button>
+        <button id="duplicateBtn" title="Duplicate page" type="button">▣</button>
+        <button id="deletePageBtn" class="danger" title="Delete page" type="button">♜</button>
+      </div>
+    </aside>
+    <section class="reader">
+      <div class="toolbar">
+        <div class="tool-groups" role="toolbar" aria-label="Editing tools">
+          <button class="tool active" data-tool="select" title="Select and move edits" type="button"><span>⌖</span><small>Select</small></button>
+          <button class="tool" data-tool="text" title="Click the page to add text" type="button"><span>Ｔ</span><small>Text</small></button>
+          <button class="tool" data-tool="replace" title="Visually replace existing text (original remains underneath)" type="button"><span>✎</span><small>Replace</small></button>
+          <button class="tool" data-tool="highlight" title="Drag to highlight" type="button"><span>▰</span><small>Highlight</small></button>
+          <button class="tool" data-tool="pen" title="Draw with pen or finger" type="button"><span>〰</span><small>Draw</small></button>
+          <button class="tool" data-tool="box" title="Drag to draw a rectangle" type="button"><span>▢</span><small>Box</small></button>
+          <button class="tool" data-tool="cover" title="Cover content visually (NOT secure redaction)" type="button"><span>▨</span><small>Cover</small></button>
+          <button class="tool" data-tool="signature" title="Click to add a typed signature" type="button"><span>ℒ</span><small>Sign</small></button>
+          <button class="tool" data-tool="image" title="Add an image to a page" type="button"><span>▧</span><small>Image</small></button>
+        </div>
+        <div class="history-actions"><button id="inspectorToggle" class="property-toggle" title="Edit properties" type="button">⚙</button>
+          <button id="undoBtn" title="Undo (Ctrl/Cmd+Z)" type="button" disabled>↶</button>
+          <button id="redoBtn" title="Redo" type="button" disabled>↷</button>
+        </div>
+      </div>
+      <div class="findbar" id="findbar" hidden>
+        <input id="findInput" aria-label="Search PDF text" placeholder="Find text in PDF…" type="search">
+        <span id="findResults"></span>
+        <button id="findPrev" type="button" title="Previous match">↑</button>
+        <button id="findNext" type="button" title="Next match">↓</button>
+        <button id="findClose" type="button" title="Close search">✕</button>
+      </div>
+      <div id="pageStage" class="page-stage">
+        <div id="pageShell" class="page-shell" aria-label="PDF page preview">
+          <canvas id="pdfCanvas"></canvas>
+          <canvas id="annotationCanvas" aria-label="PDF editing canvas"></canvas>
+        </div>
+        <div id="loading" class="loading" hidden><div class="spinner"></div><span>Loading page…</span></div>
+      </div>
+      <div class="reader-bottom">
+        <button id="sidebarToggle" class="bottom-icon" title="Show or hide page thumbnails" type="button">☷</button>
+        <div class="page-nav"><button id="prevPage" title="Previous page" type="button">‹</button><input id="pageNumber" type="number" min="1" value="1" aria-label="Page number"><span id="bottomCount">/ 1</span><button id="nextPage" title="Next page" type="button">›</button></div>
+        <div class="bottom-right"><button id="findToggle" class="bottom-icon" title="Find text (Ctrl/Cmd+F)" type="button">⌕ <span class="bottom-label">Find</span></button><span class="vertical-rule"></span><button id="zoomOut" title="Zoom out" type="button">−</button><button id="fitWidth" title="Fit page to width" type="button">Fit</button><span id="zoomValue">100%</span><button id="zoomIn" title="Zoom in" type="button">＋</button></div>
+      </div>
+    </section>
+    <aside class="inspector">
+      <div class="inspector-header"><div><h2>Edit properties</h2><p id="inspectorHint">Choose a tool to edit your PDF</p></div></div>
+      <div class="inspector-body">
+        <label class="field-label" for="editText">Text / Signature</label>
+        <textarea id="editText" rows="4" placeholder="Type the text to place on the page…">Your text here</textarea>
+        <label class="field-label" for="fontSize">Font size <span id="fontSizeValue">20 pt</span></label>
+        <input id="fontSize" type="range" min="9" max="70" value="20" step="1">
+        <label class="field-label" for="colorInput">Ink color</label>
+        <div class="color-row"><input id="colorInput" type="color" value="#173454"><button type="button" class="swatch" data-color="#173454" title="Navy" style="--swatch:#173454"></button><button type="button" class="swatch" data-color="#ed7d54" title="Coral" style="--swatch:#ed7d54"></button><button type="button" class="swatch" data-color="#189b8c" title="Teal" style="--swatch:#189b8c"></button><button type="button" class="swatch" data-color="#111827" title="Black" style="--swatch:#111827"></button><button type="button" class="swatch" data-color="#e04646" title="Red" style="--swatch:#e04646"></button></div>
+        <label class="field-label" for="strokeSize">Draw thickness <span id="strokeSizeValue">3</span></label>
+        <input id="strokeSize" type="range" min="1" max="16" step="1" value="3">
+        <div class="field-divider"></div>
+        <button id="deleteEditBtn" class="outline danger-text full" type="button" disabled>✕ Delete selected edit</button>
+        <div class="tip" id="toolTip"><strong>Tip</strong><p>Choose a tool above, then tap the page. Drag to draw boxes, highlights, or pen strokes.</p></div>
+        <div class="tip neutral"><strong>Your privacy</strong><p>PDFs are processed in your browser. No files are sent to a server by mypdf.</p></div>
+        <div class="tip warning"><strong>Important</strong><p>Replace and Cover only hide visible content. They do <em>not</em> securely redact or remove the underlying text. Added edits are saved as flattened page artwork.</p></div>
+      </div>
+    </aside>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="dialogBackdrop" class="dialog-backdrop" hidden><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><h2 id="dialogTitle"></h2><p id="dialogBody"></p><div class="dialog-buttons"><button id="dialogCancel" class="btn btn-quiet" type="button">Cancel</button><button id="dialogConfirm" class="btn btn-primary" type="button">Continue</button></div></div></div>
+  <div id="fallback" class="fallback" hidden><div class="fallback-content"><h2>Basic PDF preview</h2><p>The editing libraries couldn't load. Check your internet connection, then refresh to enable editing. You can still view the PDF below.</p><iframe id="fallbackFrame" title="PDF preview"></iframe><button id="fallbackClose" class="btn btn-primary">Close preview</button></div></div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+/* mypdf — browser-first PDF reader and editor. PDF files never leave this browser. */
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const elements = {
+    input: $('fileInput'), merge: $('mergeInput'), image: $('imageInput'), welcome: $('welcome'),
+    workspace: $('workspace'), file: $('fileArea'), pdf: $('pdfCanvas'), overlay: $('annotationCanvas'),
+    stage: $('pageStage'), shell: $('pageShell'), thumbs: $('thumbs'), loading: $('loading'),
+    text: $('editText'), size: $('fontSize'), color: $('colorInput'), stroke: $('strokeSize'),
+    tip: $('toolTip'), hint: $('inspectorHint'), deleteEdit: $('deleteEditBtn'), toast: $('toast')
+  };
+  const DEFAULT_COLOR = '#173454';
+  const state = {
+    sources: [], pages: [], current: 0, selected: null, tool: 'select', zoom: 1,
+    fileName: 'document.pdf', dirty: false, undo: [], redo: [], penColor: DEFAULT_COLOR,
+    fontSize: 20, strokeSize: 3, typedText: 'Your text here', imageData: null, activePointer: null,
+    pageRenderId: 0, thumbRenderId: 0, renderTask: null, pdfPage: null, pageViewport: null,
+    searching: false, searchMatches: [], searchAt: -1, toastTimer: null, imageCache: new Map()
+  };
+  let idCounter = 0;
+  let clearBlobUrl = null;
+  const freshId = () => `edit-${Date.now()}-${++idCounter}`;
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const deepClone = (value) => JSON.parse(JSON.stringify(value));
+  const attr = (node, name, value) => node.setAttribute(name, value);
+  const libraryReady = () => !!(window.pdfjsLib && window.PDFLib);
+  const sourcePage = (item) => item.blank ? null : state.sources[item.sourceId]?.pdf.getPage(item.pageIndex + 1);
+  const activePage = () => state.pages[state.current];
+  const activeAnnotation = () => activePage()?.annotations.find((a) => a.id === state.selected);
+  const getRotation = async (page) => page.blank ? page.rotation : ((await sourcePage(page)).rotate + page.rotation) % 360;
+
+  if (window.pdfjsLib) {
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+  function notify(message, isError = false) {
+    clearTimeout(state.toastTimer);
+    elements.toast.textContent = message;
+    elements.toast.classList.toggle('error', isError);
+    elements.toast.classList.add('visible');
+    state.toastTimer = setTimeout(() => elements.toast.classList.remove('visible'), 3600);
+  }
+  function loading(visible, label = 'Loading page…') {
+    elements.loading.hidden = !visible;
+    elements.loading.querySelector('span').textContent = label;
+  }
+  function setDirty(value = true) {
+    state.dirty = value;
+    $('fileArea').textContent = state.fileName + (value ? ' • Unsaved changes' : '');
+  }
+  function remember() {
+    state.undo.push({pages: deepClone(state.pages), current: state.current});
+    if (state.undo.length > 30) state.undo.shift();
+    state.redo.length = 0;
+    setDirty();
+    updateHistoryButtons();
+  }
+  function updateHistoryButtons() {
+    $('undoBtn').disabled = !state.undo.length;
+    $('redoBtn').disabled = !state.redo.length;
+  }
+  async function undoOrRedo(direction) {
+    const from = direction === 'undo' ? state.undo : state.redo;
+    const to = direction === 'undo' ? state.redo : state.undo;
+    if (!from.length) return;
+    to.push({pages: deepClone(state.pages), current: state.current});
+    const snapshot = from.pop();
+    state.pages = snapshot.pages;
+    state.current = clamp(snapshot.current, 0, state.pages.length - 1);
+    state.selected = null;
+    state.searchMatches = [];
+    setDirty(); updateHistoryButtons(); updatePageUi();
+    await renderPage(); await renderThumbs();
+  }
+  function confirmAction(title, body, buttonText = 'Continue') {
+    return new Promise((resolve) => {
+      $('dialogTitle').textContent = title;
+      $('dialogBody').textContent = body;
+      $('dialogConfirm').textContent = buttonText;
+      $('dialogBackdrop').hidden = false;
+      const clean = (accepted) => {
+        $('dialogBackdrop').hidden = true;
+        $('dialogConfirm').onclick = null;
+        $('dialogCancel').onclick = null;
+        resolve(accepted);
+      };
+      $('dialogConfirm').onclick = () => clean(true);
+      $('dialogCancel').onclick = () => clean(false);
+    });
+  }
+  function showFallback(file) {
+    if (clearBlobUrl) URL.revokeObjectURL(clearBlobUrl);
+    clearBlobUrl = URL.createObjectURL(file);
+    $('fallbackFrame').src = clearBlobUrl;
+    $('fallback').hidden = false;
+    notify('Editing needs a network connection to load the PDF libraries.', true);
+  }
+  async function createSource(file) {
+    const buffer = new Uint8Array(await file.arrayBuffer());
+    const task = window.pdfjsLib.getDocument({data: buffer.slice(), isEvalSupported: false});
+    const pdf = await task.promise;
+    const sourceId = state.sources.length;
+    state.sources.push({bytes: buffer, pdf, name: file.name});
+    return {sourceId, pdf};
+  }
+  async function openFile(file) {
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
+      notify('Please select a PDF file.', true); return;
+    }
+    if (!libraryReady()) {
+      showFallback(file); return;
+    }
+    if (state.dirty && !(await confirmAction('Unsaved changes', 'Opening another file will discard changes you have not saved. Continue?', 'Open file'))) return;
+    loading(true, 'Opening PDF…');
+    try {
+      if (state.renderTask) {state.renderTask.cancel(); state.renderTask = null;}
+      state.sources = []; state.pages = []; state.undo = []; state.redo = [];
+      const {sourceId, pdf} = await createSource(file);
+      for (let i = 0; i < pdf.numPages; i++) {
+        state.pages.push({sourceId, pageIndex: i, blank: false, rotation: 0, annotations: []});
+      }
+      state.fileName = file.name;
+      state.current = 0; state.selected = null; state.searchMatches = []; state.searchAt = -1;
+      state.zoom = 1; state.dirty = false; state.imageCache.clear();
+      elements.welcome.hidden = true; elements.workspace.hidden = false;
+      elements.workspace.classList.toggle('sidebar-collapsed', window.innerWidth <= 810);
+      $('saveBtn').disabled = false; $('printBtn').disabled = false;
+      updateHistoryButtons(); updatePageUi(); setTool('select'); setDirty(false);
+      await fitToWidth(); await renderThumbs();
+      notify(`Opened ${pdf.numPages} page${pdf.numPages === 1 ? '' : 's'}.`);
+    } catch (err) {
+      console.error('Could not open PDF:', err);
+      notify('Could not read this PDF. It may be password-protected or damaged.', true);
+    } finally {loading(false);}
+  }
+  async function appendFileList(files) {
+    if (!files.length || !state.pages.length) return;
+    if (!libraryReady()) { notify('Please connect to the internet to load the PDF editor.', true); return; }
+    loading(true, 'Merging PDFs…');
+    try {
+      remember();
+      let total = 0;
+      for (const file of files) {
+        if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') continue;
+        const {sourceId, pdf} = await createSource(file);
+        for (let i = 0; i < pdf.numPages; i++) {
+          state.pages.push({sourceId, pageIndex: i, blank: false, rotation: 0, annotations: []}); total++;
+        }
+      }
+      updatePageUi(); await renderThumbs();
+      notify(`Added ${total} page${total === 1 ? '' : 's'} to this PDF.`);
+    } catch (error) { console.error(error); notify('Could not merge one of the selected PDF files.', true); }
+    finally {loading(false);}
+  }
+  async function pageDimensions(page) {
+    if (page.blank) return {width: page.width, height: page.height, baseWidth: page.width, baseHeight: page.height, rotation: page.rotation};
+    const pdfPage = await sourcePage(page);
+    const viewport = pdfPage.getViewport({scale: 1, rotation: (pdfPage.rotate + page.rotation) % 360});
+    const base = pdfPage.getViewport({scale: 1, rotation: 0});
+    return {width: viewport.width, height: viewport.height, baseWidth: base.width, baseHeight: base.height, rotation: (pdfPage.rotate + page.rotation) % 360};
+  }
+  async function fitToWidth() {
+    const page = activePage(); if (!page) return;
+    const {width, height} = await pageDimensions(page);
+    const availableWidth = Math.max(220, elements.stage.clientWidth - (window.innerWidth <= 810 ? 30 : 85));
+    const availableHeight = Math.max(280, elements.stage.clientHeight - 60);
+    state.zoom = Math.round(clamp(Math.min(availableWidth / width, availableHeight / height), .3, 2.5) * 100) / 100;
+    $('zoomValue').textContent = `${Math.round(state.zoom * 100)}%`;
+    await renderPage();
+  }
+  function updatePageUi() {
+    const total = state.pages.length;
+    $('pageCount').textContent = total;
+    $('bottomCount').textContent = `/ ${total}`;
+    $('pageNumber').value = total ? state.current + 1 : 0;
+    $('pageNumber').max = Math.max(1, total);
+    $('prevPage').disabled = state.current === 0;
+    $('nextPage').disabled = state.current >= total - 1;
+    $('moveUpBtn').disabled = state.current === 0;
+    $('moveDownBtn').disabled = state.current >= total - 1;
+    $('deletePageBtn').disabled = total <= 1;
+    $('zoomValue').textContent = `${Math.round(state.zoom * 100)}%`;
+    elements.deleteEdit.disabled = !activeAnnotation();
+    updateInspector();
+  }
+  async function changePage(index) {
+    index = clamp(Math.floor(index), 0, state.pages.length - 1);
+    if (!Number.isFinite(index)) return;
+    state.current = index; state.selected = null; state.activePointer = null;
+    updatePageUi(); await renderPage();
+    document.querySelectorAll('.thumbnail').forEach((el, i) => {
+      el.classList.toggle('active', i === index);
+      if (i === index) el.scrollIntoView({block: 'nearest'});
+    });
+  }
+  async function renderPage() {
+    const item = activePage(); if (!item) return;
+    const renderId = ++state.pageRenderId;
+    if (state.renderTask) {try {state.renderTask.cancel();} catch {} state.renderTask = null;}
+    const currentPage = item.blank ? null : await sourcePage(item);
+    if (renderId !== state.pageRenderId) return;
+    state.pdfPage = currentPage;
+    const dims = await pageDimensions(item);
+    if (renderId !== state.pageRenderId) return;
+    const view = currentPage?.getViewport({scale: state.zoom, rotation: dims.rotation}) || {width: dims.width * state.zoom, height: dims.height * state.zoom};
+    state.pageViewport = view;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    const width = Math.max(1, Math.round(view.width));
+    const height = Math.max(1, Math.round(view.height));
+    for (const canvas of [elements.pdf, elements.overlay]) {
+      canvas.width = Math.max(1, Math.round(view.width * dpr));
+      canvas.height = Math.max(1, Math.round(view.height * dpr));
+      canvas.style.width = `${view.width}px`;
+      canvas.style.height = `${view.height}px`;
+    }
+    elements.shell.style.width = `${view.width}px`;
+    elements.shell.style.height = `${view.height}px`;
+    const context = elements.pdf.getContext('2d', {alpha: false});
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.fillStyle = '#fff'; context.fillRect(0, 0, elements.pdf.width, elements.pdf.height);
+    redrawOverlay();
+    if (currentPage) {
+      loading(true, 'Rendering page…');
+      try {
+        state.renderTask = currentPage.render({canvasContext: context, viewport: view, transform: [dpr, 0, 0, dpr, 0, 0]});
+        await state.renderTask.promise;
+      } catch (error) {
+        if (error.name !== 'RenderingCancelledException') console.error('Page render:', error);
+      } finally {
+        if (renderId === state.pageRenderId) {loading(false); state.renderTask = null;}
+      }
+    } else {loading(false);}
+    if (renderId !== state.pageRenderId) return;
+    redrawOverlay();
+  }
+  async function renderThumbs() {
+    const renderId = ++state.thumbRenderId;
+    const items = state.pages.slice();
+    elements.thumbs.replaceChildren();
+    for (let i = 0; i < items.length; i++) {
+      const tile = document.createElement('button'); tile.type = 'button';
+      tile.className = 'thumbnail' + (i === state.current ? ' active' : '');
+      tile.dataset.page = String(i);
+      const preview = document.createElement('span'); preview.className = 'thumbnail-preview' + (items[i].blank ? ' blank' : '');
+      const label = document.createElement('span'); label.className = 'thumbnail-label'; label.textContent = `Page ${i+1}`;
+      const canvas = document.createElement('canvas');
+      preview.appendChild(canvas); tile.append(preview, label);
+      tile.addEventListener('click', () => changePage(i));
+      elements.thumbs.appendChild(tile);
+    }
+    for (let i = 0; i < items.length; i++) {
+      if (renderId !== state.thumbRenderId) break;
+      const item = items[i];
+      const parent = elements.thumbs.children[i]; if (!parent) break;
+      const canvas = parent.querySelector('canvas');
+      try {
+        const dims = await pageDimensions(item);
+        const zoom = Math.min(75 / dims.width, 96 / dims.height);
+        canvas.width = Math.round(dims.width * zoom);
+        canvas.height = Math.round(dims.height * zoom);
+        const context = canvas.getContext('2d');
+        context.fillStyle = '#fff'; context.fillRect(0, 0, canvas.width, canvas.height);
+        if (!item.blank) {
+          const src = await sourcePage(item);
+          await src.render({canvasContext: context, viewport: src.getViewport({scale: zoom, rotation: dims.rotation})}).promise;
+        }
+        await drawMarks(context, item.annotations, canvas.width, canvas.height, zoom, {includeSelection: false});
+      } catch (error) {console.warn('Page thumbnail:', error);}
+    }
+  }
+  function mapPointer(event) {
+    const rect = elements.overlay.getBoundingClientRect();
+    return {x: clamp((event.clientX - rect.left) / rect.width, 0, 1), y: clamp((event.clientY - rect.top) / rect.height, 0, 1)};
+  }
+  function annotationBounds(annotation) {
+    if (annotation.type === 'pen') {
+      const xs = annotation.points.map((p) => p.x);
+      const ys = annotation.points.map((p) => p.y);
+      return {x: Math.min(...xs), y: Math.min(...ys), w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys)};
+    }
+    return {x: annotation.x, y: annotation.y, w: annotation.w, h: annotation.h};
+  }
+  function hitTest(point) {
+    const annotations = activePage()?.annotations || [];
+    for (let i = annotations.length - 1; i >= 0; i--) {
+      const ann = annotations[i];
+      const r = annotationBounds(ann);
+      if (point.x >= r.x - .018 && point.x <= r.x + r.w + .018 && point.y >= r.y - .018 && point.y <= r.y + r.h + .018) return ann;
+    }
+    return null;
+  }
+  function newAnnotation(type, pt) {
+    const common = {id: freshId(), type, x: pt.x, y: pt.y, w: .22, h: .05, color: state.penColor,
+      fontSize: state.fontSize, lineWidth: state.strokeSize, text: state.typedText};
+    if (type === 'text') {
+      common.w = .3;
+      common.h = Math.max(.032, state.fontSize * state.zoom / (state.pageViewport?.height || 800) * (common.text.split('\n').length * 1.25));
+    } else if (type === 'signature') {
+      common.w = .4; common.h = .085;
+      common.text = state.typedText === 'Your text here' ? 'Your signature' : state.typedText;
+      common.fontSize = Math.max(state.fontSize, 30);
+    } else if (type === 'image') {
+      common.w = .28; common.h = .19; common.data = state.imageData;
+    } else if (type === 'pen') {
+      common.w = 0; common.h = 0; common.points = [pt];
+    } else {common.w = 0;common.h = 0;}
+    return common;
+  }
+  async function replaceClickedText(point) {
+    const page = activePage();
+    if (!page || page.blank || !state.pdfPage || !state.pageViewport) {
+      notify('This page has no original selectable text.', true); return;
+    }
+    if (state.pageViewport.rotation % 180 !== 0) {
+      notify('Rotate this page upright before using Replace.', true); return;
+    }
+    try {
+      const content = await state.pdfPage.getTextContent();
+      const viewport = state.pageViewport;
+      const candidates = [];
+      for (const item of content.items) {
+        if (!item.str?.trim() || !item.transform) continue;
+        const transformed = window.pdfjsLib.Util.transform(viewport.transform, item.transform);
+        const screenFontHeight = Math.max(5, Math.hypot(transformed[2], transformed[3]));
+        const width = Math.max(5, item.width * state.zoom);
+        const x = transformed[4] / viewport.width;
+        const y = (transformed[5] - screenFontHeight) / viewport.height;
+        const w = width / viewport.width;
+        const h = screenFontHeight * 1.16 / viewport.height;
+        const distance = Math.hypot(Math.max(x-point.x, 0, point.x-x-w) * viewport.width,
+                                    Math.max(y-point.y, 0, point.y-y-h) * viewport.height);
+        candidates.push({item, x, y, w, h, distance, fontSize: screenFontHeight / state.zoom});
+      }
+      candidates.sort((a,b)=>a.distance-b.distance);
+      const target = candidates[0];
+      if (!target || target.distance > 22) {
+        notify('No selectable text here. You can use Cover and Text instead.', true); return;
+      }
+      remember();
+      const cover = {...newAnnotation('cover', {x: target.x, y: target.y}),
+        x:clamp(target.x-.003,0,1),y:clamp(target.y-.003,0,1),
+        w:clamp(target.w+.006,0,1),h:clamp(target.h+.006,0,1)};
+      const replacement = {...newAnnotation('text', {x: target.x, y: target.y}),
+        text:target.item.str, fontSize:clamp(Math.round(target.fontSize),9,70),
+        x:clamp(target.x,0,1),y:clamp(target.y,0,1),w:clamp(target.w+.05,.05,1),
+        h:clamp(target.h,.022,1)};
+      page.annotations.push(cover,replacement);
+      state.selected = replacement.id;
+      updateInspector();redrawOverlay();
+      if (window.innerWidth <= 810) elements.workspace.classList.add('inspector-open');
+      elements.text.focus();elements.text.select();
+      notify('Edit the replacement text in the properties panel.');
+    } catch (error) {
+      console.warn('Replace text:',error);
+      notify('Could not select this text. Use Cover and Text instead.',true);
+    }
+  }
+  function pointerDown(event) {
+    if (event.button !== 0 && event.pointerType === 'mouse') return;
+    if (!activePage()) return;
+    const pt = mapPointer(event);
+    elements.overlay.setPointerCapture?.(event.pointerId);
+    if (state.tool === 'replace') {void replaceClickedText(pt);return;}
+    if (state.tool === 'select') {
+      const ann = hitTest(pt);
+      state.selected = ann?.id || null;
+      if (ann) {
+        state.activePointer = {kind: 'move', start: pt, last: pt, id: ann.id, remembered: false};
+      }
+      updateInspector(); redrawOverlay(); return;
+    }
+    if (state.tool === 'image' && !state.imageData) {elements.image.click();return;}
+    const ann = newAnnotation(state.tool, pt);
+    if ((ann.type === 'text' || ann.type === 'signature') && !ann.text.trim()) {
+      notify('Type some text in the right panel first.', true);return;
+    }
+    remember();
+    activePage().annotations.push(ann);
+    state.selected = ann.id;
+    if (['highlight', 'box', 'cover', 'pen'].includes(state.tool)) {
+      state.activePointer = {kind: 'draw', start: pt, id: ann.id};
+    }
+    updateInspector(); redrawOverlay();
+  }
+  function pointerMove(event) {
+    const interaction = state.activePointer;
+    if (!interaction) return;
+    const pt = mapPointer(event);
+    const ann = activePage()?.annotations.find((a) => a.id === interaction.id);
+    if (!ann) return;
+    if (interaction.kind === 'move') {
+      const dx = pt.x - interaction.last.x, dy = pt.y - interaction.last.y;
+      if (!interaction.remembered && (Math.abs(pt.x-interaction.start.x) > .003 || Math.abs(pt.y-interaction.start.y) > .003)) {
+        remember(); interaction.remembered = true;
+      }
+      if (ann.type === 'pen') {
+        for (const p of ann.points) {p.x = clamp(p.x + dx, 0, 1);p.y = clamp(p.y + dy, 0, 1);}
+      } else {
+        ann.x = clamp(ann.x + dx, 0, Math.max(0, 1-ann.w));
+        ann.y = clamp(ann.y + dy, 0, Math.max(0, 1-ann.h));
+      }
+      interaction.last = pt;
+    } else if (ann.type === 'pen') {
+      ann.points.push(pt);
+    } else {
+      ann.x = Math.min(interaction.start.x, pt.x);
+      ann.y = Math.min(interaction.start.y, pt.y);
+      ann.w = Math.abs(pt.x - interaction.start.x);
+      ann.h = Math.abs(pt.y - interaction.start.y);
+    }
+    redrawOverlay();
+  }
+  function pointerUp(event) {
+    if (!state.activePointer) return;
+    const it = state.activePointer;
+    state.activePointer = null;
+    const ann = activePage()?.annotations.find((a) => a.id === it.id);
+    if (ann && ann.type !== 'pen' && ann.type !== 'text' && ann.type !== 'signature' && ann.type !== 'image') {
+      if (ann.w < .005 || ann.h < .005) {ann.w = .16;ann.h = .035;}
+    }
+    if (ann && ann.type === 'pen' && ann.points.length === 1) {
+      ann.points.push({x: ann.points[0].x+.001, y: ann.points[0].y+.001});
+    }
+    updateInspector(); redrawOverlay();
+  }
+  function wrapImage(data) {
+    if (!data) return Promise.resolve(null);
+    if (state.imageCache.has(data)) return state.imageCache.get(data);
+    const promise = new Promise((resolve, reject) => {
+      const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = data;
+    });
+    state.imageCache.set(data, promise);
+    return promise;
+  }
+  async function drawMarks(ctx, annotations, width, height, scale, {includeSelection = true} = {}) {
+    for (const ann of annotations) {
+      const x = ann.x * width, y = ann.y * height, w = ann.w * width, h = ann.h * height;
+      ctx.save();
+      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.strokeStyle = ann.color || DEFAULT_COLOR;
+      ctx.fillStyle = ann.color || DEFAULT_COLOR;
+      ctx.lineWidth = Math.max(.5, (ann.lineWidth || 3) * scale);
+      if (ann.type === 'text' || ann.type === 'signature') {
+        const font = ann.type === 'signature' ? `italic ${Math.round(ann.fontSize * scale)}px "Brush Script MT", "Segoe Script", cursive` : `${Math.round(ann.fontSize * scale)}px Arial, sans-serif`;
+        ctx.font = font; ctx.textBaseline = 'top';
+        const rows = (ann.text || '').split('\n');
+        rows.forEach((line, i) => ctx.fillText(line, x, y + i * ann.fontSize * scale * 1.24));
+      } else if (ann.type === 'image' && ann.data) {
+        try {const img = await wrapImage(ann.data); if (img) ctx.drawImage(img, x, y, w, h);} catch { /* Image remains selectable for deletion. */ }
+      } else if (ann.type === 'highlight') {
+        ctx.globalAlpha = .3;
+        ctx.fillStyle = ann.color === DEFAULT_COLOR ? '#f7cc36' : ann.color;
+        ctx.fillRect(x, y, w, h);
+      } else if (ann.type === 'cover') {
+        ctx.fillStyle = '#fff'; ctx.fillRect(x, y, w, h);
+      } else if (ann.type === 'box') {
+        ctx.strokeRect(x, y, w, h);
+      } else if (ann.type === 'pen') {
+        ctx.beginPath();
+        ann.points.forEach((p, i) => i ? ctx.lineTo(p.x * width, p.y * height) : ctx.moveTo(p.x * width, p.y * height));
+        ctx.stroke();
+      }
+      ctx.restore();
+      if (includeSelection && state.selected === ann.id) {
+        const r = annotationBounds(ann);
+        ctx.save();ctx.strokeStyle = '#009a90';ctx.lineWidth = 1.5;
+        ctx.setLineDash([5, 3]);ctx.strokeRect(r.x*width-3, r.y*height-3, Math.max(8,r.w*width+6), Math.max(8,r.h*height+6));
+        ctx.restore();
+      }
+    }
+  }
+  function redrawOverlay() {
+    const ctx = elements.overlay.getContext('2d');
+    const dprX = elements.overlay.width / Math.max(1, state.pageViewport?.width || 1);
+    const dprY = elements.overlay.height / Math.max(1, state.pageViewport?.height || 1);
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.clearRect(0,0,elements.overlay.width,elements.overlay.height);
+    ctx.setTransform(dprX,0,0,dprY,0,0);
+    const page = activePage();if (!page || !state.pageViewport) return;
+    void drawMarks(ctx, page.annotations, state.pageViewport.width, state.pageViewport.height, state.zoom);
+  }
+  function setTool(tool) {
+    state.tool = tool;
+    state.activePointer = null;
+    elements.shell.className = `page-shell ${tool}`;
+    document.querySelectorAll('.tool').forEach((el) => {
+      el.classList.toggle('active', el.dataset.tool === tool);
+      el.setAttribute('aria-pressed', String(el.dataset.tool === tool));
+    });
+    if (tool === 'image' && !state.imageData) elements.image.click();
+    const tips = {
+      select: 'Tap an existing edit to select and drag it. Edit its text or color in the panel, or press Delete.',
+      text: 'Type your text in the panel and tap the page where you want it to appear.',
+      replace: 'Tap an existing line of selectable PDF text. Edit the replacement in the panel. This only covers the original visually; it does not securely remove it.',
+      signature: 'Type your name in the panel and tap the page to place a cursive-style signature.',
+      highlight: 'Drag over an area to highlight it. Change the ink color if needed.',
+      pen: 'Draw on the page using your finger, Apple Pencil, mouse, or trackpad.',
+      box: 'Drag to outline an area. Use the thickness and color controls.',
+      cover: 'Drag to add an opaque white patch. This visually covers content but is NOT secure redaction.',
+      image: 'Choose a picture, then tap the page to place it.'
+    };
+    elements.tip.querySelector('p').textContent = tips[tool] || tips.select;
+    elements.hint.textContent = tool === 'select' ? 'Select an edit to change it' : `Click or drag on the PDF to use ${tool}`;
+    if (window.innerWidth <= 810 && ['text','replace','signature','pen','box','highlight','cover','image'].includes(tool)) elements.workspace.classList.add('inspector-open');
+    else if (window.innerWidth <= 810 && tool === 'select') elements.workspace.classList.remove('inspector-open');
+    updateInspector();
+  }
+  function updateInspector() {
+    const ann = activeAnnotation();
+    elements.deleteEdit.disabled = !ann;
+    if (ann) {
+      if (['text','signature'].includes(ann.type)) {
+        elements.text.value = ann.text;
+        elements.size.value = ann.fontSize;
+      }
+      elements.color.value = ann.color || DEFAULT_COLOR;
+      elements.stroke.value = ann.lineWidth || 3;
+    } else {
+      elements.text.value = state.typedText;
+      elements.size.value = state.fontSize;
+      elements.stroke.value = state.strokeSize;
+      elements.color.value = state.penColor;
+    }
+    $('fontSizeValue').textContent = `${elements.size.value} pt`;
+    $('strokeSizeValue').textContent = elements.stroke.value;
+  }
+  function updateProperty(name, value) {
+    const ann = activeAnnotation();
+    if (name === 'text') state.typedText = value;
+    else if (name === 'fontSize') state.fontSize = Number(value);
+    else if (name === 'lineWidth') state.strokeSize = Number(value);
+    else if (name === 'color') state.penColor = value;
+    if (ann) {
+      ann[name] = name === 'fontSize' || name === 'lineWidth' ? Number(value) : value;
+      if ((name === 'text' || name === 'fontSize') && (ann.type === 'text' || ann.type === 'signature')) {
+        const count = (ann.text || '').split('\n').length;
+        ann.h = Math.max(.035, (ann.fontSize * state.zoom * count * 1.3) / Math.max(1, state.pageViewport?.height || 800));
+      }
+      setDirty();redrawOverlay();
+    }
+    $('fontSizeValue').textContent = `${elements.size.value} pt`;
+    $('strokeSizeValue').textContent = elements.stroke.value;
+  }
+  function deleteEdit() {
+    const ann = activeAnnotation();if (!ann) return;
+    remember();
+    activePage().annotations = activePage().annotations.filter((a) => a.id !== ann.id);
+    state.selected = null;updateInspector();redrawOverlay();notify('Edit removed.');
+  }
+  function turnPageAnnotation(ann) {
+    if (ann.type === 'pen') {
+      ann.points = ann.points.map((p) => ({x: 1 - p.y, y: p.x}));
+    } else {
+      const {x, y, w, h} = ann;
+      ann.x = 1-y-h;ann.y=x;ann.w=h;ann.h=w;
+    }
+  }
+  async function editPages(op) {
+    const item = activePage();if (!item) return;
+    if (op === 'delete' && state.pages.length < 2) {notify('A PDF needs at least one page.', true);return;}
+    if (op === 'delete' && !(await confirmAction('Delete page?', `Page ${state.current+1} will be removed from the saved PDF.`, 'Delete page'))) return;
+    remember();
+    if (op === 'up' && state.current > 0) {
+      [state.pages[state.current-1],state.pages[state.current]] = [state.pages[state.current],state.pages[state.current-1]];
+      state.current--;
+    } else if (op === 'down' && state.current < state.pages.length-1) {
+      [state.pages[state.current+1],state.pages[state.current]] = [state.pages[state.current],state.pages[state.current+1]];
+      state.current++;
+    } else if (op === 'rotate') {
+      item.rotation = (item.rotation + 90) % 360;
+      item.annotations.forEach(turnPageAnnotation);
+    } else if (op === 'duplicate') {
+      const copy = deepClone(item);
+      copy.annotations.forEach((a) => {a.id = freshId();});
+      state.pages.splice(state.current+1, 0, copy);
+      state.current++;
+    } else if (op === 'delete') {
+      state.pages.splice(state.current, 1);
+      state.current = Math.min(state.current, state.pages.length - 1);
+      state.selected = null;
+    }
+    state.searchMatches=[];state.searchAt=-1;updatePageUi();await renderPage();await renderThumbs();
+  }
+  async function insertBlank() {
+    remember();
+    const current = activePage();
+    let dims = {baseWidth: 612, baseHeight: 792};
+    if (current) dims = await pageDimensions(current);
+    state.pages.splice(state.current+1, 0, {
+      blank:true, width:dims.baseWidth, height:dims.baseHeight, rotation:0, annotations:[]
+    });
+    state.current++;state.selected=null;updatePageUi();await renderPage();await renderThumbs();notify('Blank page added.');
+  }
+  async function pngForAnnotations(item, dimensions) {
+    if (!item.annotations.length) return null;
+    const renderScale = 2.5;
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(dimensions.width * renderScale);
+    canvas.height = Math.round(dimensions.height * renderScale);
+    const ctx = canvas.getContext('2d');
+    await drawMarks(ctx, item.annotations, canvas.width, canvas.height, renderScale, {includeSelection: false});
+    return canvas.toDataURL('image/png');
+  }
+  function placeOverlayOnPdf(pdfPage, png, originalW, originalH, rotation) {
+    const {degrees} = window.PDFLib;
+    const r = ((rotation % 360)+360)%360;
+    if (r === 90) pdfPage.drawImage(png, {x:originalW, y:0, width:originalH, height:originalW, rotate:degrees(90)});
+    else if (r === 180) pdfPage.drawImage(png, {x:originalW, y:originalH, width:originalW, height:originalH, rotate:degrees(180)});
+    else if (r === 270) pdfPage.drawImage(png, {x:0, y:originalH, width:originalH, height:originalW, rotate:degrees(270)});
+    else pdfPage.drawImage(png, {x:0, y:0, width:originalW, height:originalH});
+  }
+  async function produceEditedPdf() {
+    if (!libraryReady()) throw new Error('Editing libraries are not loaded. Connect to the internet and refresh.');
+    const {PDFDocument, degrees} = window.PDFLib;
+    const output = await PDFDocument.create();
+    output.setCreator('mypdf PDF reader & editor');
+    output.setProducer('mypdf / pdf-lib');
+    const pdfDocuments = new Map();
+    for (const [id, source] of state.sources.entries()) {
+      pdfDocuments.set(id, await PDFDocument.load(source.bytes, {ignoreEncryption: false}));
+    }
+    for (let i = 0; i < state.pages.length; i++) {
+      const item = state.pages[i];
+      let newPage;
+      if (item.blank) newPage = output.addPage([item.width, item.height]);
+      else {
+        const sourceDoc = pdfDocuments.get(item.sourceId);
+        const [copied] = await output.copyPages(sourceDoc, [item.pageIndex]);
+        newPage = output.addPage(copied);
+      }
+      const baseRot = newPage.getRotation().angle;
+      const rotation = (baseRot + item.rotation) % 360;
+      newPage.setRotation(degrees(rotation));
+      if (item.annotations.length) {
+        const dimensions = await pageDimensions(item);
+        const uri = await pngForAnnotations(item, dimensions);
+        const embedded = await output.embedPng(uri);
+        const {width, height} = newPage.getSize();
+        placeOverlayOnPdf(newPage, embedded, width, height, rotation);
+      }
+    }
+    return await output.save({useObjectStreams: true});
+  }
+  function blobUrlFromBytes(bytes) {
+    return URL.createObjectURL(new Blob([bytes], {type:'application/pdf'}));
+  }
+  async function exportPdf(print = false) {
+    if (!state.pages.length) return;
+    // Open the tab during the real click event to avoid browser popup blockers.
+    const newTab = print ? window.open('', '_blank') : null;
+    loading(true, 'Saving edited PDF…');
+    try {
+      const bytes = await produceEditedPdf();
+      const url = blobUrlFromBytes(bytes);
+      if (print) {
+        if (newTab) newTab.location.href = url;
+        else notify('Your browser blocked the print preview. Try Save PDF.', true);
+        setTimeout(() => URL.revokeObjectURL(url), 120000);
+        notify('PDF opened in a new tab. Use that tab’s Print option.');
+      } else {
+        const element = document.createElement('a');
+        element.href = url;
+        element.download = state.fileName.replace(/\.pdf$/i, '') + '-edited.pdf';
+        document.body.appendChild(element);element.click();element.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 120000);
+        setDirty(false);notify('Edited PDF saved to your downloads.');
+      }
+    } catch (error) {
+      console.error('PDF export:', error);
+      if (newTab) newTab.close();
+      notify(error?.message || 'Could not export PDF. Try a smaller file.', true);
+    } finally {loading(false);}
+  }
+  async function searchPdf() {
+    const term = $('findInput').value.trim().toLocaleLowerCase();
+    state.searchMatches=[];state.searchAt=-1;
+    if (!term) {$('findResults').textContent='';return;}
+    $('findResults').textContent='Searching…';
+    for (let i=0;i<state.pages.length;i++) {
+      const page=state.pages[i];if (page.blank) continue;
+      try {
+        const src = await sourcePage(page);
+        const textContent = await src.getTextContent();
+        const text = textContent.items.map((item)=>item.str).join(' ').toLocaleLowerCase();
+        let pos=-1, from=0;
+        while ((pos=text.indexOf(term,from)) !== -1) {
+          state.searchMatches.push({page:i, pos});from=pos+Math.max(term.length,1);
+          if (state.searchMatches.length>1000) break;
+        }
+      } catch (e) {console.warn('Text search:', e);}
+    }
+    if (!state.searchMatches.length) $('findResults').textContent='No matches';
+    else {state.searchAt=0;await changePage(state.searchMatches[0].page);updateMatchLabel();}
+  }
+  function updateMatchLabel() {
+    $('findResults').textContent=state.searchMatches.length?`${state.searchAt+1} / ${state.searchMatches.length}`:'No matches';
+  }
+  async function nextMatch(direction) {
+    if (!state.searchMatches.length) return;
+    state.searchAt=(state.searchAt + direction + state.searchMatches.length)%state.searchMatches.length;
+    await changePage(state.searchMatches[state.searchAt].page);updateMatchLabel();
+  }
+  function toggleSearch(force) {
+    const show = force === undefined ? $('findbar').hidden : !!force;
+    $('findbar').hidden = !show;
+    if (show) $('findInput').focus();
+  }
+  async function setZoom(newValue) {
+    state.zoom=clamp(Math.round(newValue*100)/100,.3,3);
+    $('zoomValue').textContent=`${Math.round(state.zoom*100)}%`;
+    await renderPage();
+  }
+  function register() {
+    $('openBtn').addEventListener('click', () => elements.input.click());
+    $('welcomeOpen').addEventListener('click', () => elements.input.click());
+    $('dropZone').addEventListener('click', () => elements.input.click());
+    $('dropZone').addEventListener('keydown', (e) => {if(e.key==='Enter'||e.key===' '){e.preventDefault();elements.input.click();}});
+    elements.input.addEventListener('change', async (event) => {await openFile(event.target.files?.[0]);elements.input.value='';});
+    $('saveBtn').addEventListener('click', () => exportPdf());
+    $('printBtn').addEventListener('click', () => exportPdf(true));
+    $('mergeBtn').addEventListener('click', () => elements.merge.click());
+    elements.merge.addEventListener('change', async (event) => {await appendFileList(Array.from(event.target.files||[]));elements.merge.value='';});
+    $('addPageBtn').addEventListener('click',insertBlank);
+    elements.image.addEventListener('change', (event)=>{
+      const file=event.target.files?.[0];if(!file)return;
+      if(file.size > 8*1024*1024){notify('Please choose an image smaller than 8 MB.',true);return;}
+      const reader=new FileReader();reader.onload=()=>{state.imageData=reader.result;notify('Tap the PDF page to place your picture.');};reader.readAsDataURL(file);
+      elements.image.value='';
+    });
+    $('moveUpBtn').addEventListener('click',()=>editPages('up'));
+    $('moveDownBtn').addEventListener('click',()=>editPages('down'));
+    $('rotateBtn').addEventListener('click',()=>editPages('rotate'));
+    $('duplicateBtn').addEventListener('click',()=>editPages('duplicate'));
+    $('deletePageBtn').addEventListener('click',()=>editPages('delete'));
+    $('undoBtn').addEventListener('click',()=>undoOrRedo('undo'));
+    $('redoBtn').addEventListener('click',()=>undoOrRedo('redo'));
+    document.querySelectorAll('.tool').forEach((element)=>element.addEventListener('click',()=>setTool(element.dataset.tool)));
+    elements.overlay.addEventListener('pointerdown',pointerDown);
+    elements.overlay.addEventListener('pointermove',pointerMove);
+    elements.overlay.addEventListener('pointerup',pointerUp);
+    elements.overlay.addEventListener('pointercancel',pointerUp);
+    let textSnapshotCaptured = false;
+    elements.text.addEventListener('focus',()=>{
+      textSnapshotCaptured = false;
+      if(!activeAnnotation() && elements.text.value==='Your text here') elements.text.select();
+    });
+    elements.text.addEventListener('blur',()=>{textSnapshotCaptured = false;});
+    elements.text.addEventListener('input',()=>{
+      if(activeAnnotation() && !textSnapshotCaptured){remember();textSnapshotCaptured=true;}
+      updateProperty('text',elements.text.value);
+    });
+    elements.size.addEventListener('change',()=>{if(activeAnnotation())remember();updateProperty('fontSize',elements.size.value);});
+    elements.color.addEventListener('input',()=>updateProperty('color',elements.color.value));
+    elements.stroke.addEventListener('change',()=>{if(activeAnnotation())remember();updateProperty('lineWidth',elements.stroke.value);});
+    document.querySelectorAll('.swatch').forEach((swatch)=>swatch.addEventListener('click',()=>{if(activeAnnotation())remember();elements.color.value=swatch.dataset.color;updateProperty('color',swatch.dataset.color);}));
+    elements.deleteEdit.addEventListener('click',deleteEdit);
+    $('prevPage').addEventListener('click',()=>changePage(state.current-1));
+    $('nextPage').addEventListener('click',()=>changePage(state.current+1));
+    $('pageNumber').addEventListener('change',()=>changePage(Number($('pageNumber').value)-1));
+    $('zoomIn').addEventListener('click',()=>setZoom(state.zoom+.15));
+    $('zoomOut').addEventListener('click',()=>setZoom(state.zoom-.15));
+    $('fitWidth').addEventListener('click',fitToWidth);
+    $('sidebarToggle').addEventListener('click',()=>elements.workspace.classList.toggle('sidebar-collapsed'));
+    $('findToggle').addEventListener('click',()=>toggleSearch());
+    $('findClose').addEventListener('click',()=>toggleSearch(false));
+    $('findInput').addEventListener('input',()=>{clearTimeout(state.searching);state.searching=setTimeout(searchPdf,280);});
+    $('findPrev').addEventListener('click',()=>nextMatch(-1));
+    $('findNext').addEventListener('click',()=>nextMatch(1));
+    $('fallbackClose').addEventListener('click',()=>{$('fallback').hidden=true;});
+    const drop = $('dropZone');
+    for(const node of [drop, elements.stage, document.body]) {
+      node.addEventListener('dragover',(event)=>{if(!Array.from(event.dataTransfer?.types||[]).includes('Files'))return;event.preventDefault();drop.classList.add('dragging');});
+      node.addEventListener('dragleave',()=>drop.classList.remove('dragging'));
+      node.addEventListener('drop',async(event)=>{
+        const files=Array.from(event.dataTransfer?.files||[]).filter((f)=>f.name.toLowerCase().endsWith('.pdf'));
+        if(!files.length)return;
+        event.preventDefault();event.stopPropagation();drop.classList.remove('dragging');
+        if(!state.pages.length) await openFile(files[0]);
+        else await appendFileList(files);
+      });
+    }
+    window.addEventListener('keydown',(event)=>{
+      const key=event.key.toLowerCase();const mod=event.ctrlKey||event.metaKey;
+      if(mod && key==='s'){event.preventDefault();exportPdf();return;}
+      if(mod && key==='o'){event.preventDefault();elements.input.click();return;}
+      if(mod && key==='z'){event.preventDefault();undoOrRedo(event.shiftKey?'redo':'undo');return;}
+      if(mod && key==='y'){event.preventDefault();undoOrRedo('redo');return;}
+      if(mod && key==='f'){if(state.pages.length){event.preventDefault();toggleSearch(true);}return;}
+      if(event.key==='Escape'){state.selected=null;elements.workspace.classList.remove('inspector-open');updateInspector();redrawOverlay();return;}
+      if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return;
+      if(event.key==='Delete'||event.key==='Backspace'){if(activeAnnotation()){event.preventDefault();deleteEdit();}}
+      if(event.key==='ArrowRight')changePage(state.current+1);
+      if(event.key==='ArrowLeft')changePage(state.current-1);
+    });
+    const media = window.matchMedia('(max-width:810px)');
+    $('inspectorToggle')?.addEventListener('click',()=>elements.workspace.classList.toggle('inspector-open'));
+    media.addEventListener?.('change',()=>{
+      elements.workspace.classList.remove('inspector-open');
+      elements.workspace.classList.toggle('sidebar-collapsed', media.matches);
+      if(state.pages.length) void fitToWidth();
+    });
+  }
+  register();
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}),{once:true});
+  }
+  if(!libraryReady()) {
+    // Defer the check until all deferred scripts have had a chance to finish.
+    window.addEventListener('load',()=>{if(!libraryReady())notify('Connect to the internet to enable PDF editing.',true);},{once:true});
+  }
+  // Diagnostics for local automated smoke tests, not an external API.
+  window.mypdf = {version:'1.0.0', getState:()=>({pages:state.pages.length,current:state.current,tool:state.tool,dirty:state.dirty}), openFile, produceEditedPdf};
+})();
+
+});
+</script>
+</body>
+</html>
