@@ -37,4 +37,4 @@ Version under test: __________    Commit: __________    Tester/device: _________
 - [ ] Previous behaviors reviewed and preserved; no unwanted architecture or library version changes.
 - [ ] New failing scenario has a regression test or a documented manual reproduction.
 - [ ] Tested desktop browser and iPhone Safari, or limitations disclosed.
-- [ ] \`ARCHITECTURE.md\` and this checklist updated if dependencies/behavior changed.
+- [ ] `ARCHITECTURE.md` and this checklist updated if dependencies/behavior changed.
